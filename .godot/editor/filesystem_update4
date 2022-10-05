@@ -1,0 +1,5 @@
+res://scene/demo.tscn
+res://speakers/speaker_jnfr.tres
+res://scripts/speech_bubble.gd
+res://scripts/text_effect_appear.gd
+res://scene/speech_bubble.tscn

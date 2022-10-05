@@ -1,0 +1,95 @@
+[gd_resource type="SpriteFrames" load_steps=20 format=3 uid="uid://c4fdxqjg7hfw5"]
+
+[ext_resource type="Script" path="res://scripts/speaker.gd" id="1_4nxmd"]
+[ext_resource type="Texture2D" uid="uid://cpfgx4vmbe2do" path="res://graphics/jnfr_talksprite.png" id="1_q2b7s"]
+[ext_resource type="AudioStream" uid="uid://cobseybia0rg1" path="res://sounds/talksound/keys-01.wav" id="3_dec32"]
+[ext_resource type="AudioStream" uid="uid://ckplh8gyywfyq" path="res://sounds/talksound/keys-02.wav" id="4_ok3y3"]
+[ext_resource type="AudioStream" uid="uid://ltfm4tu4lccl" path="res://sounds/talksound/keys-03.wav" id="5_8o8le"]
+[ext_resource type="AudioStream" uid="uid://coxgii4p1uoab" path="res://sounds/talksound/keys-04.wav" id="6_rfegt"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hbj6o"]
+atlas = ExtResource("1_q2b7s")
+region = Rect2(0, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1y838"]
+atlas = ExtResource("1_q2b7s")
+region = Rect2(48, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5mrgk"]
+atlas = ExtResource("1_q2b7s")
+region = Rect2(96, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o4ryw"]
+atlas = ExtResource("1_q2b7s")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sbsw5"]
+atlas = ExtResource("1_q2b7s")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iggud"]
+atlas = ExtResource("1_q2b7s")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_42604"]
+atlas = ExtResource("1_q2b7s")
+region = Rect2(0, 144, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wab4d"]
+atlas = ExtResource("1_q2b7s")
+region = Rect2(48, 144, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r0epf"]
+atlas = ExtResource("1_q2b7s")
+region = Rect2(96, 144, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v84wm"]
+atlas = ExtResource("1_q2b7s")
+region = Rect2(0, 96, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_02ov7"]
+atlas = ExtResource("1_q2b7s")
+region = Rect2(48, 96, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3tsb8"]
+atlas = ExtResource("1_q2b7s")
+region = Rect2(96, 96, 48, 48)
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_hiel6"]
+streams_count = 4
+random_pitch = 1.2
+random_volume_offset_db = 0.0
+stream_0/stream = ExtResource("3_dec32")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("4_ok3y3")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("5_8o8le")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("6_rfegt")
+stream_3/weight = 1.0
+
+[resource]
+animations = [{
+"frames": [SubResource("AtlasTexture_hbj6o"), SubResource("AtlasTexture_1y838"), SubResource("AtlasTexture_5mrgk")],
+"loop": true,
+"name": &"angry",
+"speed": 8.0
+}, {
+"frames": [SubResource("AtlasTexture_o4ryw"), SubResource("AtlasTexture_sbsw5"), SubResource("AtlasTexture_iggud")],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}, {
+"frames": [SubResource("AtlasTexture_42604"), SubResource("AtlasTexture_wab4d"), SubResource("AtlasTexture_r0epf")],
+"loop": true,
+"name": &"seethe",
+"speed": 8.0
+}, {
+"frames": [SubResource("AtlasTexture_v84wm"), SubResource("AtlasTexture_02ov7"), SubResource("AtlasTexture_3tsb8")],
+"loop": true,
+"name": &"shocked",
+"speed": 8.0
+}]
+script = ExtResource("1_4nxmd")
+speaker_name = "JNFR"
+talksound = SubResource("AudioStreamRandomizer_hiel6")

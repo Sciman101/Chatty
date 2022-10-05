@@ -1,0 +1,6 @@
+[gd_resource type="RichTextEffect" load_steps=2 format=3 uid="uid://ddf5brqsh6pyj"]
+
+[ext_resource type="Script" path="res://scripts/text_effect_glitch.gd" id="1_fwvav"]
+
+[resource]
+script = ExtResource("1_fwvav")
