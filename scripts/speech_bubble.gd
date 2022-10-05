@@ -24,6 +24,8 @@ var num_characters := 0
 var parsed_dialouge := ""
 var speaker = null
 
+var interrupt := false
+
 var is_presenting = false
 
 func appear() -> void:
@@ -58,6 +60,9 @@ func appearImmediate() -> void:
 
 func disappearImmediate() -> void:
 	graphic.visible = false
+
+func stop_dialouge() -> void:
+	interrupt = true
 
 func is_bubble_visible() -> bool:
 	return graphic.visible
@@ -101,6 +106,10 @@ func present(animate:bool=true,sfx:bool=true) -> void:
 	_set_visible_characters(0)
 	
 	for i in range(num_characters):
+		
+		if interrupt:
+			break
+		
 		_set_visible_characters(i)
 		
 		if sfx and parsed_dialouge[i] != ' ':
@@ -112,8 +121,11 @@ func present(animate:bool=true,sfx:bool=true) -> void:
 	jump_to_end()
 	
 	# Wait a second
-	timer.start(DEFAULT_SPEECH_DELAY)
-	await timer.timeout
+	if not interrupt:
+		timer.start(DEFAULT_SPEECH_DELAY)
+		await timer.timeout
+	else:
+		interrupt = false
 
 func jump_to_end() -> void:
 	

@@ -5,38 +5,44 @@ const Speakers = {
 	'jnfr': preload("res://speakers/speaker_jnfr.tres")
 }
 
-var the_script = """
-jnfr: ...And then he said
-jnfr: "No, you're supposed to EAT it"
-jnfr, shocked, 1s, noanimate, nosound: ....
-jnfr, seethe: MY FACE IS AN LCD
-jnfr, seethe: WHAT DO YOU WANT FROM ME????
-"""
-
 var current_dialouge_bubble = null
 var actors = {}
 
 var script_events = []
+var script_active = false
 
-func _ready():
-	load_script(the_script)
-	run_script()
+signal event_started(num,event)
 
-func run_script() -> void:
+func run_script(start:int=0) -> void:
+	script_active = true
+	var index := 0
 	for event in script_events:
-		if event.type == &'dialouge':
-			await _run_dialouge_event(event)
-		elif event.type == &'instruction':
-			pass
+		
+		if index >= start:
+			if not script_active:
+				break
+			event_started.emit(index,event)
+			if event.type == &'dialouge':
+				await _run_dialouge_event(event)
+			elif event.type == &'instruction':
+				pass
+		
+		index += 1
 	
 	if current_dialouge_bubble:
 		current_dialouge_bubble.disappear()
+	
+	script_active = false
+
+func stop_script() -> void:
+	current_dialouge_bubble.stop_dialouge()
+	script_active = false
 
 func _run_dialouge_event(event) -> void:
 	if current_dialouge_bubble == null:
 		current_dialouge_bubble = SpeechBubble.instantiate()
 		add_child(current_dialouge_bubble)
-		current_dialouge_bubble.position = current_dialouge_bubble.get_viewport_rect().position + current_dialouge_bubble.get_viewport_rect().size / 2
+		current_dialouge_bubble.position = current_dialouge_bubble.get_viewport_rect().position + current_dialouge_bubble.get_viewport_rect().size / 2 + Vector2.RIGHT * 100
 		current_dialouge_bubble.disappearImmediate()
 	
 	current_dialouge_bubble.set_dialouge(event.dialouge)
