@@ -9,6 +9,7 @@ var current_dialouge_bubble = null
 var actors = {}
 
 var script_events = []
+var script_labels = {}
 var script_active = false
 var script_index := 0
 
@@ -17,21 +18,26 @@ signal script_completed
 
 func run_script(start:int=0) -> void:
 	script_active = true
-	script_index = 0
+	script_index = start
 	
 	if current_dialouge_bubble:
 		current_dialouge_bubble.set_speaker_animation()
 	
-	for script_index in range(start,script_events.size()):
+	while script_index < script_events.size():
 		var event = script_events[script_index]
 
 		if not script_active:
 			break
 		event_started.emit(script_index,event)
-		if event.type == &'dialouge':
-			await _run_dialouge_event(event)
-		elif event.type == &'instruction':
-			pass
+		match event.type:
+			&'dialouge':
+				await _run_dialouge_event(event)
+			&'instruction':
+				await _run_instruction_event(event)
+			&'label':
+				pass # Labels do nothing. this is just here for completeness
+		
+		script_index += 1
 	
 	if current_dialouge_bubble:
 		current_dialouge_bubble.disappear()
@@ -68,20 +74,59 @@ func _run_dialouge_event(event) -> void:
 	if event.has('args'): args = event.args
 	await current_dialouge_bubble.present(args)
 
+func _run_instruction_event(event) -> void:
+	var params = event.params
+	if params.size() == 0:
+		push_warning("Empty instruction!")
+		return
+	match params[0]:
+		'goto':
+			# Jump to the labeled section
+			if params.size() > 1:
+				var label = params[1]
+				if script_labels.has(label):
+					script_index = script_labels[label]-1
+				else:
+					push_warning("Insufficient params!")
+		'fin':
+			# Stop after this command
+			script_index = script_events.size()+1
+		'gotor':
+			# Go to a random label
+			if params.size() > 1:
+				var label_index = randi_range(1,params.size()-1)
+				print(label_index)
+				var label = params[label_index]
+				if script_labels.has(label):
+					script_index = script_labels[label]-1
+			else:
+				push_warning("Insufficient params!")
+
 # Load a script into the chatty system
 func load_script(script_text:String) -> void:
 	script_events = []
 	var lines = script_text.split("\n")
+	var idx : =0
 	for line in lines:
 		if line.length() > 0:
-			_parse_line(line)
+			_parse_line(line,idx)
+			idx += 1
 
-func _parse_line(line:String) -> void:
-	if line[0] == '*':
+func _parse_line(line:String,event_index:int) -> void:
+	if line[0] == '>':
+		# Parse action
 		line = line.substr(1)
 		var event = {
 			'type':&'instruction',
-			'args': _parse_args(Array(line.split(',')).map(func(item): return item.strip_edges()))
+			'params': Array(line.split(' ')).map(func(item): return item.strip_edges())
+		}
+		script_events.append(event)
+	elif line[0] == '#':
+		# Parse label
+		var label_name = line.substr(1).strip_edges()
+		script_labels[label_name] = event_index
+		var event = {
+			'type':&'label'
 		}
 		script_events.append(event)
 	else:
@@ -115,7 +160,6 @@ func _parse_args(arg_list:Array) -> Dictionary:
 			var key = a.substr(0,equals_index)
 			var val = a.substr(equals_index+1)
 			args[key] = val
-	print(args)
 	return args
 
 # Actor control
