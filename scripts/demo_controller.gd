@@ -8,13 +8,14 @@ var start_from_line := false
 
 func _ready():
 	Chatty.event_started.connect(self._on_chatty_event)
+	Chatty.script_completed.connect(self._on_stop_pressed)
 
+# Handle shift modifier
 func _input(event):
 	if event is InputEventKey:
-		if event.keycode == KEY_SHIFT:
+		if event.keycode == KEY_CTRL:
 			start_from_line = event.pressed
 			btn_run.text = "From Line" if start_from_line else "Run Script"
-			
 
 func _on_run_pressed():
 	var script = dialouge_input.text
@@ -23,11 +24,15 @@ func _on_run_pressed():
 		Chatty.run_script(0 if not start_from_line else dialouge_input.get_caret_line())
 		
 		btn_stop.disabled = false
+		btn_run.disabled = true
+		dialouge_input.editable = false
 
 func _on_chatty_event(num,event):
 	dialouge_input.set_caret_line(num)
 
 func _on_stop_pressed():
-	btn_stop.disabled = false
-	
-	Chatty.stop_script()
+	btn_run.disabled = false
+	btn_stop.disabled = true
+	dialouge_input.editable = true
+	if Chatty.script_active:
+		Chatty.stop_script()

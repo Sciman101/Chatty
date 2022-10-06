@@ -36,7 +36,7 @@ size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("1_i0o6v")
 text = "jnfr: Hello!
 jnfr, shocked: This is an example script!
-jnfr, default, 5s: Have fun messing with Chatty!"
+jnfr, default, t=5: Have fun messing with Chatty!"
 placeholder_text = "speaker_name: Dialouge!"
 wrap_mode = 1
 highlight_current_line = true

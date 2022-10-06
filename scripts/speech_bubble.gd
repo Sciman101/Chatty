@@ -19,7 +19,6 @@ const DEFAULT_CHARACTER_DELAY := 0.05
 const DEFAULT_SPEECH_DELAY := 1
 const DEFAULT_SHOW_DURATION := 0.5
 
-var character_delay := DEFAULT_CHARACTER_DELAY
 var num_characters := 0
 var parsed_dialouge := ""
 var speaker = null
@@ -72,7 +71,6 @@ func set_dialouge(dialouge:String) -> void:
 	parsed_dialouge = dialouge_label.get_parsed_text()
 	num_characters = parsed_dialouge.length()
 	_set_visible_characters(0)
-	character_delay = DEFAULT_CHARACTER_DELAY
 
 func set_speaker(new_speaker:Speaker) -> void:
 	speaker = new_speaker
@@ -83,11 +81,7 @@ func set_speaker(new_speaker:Speaker) -> void:
 	
 	talk_sfx.stream = speaker.talksound
 
-func set_dialouge_duration(duration:float) -> void:
-	if duration > 0 and num_characters > 0:
-		character_delay = duration / num_characters
-
-func set_speaker_animation(anim:StringName) -> void:
+func set_speaker_animation(anim:StringName=&'default') -> void:
 	if speaker:
 		if portrait.frames.has_animation(anim):
 			portrait.animation = anim
@@ -98,12 +92,21 @@ func set_speaker_animation(anim:StringName) -> void:
 		push_warning("No active speaker!")
 
 # Actually do the thing
-func present(animate:bool=true,sfx:bool=true) -> void:
+func present(args:Dictionary) -> void:
 	
 	is_presenting = true
 	portrait.frame = 0
-	if animate: portrait.play()
 	_set_visible_characters(0)
+	
+	# Set time from args
+	var character_delay = DEFAULT_CHARACTER_DELAY
+	if args.has('t'):
+		character_delay = max(0.01,args.t.to_float()/num_characters)
+	
+	# Other flags
+	if not args.has('noanimate'):
+		portrait.play()
+	var play_sound = not args.has('nosound')
 	
 	for i in range(num_characters):
 		
@@ -112,7 +115,7 @@ func present(animate:bool=true,sfx:bool=true) -> void:
 		
 		_set_visible_characters(i)
 		
-		if sfx and parsed_dialouge[i] != ' ':
+		if play_sound and parsed_dialouge[i] != ' ':
 			talk_sfx.play()
 		
 		timer.start(character_delay)
@@ -121,7 +124,7 @@ func present(animate:bool=true,sfx:bool=true) -> void:
 	jump_to_end()
 	
 	# Wait a second
-	if not interrupt:
+	if not interrupt and not args.has('nopause'):
 		timer.start(DEFAULT_SPEECH_DELAY)
 		await timer.timeout
 	else:

@@ -50,7 +50,6 @@ text = "TEST
 TEST
 IF YOU CAN SEE THIS DIE"
 scroll_active = false
-autowrap_mode = 2
 custom_effects = [SubResource("RichTextEffect_i80sp"), SubResource("RichTextEffect_eci5y")]
 visible_characters_behavior = 1
 

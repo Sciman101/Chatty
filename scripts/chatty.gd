@@ -10,35 +10,43 @@ var actors = {}
 
 var script_events = []
 var script_active = false
+var script_index := 0
 
 signal event_started(num,event)
+signal script_completed
 
 func run_script(start:int=0) -> void:
 	script_active = true
-	var index := 0
-	for event in script_events:
-		
-		if index >= start:
-			if not script_active:
-				break
-			event_started.emit(index,event)
-			if event.type == &'dialouge':
-				await _run_dialouge_event(event)
-			elif event.type == &'instruction':
-				pass
-		
-		index += 1
+	script_index = 0
+	
+	if current_dialouge_bubble:
+		current_dialouge_bubble.set_speaker_animation()
+	
+	for script_index in range(start,script_events.size()):
+		var event = script_events[script_index]
+
+		if not script_active:
+			break
+		event_started.emit(script_index,event)
+		if event.type == &'dialouge':
+			await _run_dialouge_event(event)
+		elif event.type == &'instruction':
+			pass
 	
 	if current_dialouge_bubble:
 		current_dialouge_bubble.disappear()
 	
 	script_active = false
+	
+	script_completed.emit()
 
 func stop_script() -> void:
-	current_dialouge_bubble.stop_dialouge()
+	if current_dialouge_bubble:
+		current_dialouge_bubble.stop_dialouge()
 	script_active = false
 
 func _run_dialouge_event(event) -> void:
+	# Create bubble if it doesn't exist
 	if current_dialouge_bubble == null:
 		current_dialouge_bubble = SpeechBubble.instantiate()
 		add_child(current_dialouge_bubble)
@@ -49,30 +57,16 @@ func _run_dialouge_event(event) -> void:
 	
 	if current_dialouge_bubble.speaker != event.speaker:
 		current_dialouge_bubble.set_speaker(event.speaker)
-		if current_dialouge_bubble.is_bubble_visible():
-			# Animate the bubble tweening over
-			pass
 	
 	if event.has('animation_name'):
 		current_dialouge_bubble.set_speaker_animation(event.animation_name)
 	
-	var animate_portrait = true
-	var play_sound = true
-	
-	if event.has('args'):
-		for arg in event.args:
-			# Duration
-			if arg[-1] == 's':
-				current_dialouge_bubble.set_dialouge_duration(arg.substr(0,arg.length()-1).to_float())
-			elif arg == 'noanimate':
-				animate_portrait = false
-			elif arg == 'nosound':
-				play_sound = false
-	
 	if not current_dialouge_bubble.is_bubble_visible():
 		await current_dialouge_bubble.appear()
 	
-	await current_dialouge_bubble.present(animate_portrait,play_sound)
+	var args = {}
+	if event.has('args'): args = event.args
+	await current_dialouge_bubble.present(args)
 
 # Load a script into the chatty system
 func load_script(script_text:String) -> void:
@@ -87,7 +81,7 @@ func _parse_line(line:String) -> void:
 		line = line.substr(1)
 		var event = {
 			'type':&'instruction',
-			'args': Array(line.split(',')).map(func(item): return item.strip_edges())
+			'args': _parse_args(Array(line.split(',')).map(func(item): return item.strip_edges()))
 		}
 		script_events.append(event)
 	else:
@@ -108,8 +102,21 @@ func _parse_line(line:String) -> void:
 			if params.size() > 1:
 				event['animation_name'] = params[1]
 			if params.size() > 2:
-				event['args'] = params.slice(2)
+				event['args'] = _parse_args(params.slice(2))
 			script_events.append(event)
+
+func _parse_args(arg_list:Array) -> Dictionary:
+	var args = {}
+	for a in arg_list:
+		var equals_index = a.find('=')
+		if equals_index == -1:
+			args[a] = true
+		else:
+			var key = a.substr(0,equals_index)
+			var val = a.substr(equals_index+1)
+			args[key] = val
+	print(args)
+	return args
 
 # Actor control
 
