@@ -1,0 +1,6 @@
+[gd_resource type="SyntaxHighlighter" load_steps=2 format=3 uid="uid://bqdmxccvcx81s"]
+
+[ext_resource type="Script" path="res://scripts/chatty_syntax_highlighter.gd" id="1_lfe8c"]
+
+[resource]
+script = ExtResource("1_lfe8c")

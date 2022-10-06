@@ -52,19 +52,16 @@ func stop_script() -> void:
 	script_active = false
 
 func _run_dialouge_event(event) -> void:
-	# Create bubble if it doesn't exist
+	
 	if current_dialouge_bubble == null:
-		current_dialouge_bubble = SpeechBubble.instantiate()
-		add_child(current_dialouge_bubble)
-		current_dialouge_bubble.position = current_dialouge_bubble.get_viewport_rect().position + current_dialouge_bubble.get_viewport_rect().size / 2 + Vector2.RIGHT * 100
-		current_dialouge_bubble.disappearImmediate()
+		_create_dialouge_bubble()
 	
 	current_dialouge_bubble.set_dialouge(event.dialouge)
 	
 	if current_dialouge_bubble.speaker != event.speaker:
 		current_dialouge_bubble.set_speaker(event.speaker)
 	
-	if event.has('animation_name'):
+	if event.has('animation_name') and event.animation_name.length() > 0:
 		current_dialouge_bubble.set_speaker_animation(event.animation_name)
 	
 	if not current_dialouge_bubble.is_bubble_visible():
@@ -73,6 +70,12 @@ func _run_dialouge_event(event) -> void:
 	var args = {}
 	if event.has('args'): args = event.args
 	await current_dialouge_bubble.present(args)
+
+func _create_dialouge_bubble() -> void:
+	current_dialouge_bubble = SpeechBubble.instantiate()
+	add_child(current_dialouge_bubble)
+	current_dialouge_bubble.position = current_dialouge_bubble.get_viewport_rect().position + current_dialouge_bubble.get_viewport_rect().size / 2 + Vector2.RIGHT * 100
+	current_dialouge_bubble.disappearImmediate()
 
 func _run_instruction_event(event) -> void:
 	var params = event.params
