@@ -20,7 +20,6 @@ theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
-layout_mode = 2
 offset_left = 2.0
 offset_top = 2.0
 offset_right = 200.0
@@ -29,7 +28,6 @@ grow_vertical = 2
 
 [node name="DialougeInput" type="TextEdit" parent="CanvasLayer/MarginContainer/VBoxContainer"]
 texture_filter = 1
-layout_mode = 2
 offset_right = 198.0
 offset_bottom = 321.0
 grow_vertical = 2
@@ -56,21 +54,18 @@ syntax_highlighter = ExtResource("3_t0y6w")
 caret_blink = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer"]
-layout_mode = 2
 offset_top = 325.0
 offset_right = 198.0
 offset_bottom = 356.0
 alignment = 1
 
 [node name="Run" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
 offset_right = 97.0
 offset_bottom = 31.0
 size_flags_horizontal = 3
 text = "Run Script"
 
 [node name="Stop" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
 offset_left = 101.0
 offset_right = 198.0
 offset_bottom = 31.0

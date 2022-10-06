@@ -142,9 +142,13 @@ func _parse_line(line:String,event_index:int) -> void:
 			var params = Array(line.substr(0,colon_index).strip_edges().split(',')).map(func(item): return item.strip_edges().to_lower())
 			var dialouge = line.substr(colon_index+1).strip_edges()
 			
+			if not SpeakerLoader.speakers.has(params[0]):
+				push_error("Unknown speaker ",params[0])
+				return
+			
 			var event = {
 				'type': &'dialouge',
-				'speaker': Speakers[params[0]],
+				'speaker': SpeakerLoader.speakers[params[0]],
 				'dialouge': dialouge
 			}
 			if params.size() > 1:
