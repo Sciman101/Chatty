@@ -1,26 +1,26 @@
-[gd_scene load_steps=11 format=3 uid="uid://dp6xl1ewc81u8"]
+[gd_scene load_steps=11 format=3 uid="uid://6mmv842l2nqv"]
 
-[ext_resource type="Script" path="res://scripts/speech_bubble.gd" id="1_dfv8m"]
+[ext_resource type="Script" path="res://scripts/chatty/speech_bubble.gd" id="1_jl81n"]
 [ext_resource type="Texture2D" uid="uid://heljunt50u68" path="res://graphics/speech_bubble.png" id="2_fjywy"]
-[ext_resource type="SpriteFrames" uid="uid://c4fdxqjg7hfw5" path="res://speakers/speaker_jnfr.tres" id="2_wboqa"]
+[ext_resource type="SpriteFrames" uid="uid://b8cxi2vptwohx" path="res://speakers/speaker_jnfr.tres" id="2_wboqa"]
 [ext_resource type="FontFile" uid="uid://bbnmo4grd6j5x" path="res://graphics/monogram.ttf" id="3_8txfa"]
-[ext_resource type="Script" path="res://scripts/text_effect_appear.gd" id="5_tgg17"]
+[ext_resource type="Script" path="res://scripts/text_effects/text_effect_appear.gd" id="5_ebamh"]
 [ext_resource type="Texture2D" uid="uid://c30x6n33dlb4u" path="res://graphics/tail.png" id="6_dvoxa"]
-[ext_resource type="Script" path="res://scripts/text_effect_glitch.gd" id="6_x38wg"]
+[ext_resource type="Script" path="res://scripts/text_effects/text_effect_glitch.gd" id="6_lbiwn"]
 
 [sub_resource type="FontVariation" id="FontVariation_eku4v"]
 base_font = ExtResource("3_8txfa")
 variation_embolden = 0.6
 
 [sub_resource type="RichTextEffect" id="RichTextEffect_i80sp"]
-script = ExtResource("5_tgg17")
+script = ExtResource("5_ebamh")
 
 [sub_resource type="RichTextEffect" id="RichTextEffect_eci5y"]
-script = ExtResource("6_x38wg")
+script = ExtResource("6_lbiwn")
 
 [node name="SpeechBubble" type="Node2D"]
 texture_filter = 1
-script = ExtResource("1_dfv8m")
+script = ExtResource("1_jl81n")
 
 [node name="FadeInSound" type="AudioStreamPlayer" parent="."]
 

@@ -2,7 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://bbnmo4grd6j5x" path="res://graphics/monogram.ttf" id="1_i0o6v"]
 [ext_resource type="Script" path="res://scripts/demo_controller.gd" id="1_ikqjx"]
-[ext_resource type="SyntaxHighlighter" uid="uid://bqdmxccvcx81s" path="res://chatty_syntax_highlighter.tres" id="3_t0y6w"]
+[ext_resource type="SyntaxHighlighter" path="res://chatty_syntax_highlighter.tres" id="3_t0y6w"]
 
 [node name="Demo" type="Node2D"]
 
@@ -35,8 +35,21 @@ offset_bottom = 321.0
 grow_vertical = 2
 size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("1_i0o6v")
-text = "#hello"
+text = "jnfr: Hi! Welcome to the [wave]Chatty[/wave] dialouge system!
+jnfr, shocked: Mess around a bit, see what works!
+jnfr, default: And don't forget!-
+>gotor 1 2 3
+(comments are formatted like you're typing OOC)
+#1
+jnfr: Take it easy, but take it!!
+>fin
+#2
+jnfr,, nosound, t=2: [b][shake]D I E
+>fin
+#3
+jnfr: aiojs;jfklsdjfkl;sdl;kf"
 placeholder_text = "speaker_name: Dialouge!"
+drag_and_drop_selection_enabled = false
 wrap_mode = 1
 highlight_current_line = true
 syntax_highlighter = ExtResource("3_t0y6w")

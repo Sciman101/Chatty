@@ -111,7 +111,7 @@ func load_script(script_text:String) -> void:
 	var lines = script_text.split("\n")
 	var idx : =0
 	for line in lines:
-		if line.length() > 0:
+		if line.length() > 0 and line[0] != '(':
 			_parse_line(line,idx)
 			idx += 1
 

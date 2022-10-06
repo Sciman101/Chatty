@@ -10,6 +10,8 @@ func _get_line_syntax_highlighting(line_num:int) -> Dictionary:
 	if line.length() > 0:
 		if line[0] == '#':
 			return {0:{color = Color.ORANGE}}
+		elif line[0] == '(':
+			return {0:{color = Color.GRAY}}
 		elif line[0] == '>':
 			
 			var space_index = line.find(' ')
@@ -26,7 +28,7 @@ func _get_line_syntax_highlighting(line_num:int) -> Dictionary:
 				var colon_index = line.find(':')
 				var highlight = {0:{color=Color.DARK_SEA_GREEN},colon_index+1:{color=Color.WHITE}}
 				var comma_index = line.find(',')
-				if comma_index != -1:
+				if comma_index != -1 and comma_index < colon_index:
 					highlight[comma_index] = {color=Color.CADET_BLUE}
 				return highlight
 	else:

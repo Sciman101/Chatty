@@ -12,22 +12,22 @@ _global_script_classes=[{
 "base": "SyntaxHighlighter",
 "class": &"ChattySyntaxHighlighter",
 "language": &"GDScript",
-"path": "res://scripts/chatty_syntax_highlighter.gd"
+"path": "res://scripts/chatty/chatty_syntax_highlighter.gd"
 }, {
 "base": "RichTextEffect",
 "class": &"RichTextAppear",
 "language": &"GDScript",
-"path": "res://scripts/text_effect_appear.gd"
+"path": "res://scripts/text_effects/text_effect_appear.gd"
 }, {
 "base": "RichTextEffect",
 "class": &"RichTextGlitch",
 "language": &"GDScript",
-"path": "res://scripts/text_effect_glitch.gd"
+"path": "res://scripts/text_effects/text_effect_glitch.gd"
 }, {
 "base": "SpriteFrames",
 "class": &"Speaker",
 "language": &"GDScript",
-"path": "res://scripts/speaker.gd"
+"path": "res://scripts/chatty/speaker.gd"
 }]
 _global_script_class_icons={
 "ChattySyntaxHighlighter": "",
@@ -45,7 +45,7 @@ config/icon="res://graphics/icon.svg"
 
 [autoload]
 
-Chatty="*res://scripts/chatty.gd"
+Chatty="*res://scripts/chatty/chatty.gd"
 
 [display]
 

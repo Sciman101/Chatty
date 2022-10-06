@@ -1,61 +1,61 @@
-[gd_resource type="SpriteFrames" load_steps=20 format=3 uid="uid://c4fdxqjg7hfw5"]
+[gd_resource type="SpriteFrames" load_steps=20 format=3 uid="uid://b8cxi2vptwohx"]
 
-[ext_resource type="Script" path="res://scripts/speaker.gd" id="1_4nxmd"]
+[ext_resource type="Script" path="res://scripts/chatty/speaker.gd" id="1_4nxmd"]
 [ext_resource type="Texture2D" uid="uid://cpfgx4vmbe2do" path="res://graphics/jnfr_talksprite.png" id="1_q2b7s"]
 [ext_resource type="AudioStream" uid="uid://cobseybia0rg1" path="res://sounds/talksound/keys-01.wav" id="3_dec32"]
 [ext_resource type="AudioStream" uid="uid://ckplh8gyywfyq" path="res://sounds/talksound/keys-02.wav" id="4_ok3y3"]
 [ext_resource type="AudioStream" uid="uid://ltfm4tu4lccl" path="res://sounds/talksound/keys-03.wav" id="5_8o8le"]
 [ext_resource type="AudioStream" uid="uid://coxgii4p1uoab" path="res://sounds/talksound/keys-04.wav" id="6_rfegt"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_hbj6o"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_n3d71"]
 atlas = ExtResource("1_q2b7s")
 region = Rect2(0, 48, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1y838"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_a1srr"]
 atlas = ExtResource("1_q2b7s")
 region = Rect2(48, 48, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5mrgk"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_0s1m5"]
 atlas = ExtResource("1_q2b7s")
 region = Rect2(96, 48, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_o4ryw"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_mnelg"]
 atlas = ExtResource("1_q2b7s")
 region = Rect2(0, 0, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_sbsw5"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_t1wob"]
 atlas = ExtResource("1_q2b7s")
 region = Rect2(48, 0, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_iggud"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_cl004"]
 atlas = ExtResource("1_q2b7s")
 region = Rect2(96, 0, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_42604"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ikfqn"]
 atlas = ExtResource("1_q2b7s")
 region = Rect2(0, 144, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_wab4d"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_1t2l5"]
 atlas = ExtResource("1_q2b7s")
 region = Rect2(48, 144, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_r0epf"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_0loxr"]
 atlas = ExtResource("1_q2b7s")
 region = Rect2(96, 144, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_v84wm"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_6d20d"]
 atlas = ExtResource("1_q2b7s")
 region = Rect2(0, 96, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_02ov7"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ehua3"]
 atlas = ExtResource("1_q2b7s")
 region = Rect2(48, 96, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3tsb8"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_3wu3r"]
 atlas = ExtResource("1_q2b7s")
 region = Rect2(96, 96, 48, 48)
 
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_hiel6"]
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_26waf"]
 streams_count = 4
 random_pitch = 1.2
 random_volume_offset_db = 0.0
@@ -70,26 +70,26 @@ stream_3/weight = 1.0
 
 [resource]
 animations = [{
-"frames": [SubResource("AtlasTexture_hbj6o"), SubResource("AtlasTexture_1y838"), SubResource("AtlasTexture_5mrgk")],
+"frames": [SubResource("AtlasTexture_n3d71"), SubResource("AtlasTexture_a1srr"), SubResource("AtlasTexture_0s1m5")],
 "loop": true,
 "name": &"angry",
 "speed": 8.0
 }, {
-"frames": [SubResource("AtlasTexture_o4ryw"), SubResource("AtlasTexture_sbsw5"), SubResource("AtlasTexture_iggud")],
+"frames": [SubResource("AtlasTexture_mnelg"), SubResource("AtlasTexture_t1wob"), SubResource("AtlasTexture_cl004")],
 "loop": true,
 "name": &"default",
 "speed": 8.0
 }, {
-"frames": [SubResource("AtlasTexture_42604"), SubResource("AtlasTexture_wab4d"), SubResource("AtlasTexture_r0epf")],
+"frames": [SubResource("AtlasTexture_ikfqn"), SubResource("AtlasTexture_1t2l5"), SubResource("AtlasTexture_0loxr")],
 "loop": true,
 "name": &"seethe",
 "speed": 8.0
 }, {
-"frames": [SubResource("AtlasTexture_v84wm"), SubResource("AtlasTexture_02ov7"), SubResource("AtlasTexture_3tsb8")],
+"frames": [SubResource("AtlasTexture_6d20d"), SubResource("AtlasTexture_ehua3"), SubResource("AtlasTexture_3wu3r")],
 "loop": true,
 "name": &"shocked",
 "speed": 8.0
 }]
 script = ExtResource("1_4nxmd")
 speaker_name = "JNFR"
-talksound = SubResource("AudioStreamRandomizer_hiel6")
+talksound = SubResource("AudioStreamRandomizer_26waf")
