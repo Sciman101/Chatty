@@ -98,7 +98,6 @@ func _run_instruction_event(event) -> void:
 			# Go to a random label
 			if params.size() > 1:
 				var label_index = randi_range(1,params.size()-1)
-				print(label_index)
 				var label = params[label_index]
 				if script_labels.has(label):
 					script_index = script_labels[label]-1

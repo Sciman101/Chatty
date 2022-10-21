@@ -1,4 +1,3 @@
 res://scene/speech_bubble.tscn
 res://speakers/speaker_jnfr.tres
-res://scripts/chatty/speaker_loader.gd
 res://scene/demo.tscn

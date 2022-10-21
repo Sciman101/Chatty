@@ -1,5 +1,5 @@
 0b7126e0c6e86d3ec295a72f5aa6e0bd
-::res://::1665068926
+::res://::1666318541
 chatty_syntax_highlighter.tres::SyntaxHighlighter::-1::1665062371::0::1::::<><>::res://scripts/chatty/chatty_syntax_highlighter.gd
 rich_text_effect_glitch.tres::RichTextEffect::-1::1665062371::0::1::::<><>::res://scripts/text_effects/text_effect_glitch.gd
 ::res://graphics/::1665062371
@@ -8,16 +8,16 @@ jnfr_talksprite.png::CompressedTexture2D::5836402842108195024::1665062371::16650
 monogram.ttf::FontFile::2484201576385398399::1665062371::1665062371::1::::<><>::
 speech_bubble.png::CompressedTexture2D::500264447001871191::1665062371::1665062371::1::::<><>::
 tail.png::CompressedTexture2D::6791191010881994618::1665062371::1665062371::1::::<><>::
-::res://scene/::1665064748
-demo.tscn::PackedScene::7427877439555253715::1665064748::0::1::::<><>::uid://bbnmo4grd6j5x<>res://scripts/demo_controller.gd<>res://chatty_syntax_highlighter.tres
-speech_bubble.tscn::PackedScene::2201394570725337361::1665064131::0::1::::<><>::res://scripts/chatty/speech_bubble.gd<>uid://heljunt50u68<>uid://b8cxi2vptwohx<>uid://bbnmo4grd6j5x<>res://scripts/text_effects/text_effect_appear.gd<>uid://c30x6n33dlb4u<>res://scripts/text_effects/text_effect_glitch.gd
+::res://scene/::1665070904
+demo.tscn::PackedScene::7427877439555253715::1665070469::0::1::::<><>::uid://bbnmo4grd6j5x<>res://scripts/demo_controller.gd<>res://chatty_syntax_highlighter.tres
+speech_bubble.tscn::PackedScene::2201394570725337361::1665070904::0::1::::<><>::res://scripts/chatty/speech_bubble.gd<>uid://heljunt50u68<>uid://b8cxi2vptwohx<>uid://bbnmo4grd6j5x<>res://scripts/text_effects/text_effect_appear.gd<>uid://c30x6n33dlb4u<>res://scripts/text_effects/text_effect_glitch.gd
 ::res://scripts/::1665062371
 demo_controller.gd::GDScript::-1::1665062371::0::1::::<>CanvasLayer<>::
-::res://scripts/chatty/::1665064748
-chatty.gd::GDScript::-1::1665063766::0::1::::<>Node<>::
+::res://scripts/chatty/::1665070904
+chatty.gd::GDScript::-1::1665070904::0::1::::<>Node<>::
 chatty_syntax_highlighter.gd::GDScript::-1::1665062371::0::1::::ChattySyntaxHighlighter<>SyntaxHighlighter<>::
 speaker.gd::GDScript::-1::1665064748::0::1::::Speaker<>SpriteFrames<>::
-speaker_loader.gd::GDScript::-1::1665064748::0::1::::<>Node<>::
+speaker_loader.gd::GDScript::-1::1665068943::0::1::::<>Node<>::
 speech_bubble.gd::GDScript::-1::1665062371::0::1::::<>Node2D<>::
 ::res://scripts/text_effects/::1665062371
 text_effect_appear.gd::GDScript::-1::1665062371::0::1::::RichTextAppear<>RichTextEffect<>::
@@ -30,5 +30,5 @@ keys-01.wav::AudioStreamWAV::5758650867587824946::1665062371::1665062371::1::::<
 keys-02.wav::AudioStreamWAV::5506377601217962756::1665062371::1665062371::1::::<><>::
 keys-03.wav::AudioStreamWAV::811627025312518079::1665062371::1665062371::1::::<><>::
 keys-04.wav::AudioStreamWAV::5803344920673075865::1665062371::1665062371::1::::<><>::
-::res://speakers/::1665062758
-speaker_jnfr.tres::SpriteFrames::4708193507720306621::1665062758::0::1::::<><>::res://scripts/chatty/speaker.gd<>uid://cpfgx4vmbe2do<>uid://cobseybia0rg1<>uid://ckplh8gyywfyq<>uid://ltfm4tu4lccl<>uid://coxgii4p1uoab
+::res://speakers/::1665070469
+speaker_jnfr.tres::SpriteFrames::4708193507720306621::1665070469::0::1::::<><>::res://scripts/chatty/speaker.gd<>uid://cpfgx4vmbe2do<>uid://cobseybia0rg1<>uid://ckplh8gyywfyq<>uid://ltfm4tu4lccl<>uid://coxgii4p1uoab
