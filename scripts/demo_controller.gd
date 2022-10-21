@@ -34,5 +34,6 @@ func _on_stop_pressed():
 	btn_run.disabled = false
 	btn_stop.disabled = true
 	dialouge_input.editable = true
+	start_from_line = false
 	if Chatty.script_active:
 		Chatty.stop_script()

@@ -40,7 +40,7 @@ _global_script_class_icons={
 
 config/name="Chatty"
 run/main_scene="res://scene/demo.tscn"
-config/features=PackedStringArray("4.0", "Vulkan Clustered")
+config/features=PackedStringArray("4.0")
 config/icon="res://graphics/icon.svg"
 
 [autoload]
@@ -55,6 +55,10 @@ window/size/viewport_height=360
 window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="viewport"
+
+[editor]
+
+movie_writer/movie_file="C:/Users/Scima/Videos/Godot Movie Mode/movie.avi"
 
 [rendering]
 

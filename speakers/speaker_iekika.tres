@@ -1,0 +1,33 @@
+[gd_resource type="SpriteFrames" load_steps=8 format=3 uid="uid://bycl6s8yad4d7"]
+
+[ext_resource type="Script" path="res://scripts/chatty/speaker.gd" id="1_4nxmd"]
+[ext_resource type="Texture2D" uid="uid://dyk7ude8qy7uj" path="res://graphics/iekikatalk.png" id="1_smw5m"]
+[ext_resource type="AudioStream" uid="uid://bjcmbe1t5gbv6" path="res://sounds/talksound/pvc-01.wav" id="3_wxv7o"]
+[ext_resource type="AudioStream" uid="uid://cnuwy8bcem3y6" path="res://sounds/talksound/pvc-02.wav" id="4_m1e68"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bu082"]
+atlas = ExtResource("1_smw5m")
+region = Rect2(0, 0, 53, 53)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gris0"]
+atlas = ExtResource("1_smw5m")
+region = Rect2(53, 0, 53, 53)
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_26waf"]
+streams_count = 2
+random_pitch = 1.5
+stream_0/stream = ExtResource("3_wxv7o")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("4_m1e68")
+stream_1/weight = 1.0
+
+[resource]
+animations = [{
+"frames": [SubResource("AtlasTexture_bu082"), SubResource("AtlasTexture_gris0")],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+script = ExtResource("1_4nxmd")
+speaker_name = "Iekika"
+talksound = SubResource("AudioStreamRandomizer_26waf")
