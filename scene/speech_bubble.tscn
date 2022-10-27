@@ -1,11 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://6mmv842l2nqv"]
+[gd_scene load_steps=10 format=3 uid="uid://6mmv842l2nqv"]
 
 [ext_resource type="Script" path="res://scripts/chatty/speech_bubble.gd" id="1_jl81n"]
 [ext_resource type="Texture2D" uid="uid://heljunt50u68" path="res://graphics/speech_bubble.png" id="2_fjywy"]
 [ext_resource type="SpriteFrames" uid="uid://b8cxi2vptwohx" path="res://speakers/speaker_jnfr.tres" id="2_wboqa"]
 [ext_resource type="FontFile" uid="uid://bbnmo4grd6j5x" path="res://graphics/monogram.ttf" id="3_8txfa"]
 [ext_resource type="Script" path="res://scripts/text_effects/text_effect_appear.gd" id="5_ebamh"]
-[ext_resource type="Texture2D" uid="uid://c30x6n33dlb4u" path="res://graphics/tail.png" id="6_dvoxa"]
 [ext_resource type="Script" path="res://scripts/text_effects/text_effect_glitch.gd" id="6_lbiwn"]
 
 [sub_resource type="FontVariation" id="FontVariation_eku4v"]
@@ -52,19 +51,5 @@ IF YOU CAN SEE THIS DIE"
 scroll_active = false
 custom_effects = [SubResource("RichTextEffect_i80sp"), SubResource("RichTextEffect_eci5y")]
 visible_characters_behavior = 1
-
-[node name="@@16859" type="VScrollBar" parent="Graphic/Dialouge"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-max_value = 44.0
-step = 1.0
-page = 44.0
-
-[node name="Tail" type="Sprite2D" parent="Graphic"]
-position = Vector2(0, 40)
-texture = ExtResource("6_dvoxa")
 
 [node name="Timer" type="Timer" parent="."]

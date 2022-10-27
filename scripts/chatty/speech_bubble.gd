@@ -6,14 +6,14 @@ extends Node2D
 @onready var graphic : Sprite2D = $Graphic
 @onready var portrait : AnimatedSprite2D = $Graphic/Portrait
 @onready var dialouge_label : RichTextLabel = $Graphic/Dialouge
-@onready var tail : Sprite2D = $Graphic/Tail
+#@onready var tail : Sprite2D = $Graphic/Tail
 @onready var timer : Timer = $Timer
 @onready var fade_sfx : AudioStreamPlayer = $FadeInSound
 @onready var talk_sfx : AudioStreamPlayer = $TalkSoundPlayer
 
 const BUBBLE_MARGINS := Vector2(192/2 + 8,32 + 8)
-const BUBBLE_TAIL_Y_OFFSET := 48
-const BUBBLE_TAIL_X_LIMIT := 192/2 - 32
+#const BUBBLE_TAIL_Y_OFFSET := 48
+#const BUBBLE_TAIL_X_LIMIT := 192/2 - 32
 
 const DEFAULT_CHARACTER_DELAY := 0.05
 const DEFAULT_SPEECH_DELAY := 1
@@ -144,7 +144,7 @@ func jump_to_end() -> void:
 
 func set_bubble_position(target_pos:Vector2) -> void:
 	target_pos.x = round(target_pos.x)
-	target_pos.y = round(target_pos.y) - BUBBLE_TAIL_Y_OFFSET
+	target_pos.y = round(target_pos.y)
 	
 	var rect = get_viewport_rect()
 	
@@ -158,9 +158,6 @@ func set_bubble_position(target_pos:Vector2) -> void:
 		rect.position.y + BUBBLE_MARGINS.y,
 		rect.end.y - BUBBLE_MARGINS.y
 	)
-	
-	var tail_x = target_pos.x - position.x
-	tail.position.x = clamp(tail_x,-BUBBLE_TAIL_X_LIMIT,BUBBLE_TAIL_X_LIMIT)
 
 func _set_visible_characters(num:int) -> void:
 	dialouge_label.visible_characters = num

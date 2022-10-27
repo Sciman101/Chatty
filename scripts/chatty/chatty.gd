@@ -58,7 +58,7 @@ func _run_dialouge_event(event) -> void:
 	
 	current_dialouge_bubble.set_dialouge(event.dialouge)
 	
-	if current_dialouge_bubble.speaker != event.speaker:
+	if current_dialouge_bubble.speaker != event.speaker and event.speaker != null:
 		current_dialouge_bubble.set_speaker(event.speaker)
 	
 	if event.has('animation_name') and event.animation_name.length() > 0:
@@ -110,12 +110,16 @@ func load_script(script_text:String) -> void:
 	var lines = script_text.split("\n")
 	var idx : =0
 	for line in lines:
-		if line.length() > 0 and line[0] != '(':
+		if line.length() > 0:
 			_parse_line(line,idx)
 			idx += 1
 
 func _parse_line(line:String,event_index:int) -> void:
-	if line[0] == '>':
+	line = line.strip_edges()
+	if line[0] == '(':
+		# Do nothing, comment
+		pass
+	elif line[0] == '>':
 		# Parse action
 		line = line.substr(1)
 		var event = {
@@ -138,22 +142,50 @@ func _parse_line(line:String,event_index:int) -> void:
 		if colon_index == -1:
 			push_error("Malformed dialouge line: " + line)
 		else:
-			var params = Array(line.substr(0,colon_index).strip_edges().split(',')).map(func(item): return item.strip_edges().to_lower())
+			var params_string = line.substr(0,colon_index).strip_edges()
+			
+			# Extract params
+			var comma_index = params_string.find(',')
+			var bracket_index = params_string.find('[')
+			
+			var speaker_name = ''
+			var animation_name = ''
+			var args = []
+			if comma_index != -1:
+				if comma_index != 0:
+					speaker_name = params_string.substr(0,comma_index).strip_edges(false)
+				if bracket_index != -1:
+					animation_name = params_string.substr(comma_index+1,bracket_index-comma_index).strip_edges()
+				else:
+					animation_name = params_string.substr(comma_index+1).strip_edges(true,false)
+			elif bracket_index != -1:
+				speaker_name = params_string.substr(0,bracket_index).strip_edges(false)
+			else:
+				speaker_name = params_string
+			
+			if bracket_index != -1:
+				if params_string[len(params_string)-1] != ']':
+					# parse error
+					pass
+				args = params_string.substr(bracket_index+1,len(params_string)-bracket_index-2).strip_edges().split(',')
+			
 			var dialouge = line.substr(colon_index+1).strip_edges()
 			
-			if not SpeakerLoader.speakers.has(params[0]):
-				push_error("Unknown speaker ",params[0])
+			if speaker_name != '' and not SpeakerLoader.speakers.has(speaker_name):
+				push_error("Unknown speaker ",speaker_name)
 				return
+			var speaker = null
+			if speaker_name != '':
+				speaker = SpeakerLoader.speakers[speaker_name]
 			
 			var event = {
 				'type': &'dialouge',
-				'speaker': SpeakerLoader.speakers[params[0]],
+				'speaker': speaker,
+				'animation_name': animation_name,
+				'args': _parse_args(args),
 				'dialouge': dialouge
 			}
-			if params.size() > 1:
-				event['animation_name'] = params[1]
-			if params.size() > 2:
-				event['args'] = _parse_args(params.slice(2))
+			print(event)
 			script_events.append(event)
 
 func _parse_args(arg_list:Array) -> Dictionary:

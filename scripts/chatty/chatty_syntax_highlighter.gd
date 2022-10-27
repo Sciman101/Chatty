@@ -5,7 +5,7 @@ class_name ChattySyntaxHighlighter
 
 func _get_line_syntax_highlighting(line_num:int) -> Dictionary:
 	
-	var line = get_text_edit().text.split('\n')[line_num]
+	var line = get_text_edit().text.split('\n')[line_num].strip_edges()
 	
 	if line.length() > 0:
 		if line[0] == '#':
@@ -27,9 +27,9 @@ func _get_line_syntax_highlighting(line_num:int) -> Dictionary:
 			else:
 				var colon_index = line.find(':')
 				var highlight = {0:{color=Color.DARK_SEA_GREEN},colon_index+1:{color=Color.WHITE}}
-				var comma_index = line.find(',')
-				if comma_index != -1 and comma_index < colon_index:
-					highlight[comma_index] = {color=Color.CADET_BLUE}
+				var bracket_index = line.find('[')
+				if bracket_index != -1 and bracket_index < colon_index:
+					highlight[bracket_index] = {color=Color.CADET_BLUE}
 				return highlight
 	else:
 		return {}
