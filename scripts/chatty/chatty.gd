@@ -1,9 +1,6 @@
 extends Node
 
 const SpeechBubble = preload("res://scene/speech_bubble.tscn")
-const Speakers = {
-	'jnfr': preload("res://speakers/speaker_jnfr.tres")
-}
 
 var current_dialouge_bubble = null
 var actors = {}
@@ -67,9 +64,9 @@ func _run_dialouge_event(event) -> void:
 	if not current_dialouge_bubble.is_bubble_visible():
 		await current_dialouge_bubble.appear()
 	
-	var args = {}
-	if event.has('args'): args = event.args
-	await current_dialouge_bubble.present(args)
+	var flags = {}
+	if event.has('flags'): flags = event.flags
+	await current_dialouge_bubble.present(flags)
 
 func _create_dialouge_bubble() -> void:
 	current_dialouge_bubble = SpeechBubble.instantiate()
@@ -83,6 +80,9 @@ func _run_instruction_event(event) -> void:
 		push_warning("Empty instruction!")
 		return
 	match params[0]:
+		'end':
+			# Stop after this command
+			script_index = script_events.size()+1
 		'goto':
 			# Jump to the labeled section
 			if params.size() > 1:
@@ -91,9 +91,6 @@ func _run_instruction_event(event) -> void:
 					script_index = script_labels[label]-1
 				else:
 					push_warning("Insufficient params!")
-		'fin':
-			# Stop after this command
-			script_index = script_events.size()+1
 		'gotor':
 			# Go to a random label
 			if params.size() > 1:
@@ -150,7 +147,7 @@ func _parse_line(line:String,event_index:int) -> void:
 			
 			var speaker_name = ''
 			var animation_name = ''
-			var args = []
+			var flags = []
 			if comma_index != -1:
 				if comma_index != 0:
 					speaker_name = params_string.substr(0,comma_index).strip_edges(false)
@@ -167,7 +164,7 @@ func _parse_line(line:String,event_index:int) -> void:
 				if params_string[len(params_string)-1] != ']':
 					# parse error
 					pass
-				args = params_string.substr(bracket_index+1,len(params_string)-bracket_index-2).strip_edges().split(',')
+				flags = params_string.substr(bracket_index+1,len(params_string)-bracket_index-2).strip_edges().split(',')
 			
 			var dialouge = line.substr(colon_index+1).strip_edges()
 			
@@ -182,10 +179,9 @@ func _parse_line(line:String,event_index:int) -> void:
 				'type': &'dialouge',
 				'speaker': speaker,
 				'animation_name': animation_name,
-				'args': _parse_args(args),
+				'flags': _parse_args(flags),
 				'dialouge': dialouge
 			}
-			print(event)
 			script_events.append(event)
 
 func _parse_args(arg_list:Array) -> Dictionary:

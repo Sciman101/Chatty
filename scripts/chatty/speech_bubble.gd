@@ -92,7 +92,7 @@ func set_speaker_animation(anim:StringName=&'default') -> void:
 		push_warning("No active speaker!")
 
 # Actually do the thing
-func present(args:Dictionary) -> void:
+func present(flags:Dictionary) -> void:
 	
 	is_presenting = true
 	portrait.frame = 0
@@ -100,13 +100,13 @@ func present(args:Dictionary) -> void:
 	
 	# Set time from args
 	var character_delay = DEFAULT_CHARACTER_DELAY
-	if args.has('t'):
-		character_delay = max(0.01,args.t.to_float()/num_characters)
+	if flags.has('t'):
+		character_delay = max(0.01,flags.t.to_float()/num_characters)
 	
 	# Other flags
-	if not args.has('noanimate'):
+	if not flags.has('noanimate') and not flags.has('na'):
 		portrait.play()
-	var play_sound = not args.has('nosound')
+	var play_sound = not flags.has('nosound') and not flags.has('ns')
 	
 	for i in range(num_characters):
 		
@@ -124,7 +124,7 @@ func present(args:Dictionary) -> void:
 	jump_to_end()
 	
 	# Wait a second
-	if not interrupt and not args.has('nopause'):
+	if not interrupt and not flags.has('nopause') and not flags.has('np'):
 		timer.start(DEFAULT_SPEECH_DELAY)
 		await timer.timeout
 	else:

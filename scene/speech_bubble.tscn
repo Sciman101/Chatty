@@ -30,14 +30,14 @@ volume_db = -10.0
 texture = ExtResource("2_fjywy")
 
 [node name="Portrait" type="AnimatedSprite2D" parent="Graphic"]
-position = Vector2(-67, -2)
+position = Vector2(-99, -2)
 frames = ExtResource("2_wboqa")
 animation = &"seethe"
 
 [node name="Dialouge" type="RichTextLabel" parent="Graphic"]
-offset_left = -39.0
+offset_left = -70.0
 offset_top = -30.0
-offset_right = 89.0
+offset_right = 122.0
 offset_bottom = 22.0
 mouse_force_pass_scroll_events = false
 theme_override_colors/default_color = Color(0, 0, 0, 1)
@@ -45,9 +45,6 @@ theme_override_constants/line_separation = -2
 theme_override_fonts/normal_font = ExtResource("3_8txfa")
 theme_override_fonts/bold_font = SubResource("FontVariation_eku4v")
 bbcode_enabled = true
-text = "TEST
-TEST
-IF YOU CAN SEE THIS DIE"
 scroll_active = false
 custom_effects = [SubResource("RichTextEffect_i80sp"), SubResource("RichTextEffect_eci5y")]
 visible_characters_behavior = 1

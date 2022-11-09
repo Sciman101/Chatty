@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=3 uid="uid://0lewgghdh148"]
+
+[ext_resource type="PackedScene" uid="uid://6mmv842l2nqv" path="res://scene/speech_bubble.tscn" id="1_gg5w2"]
+[ext_resource type="Script" path="res://scripts/chatty_player.gd" id="1_s8fyu"]
+
+[node name="ChattyPlayer" type="Control"]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 320.0
+offset_bottom = 256.0
+script = ExtResource("1_s8fyu")
+
+[node name="Fill" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.505882, 0.505882, 0.505882, 1)
+
+[node name="SpeechBubble" parent="." instance=ExtResource("1_gg5w2")]
+position = Vector2(160, 210)
+
+[node name="SpeechBubblePositions" type="Node2D" parent="."]
+visible = false
+
+[node name="bottom" type="Marker2D" parent="SpeechBubblePositions"]
+position = Vector2(160, 210)
+
+[node name="center" type="Marker2D" parent="SpeechBubblePositions"]
+position = Vector2(160, 128)
+
+[node name="left" type="Marker2D" parent="SpeechBubblePositions"]
+position = Vector2(130, 128)
+
+[node name="right" type="Marker2D" parent="SpeechBubblePositions"]
+position = Vector2(190, 128)
+
+[node name="top" type="Marker2D" parent="SpeechBubblePositions"]
+position = Vector2(160, 40)

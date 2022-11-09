@@ -42,7 +42,7 @@ jnfr, default: And don't forget!-
 jnfr: Take it easy, but take it!!
 >fin
 #2
-jnfr,, nosound, t=2: [b][shake]D I E
+jnfr [nosound, t=2]: [b][shake]D I E
 >fin
 #3
 jnfr: aiojs;jfklsdjfkl;sdl;kf"
