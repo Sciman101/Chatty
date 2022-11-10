@@ -1,0 +1,9 @@
+{
+    "displayName":"J.N.F.R.",
+    "animations":{
+        "default":{
+            "frames":[0,1,2],
+            "speed": 8
+        }
+    }
+}
