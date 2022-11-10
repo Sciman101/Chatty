@@ -27,7 +27,7 @@ config/icon="res://graphics/icon.svg"
 
 [autoload]
 
-SpeakerLoader="*res://scripts/chatty/speaker_loader.gd"
+AssetHandler="*res://scripts/chatty/asset_handler.gd"
 ChattyParser="*res://scripts/chatty/chatty_parser.gd"
 
 [display]

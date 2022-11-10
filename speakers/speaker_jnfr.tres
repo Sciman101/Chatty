@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=20 format=3 uid="uid://b8cxi2vptwohx"]
+[gd_resource type="SpriteFrames" load_steps=23 format=3 uid="uid://b8cxi2vptwohx"]
 
 [ext_resource type="Script" path="res://scripts/chatty/speaker.gd" id="1_4nxmd"]
 [ext_resource type="Texture2D" uid="uid://cpfgx4vmbe2do" path="res://graphics/jnfr_talksprite.png" id="1_q2b7s"]
@@ -55,6 +55,18 @@ region = Rect2(48, 96, 48, 48)
 atlas = ExtResource("1_q2b7s")
 region = Rect2(96, 96, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_e0t1x"]
+atlas = ExtResource("1_q2b7s")
+region = Rect2(0, 192, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7v48h"]
+atlas = ExtResource("1_q2b7s")
+region = Rect2(48, 192, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ywpd5"]
+atlas = ExtResource("1_q2b7s")
+region = Rect2(96, 192, 48, 48)
+
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_26waf"]
 streams_count = 4
 random_pitch = 1.2
@@ -88,6 +100,11 @@ animations = [{
 "frames": [SubResource("AtlasTexture_6d20d"), SubResource("AtlasTexture_ehua3"), SubResource("AtlasTexture_3wu3r")],
 "loop": true,
 "name": &"shocked",
+"speed": 8.0
+}, {
+"frames": [SubResource("AtlasTexture_e0t1x"), SubResource("AtlasTexture_7v48h"), SubResource("AtlasTexture_ywpd5")],
+"loop": true,
+"name": &"smug",
 "speed": 8.0
 }]
 script = ExtResource("1_4nxmd")

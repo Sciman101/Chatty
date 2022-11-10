@@ -1,7 +1,142 @@
-[gd_scene load_steps=3 format=3 uid="uid://delotll1ag66s"]
+[gd_scene load_steps=12 format=3 uid="uid://delotll1ag66s"]
 
+[ext_resource type="Texture2D" uid="uid://g2u6a184qv08" path="res://graphics/backgrounds/white.png" id="1_al3ex"]
 [ext_resource type="PackedScene" uid="uid://6mmv842l2nqv" path="res://scene/speech_bubble.tscn" id="1_gg5w2"]
-[ext_resource type="Script" path="res://scripts/chatty/chatty_player.gd" id="1_s8fyu"]
+[ext_resource type="Script" path="res://scripts/chatty/background_handler.gd" id="1_h6rm1"]
+[ext_resource type="Script" path="res://scripts/chatty/chatty_player.gd" id="1_vdit5"]
+[ext_resource type="Texture2D" uid="uid://cwvngy6xb4dub" path="res://graphics/backgrounds/black.png" id="4_8r503"]
+
+[sub_resource type="Animation" id="Animation_povfc"]
+resource_name = "fade"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TempBg:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_3rh1o"]
+resource_name = "slide_right"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CurrentBg:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-320, 0), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TempBg:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(320, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ho7wf"]
+resource_name = "slide_left"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CurrentBg:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(320, 0), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TempBg:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-320, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_o1eex"]
+resource_name = "slide_up"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CurrentBg:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 256), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TempBg:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -256)]
+}
+
+[sub_resource type="Animation" id="Animation_mgmlb"]
+resource_name = "slide_down"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CurrentBg:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 256), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TempBg:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -256)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6r0u6"]
+_data = {
+"fade": SubResource("Animation_povfc"),
+"slide_down": SubResource("Animation_mgmlb"),
+"slide_left": SubResource("Animation_ho7wf"),
+"slide_right": SubResource("Animation_3rh1o"),
+"slide_up": SubResource("Animation_o1eex")
+}
 
 [node name="ChattyPlayer" type="Control"]
 clip_contents = true
@@ -9,19 +144,63 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 320.0
 offset_bottom = 256.0
-script = ExtResource("1_s8fyu")
-script_text = "#label1
-jnfr [t=0.1, nopause]: Am I annoying you yet???
->goto label1"
+script = ExtResource("1_vdit5")
+script_text = ">bg black
+>wait 0.5
+>bg windowsxp fade 0.5
+jnfr: ... Anyways, how about we head back to my place?
+ru_b: Sure! I've been curious what your apartment is like.
+>disappear
+>bg den slide_right 0.75
+ru_b: ......
+jnfr, smug: Welcome to my [wave]Epic Gamer Den[/wave]
+ru_b [t=2]: ......
+jnfr, smug:  At a loss for words?
+ru_b: JNFR this is.... [shake]horrible.
+jnfr, angry: Oh, come on, it's not THAT bad.
+ru_b: You don't EAT. Why is there [shake]FOOD[/shake] in here????
+jnfr: I tried doing doordash for a bit.
+>bg dencup
+ru_b: Wh- were you DRINKING from this?
+ru_b: The inside is... sticky???
+jnfr, angry: Drin- Ru-b. I'm a robot, of course I wasn't drinking from that.
+jnfr: I was using it to hold coolant!
+ru_b: WHY IS YOUR COOLANT STICKY."
 
-[node name="Fill" type="ColorRect" parent="."]
+[node name="Background" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.505882, 0.505882, 0.505882, 1)
+script = ExtResource("1_h6rm1")
+
+[node name="BackroundAnimations" type="AnimationPlayer" parent="Background"]
+libraries = {
+"": SubResource("AnimationLibrary_6r0u6")
+}
+
+[node name="CurrentBg" type="TextureRect" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 256.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_al3ex")
+
+[node name="TempBg" type="TextureRect" parent="Background"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_8r503")
 
 [node name="SpeechBubble" parent="." instance=ExtResource("1_gg5w2")]
 position = Vector2(160, 210)

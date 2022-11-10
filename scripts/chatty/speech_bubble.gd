@@ -51,6 +51,7 @@ func disappear() -> void:
 	
 	await tween.finished
 	graphic.visible = false
+	dialouge_label.text = ''
 
 func appearImmediate() -> void:
 	graphic.visible = true
@@ -59,6 +60,7 @@ func appearImmediate() -> void:
 	graphic.modulate = Color.WHITE
 
 func disappearImmediate() -> void:
+	dialouge_label.text = ''
 	graphic.visible = false
 
 func stop_dialouge() -> void:
@@ -79,10 +81,6 @@ func present(event) -> void:
 		push_error('Attempting to run a non-dialouge event on a speech bubble!')
 		return
 	
-	set_speaker(event.speaker)
-	set_speaker_animation(event.animation_name)
-	set_dialouge(event.dialouge)
-	
 	advance_arrow.visible = false
 	is_presenting = true
 	portrait.frame = 0
@@ -98,7 +96,6 @@ func present(event) -> void:
 	# Other flags
 	if not flags.has('noanimate') and not flags.has('na'):
 		portrait.play()
-	print(flags)
 	var play_sound = not flags.has('nosound') and not flags.has('ns')
 	
 	for i in range(num_characters):
@@ -132,8 +129,8 @@ func set_dialouge(dialouge:String) -> void:
 
 func set_speaker(new_speaker) -> bool:
 	if new_speaker is String:
-		if SpeakerLoader.speakers.has(new_speaker):
-			new_speaker = SpeakerLoader.speakers[new_speaker]
+		if AssetHandler.speakers.has(new_speaker):
+			new_speaker = AssetHandler.speakers[new_speaker]
 		else:
 			return false
 	

@@ -1,9 +1,11 @@
+AnimationPlayer
+TextureRect
+Control
 AnimatedSprite2D
 Marker2D
 ColorRect
 Node2D
 Sprite2D
-Control
 CanvasLayer
 AudioStreamPlayer
 Timer
