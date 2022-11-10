@@ -10,6 +10,11 @@ anchors_preset = 0
 offset_right = 320.0
 offset_bottom = 256.0
 script = ExtResource("1_s8fyu")
+script_text = "jnfr: Hi!
+jnfr, mad: HEY
+#label1
+jnfr, happy [t=0.5,h,noanim]: We haven't tested flags yet!
+>bg"
 
 [node name="Fill" type="ColorRect" parent="."]
 layout_mode = 1

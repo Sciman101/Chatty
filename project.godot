@@ -47,6 +47,7 @@ config/icon="res://graphics/icon.svg"
 
 Chatty="*res://scripts/chatty/chatty.gd"
 SpeakerLoader="*res://scripts/chatty/speaker_loader.gd"
+ChattyParser="*res://scripts/chatty_parser.gd"
 
 [display]
 

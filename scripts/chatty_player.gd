@@ -7,7 +7,13 @@ var current_script = []
 var script_event_index := -1
 var interrupt := false
 
+@export_multiline var script_text : String
+
 func _ready() -> void:
+	
+	var script = ChattyParser.compile_script(script_text)
+	print(script.debug_string())
+	
 	# Get speech bubble positions
 	for child in $SpeechBubblePositions.get_children():
 		_speech_bubble_positions[str(child.name).to_lower()] = child.position

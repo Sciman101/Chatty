@@ -1,11 +1,8 @@
-res://scene/speech_bubble.tscn
+res://scene/demo.tscn
 res://speakers/speaker_jnfr.tres
 res://speakers/speaker_ru_b.tres
 res://speakers/speaker_iekika.tres
-res://scene/demo.tscn
-res://scripts/chatty/chatty.gd
-res://scripts/chatty/speech_bubble.gd
 res://scene/chatty_player.tscn
-res://scripts/chatty_player.gd
-res://scripts/chatty_script.gd
+res://scene/speech_bubble.tscn
 res://scripts/chatty_parser.gd
+res://scripts/chatty_player.gd
