@@ -26,10 +26,23 @@ func compile_script(script_text:String) -> ChattyScript:
 		_parse_line(line,line_num,script)
 		line_num += 1
 	
+	# Add choice event
+	_resolve_choice_event(script)
+	
 	return script
 
 func _parser_error(message:String,line_num:int) -> void:
 	push_error(message + " @ line " + str(line_num))
+
+func _resolve_choice_event(script:ChattyScript) -> void:
+	# Add choice event
+	if choice_queue.size() > 0:
+		var event = {
+			'type':&'choice',
+			'options': choice_queue
+		}
+		choice_queue = []
+		script.add_event(event)
 
 func _parse_line(line:String,line_num:int,script:ChattyScript) -> void:
 	
@@ -51,13 +64,7 @@ func _parse_line(line:String,line_num:int,script:ChattyScript) -> void:
 		})
 	else:
 		# Add choice event
-		if choice_queue.size() > 0:
-			var event = {
-				'type':&'choice',
-				'options': choice_queue
-			}
-			choice_queue = []
-			script.add_event(event)
+		_resolve_choice_event(script)
 	
 		if line.begins_with('(') and line.ends_with(')'):
 			pass # Do nothing. comment

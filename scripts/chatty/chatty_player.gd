@@ -4,6 +4,7 @@ const DEFAULT_SPEECHBUBBLE_MOVE_DURATION = 0.5
 
 @onready var speech_bubble = $SpeechBubble
 @onready var bg_handler = $Background
+@onready var choice_box = $ChoiceBox
 var _speech_bubble_positions = {}
 
 var current_script = null
@@ -40,8 +41,16 @@ func _wait_for_input() -> void:
 	while not Input.is_action_pressed("advance_dialouge"):
 		await get_tree().process_frame
 
+func _current_event():
+	return current_script.events[script_event_index]
+
+func _next_event():
+	if script_event_index < current_script.events.size()-1:
+		return current_script.events[script_event_index+1]
+	return null
+
 func _run_current_script_event() -> void:
-	var event = current_script.events[script_event_index]
+	var event = _current_event()
 	
 	match event.type:
 		&'dialouge':
@@ -79,11 +88,14 @@ func _run_dialouge_event(event) -> void:
 	
 	await speech_bubble.present(event)
 	
-	if not (event.flags.has('nopause') or event.flags.has('np')):
+	var next_event = _next_event()
+	if not (event.flags.has('nopause') or event.flags.has('np') or (next_event and next_event.type == &'choice')):
 		await _wait_for_input()
 
 func _run_choice_event(event) -> void:
-	pass
+	choice_box.present_choice(event)
+	var choice = await choice_box.on_choice_made
+	_goto_label(choice)
 
 func _run_command_event(event) -> void:
 	var cmd = event.cmd_name
@@ -121,8 +133,14 @@ func _run_command_event(event) -> void:
 					await speech_bubble.disappear()
 
 func _goto_label(label_string:String) -> void:
-	script_event_index = current_script.label_indices[label_string] - 1
+	if current_script.label_indices.has(label_string):
+		script_event_index = current_script.label_indices[label_string] - 1
+	else:
+		_player_error("No such label " + label_string)
 
 func interrupt_script() -> void:
 	interrupt = true
 	current_script = null
+
+func _player_error(message:String) -> void:
+	push_error(message)

@@ -144,6 +144,7 @@ func set_speaker(new_speaker) -> bool:
 	return true
 
 func set_speaker_animation(anim:StringName=&'default') -> void:
+	if anim == &'': anim = &'default'
 	if speaker:
 		if portrait.frames.has_animation(anim):
 			portrait.animation = anim

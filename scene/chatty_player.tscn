@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://delotll1ag66s"]
+[gd_scene load_steps=13 format=3 uid="uid://delotll1ag66s"]
 
 [ext_resource type="Texture2D" uid="uid://g2u6a184qv08" path="res://graphics/backgrounds/white.png" id="1_al3ex"]
 [ext_resource type="PackedScene" uid="uid://6mmv842l2nqv" path="res://scene/speech_bubble.tscn" id="1_gg5w2"]
 [ext_resource type="Script" path="res://scripts/chatty/background_handler.gd" id="1_h6rm1"]
 [ext_resource type="Script" path="res://scripts/chatty/chatty_player.gd" id="1_vdit5"]
 [ext_resource type="Texture2D" uid="uid://cwvngy6xb4dub" path="res://graphics/backgrounds/black.png" id="4_8r503"]
+[ext_resource type="PackedScene" uid="uid://bdexttr3d1sjp" path="res://scene/choice_box.tscn" id="6_afs78"]
 
 [sub_resource type="Animation" id="Animation_povfc"]
 resource_name = "fade"
@@ -148,10 +149,17 @@ script = ExtResource("1_vdit5")
 script_text = ">bg windowsxp
 >wait 0.5
 #start
-jnfr [p=bottom,nopause]: hi
->wait 0.1
->disappear now
->goto start"
+jnfr: ... did you get all that?
+?yes:Yep, loud and clear
+?no:Can you repeat that?
+
+#no
+jnfr: Ok, lemme start from the beginning...
+jnfr [nf]: JNFR spent the next half-hour re-explaining her plan to steal the decleration of independence
+>goto start
+
+#yes
+jnfr: Great! Let's go"
 
 [node name="Background" type="Control" parent="."]
 layout_mode = 1
@@ -191,6 +199,9 @@ texture = ExtResource("4_8r503")
 
 [node name="SpeechBubble" parent="." instance=ExtResource("1_gg5w2")]
 position = Vector2(160, 210)
+
+[node name="ChoiceBox" parent="." instance=ExtResource("6_afs78")]
+position = Vector2(160, 128)
 
 [node name="SpeechBubblePositions" type="Node2D" parent="."]
 visible = false
