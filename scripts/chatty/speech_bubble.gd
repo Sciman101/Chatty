@@ -5,18 +5,16 @@ extends Node2D
 
 @onready var graphic : Sprite2D = $Graphic
 @onready var portrait : AnimatedSprite2D = $Graphic/Portrait
+@onready var advance_arrow : AnimatedSprite2D = $Graphic/AdvanceArrow
 @onready var dialouge_label : RichTextLabel = $Graphic/Dialouge
-#@onready var tail : Sprite2D = $Graphic/Tail
 @onready var timer : Timer = $Timer
 @onready var fade_sfx : AudioStreamPlayer = $FadeInSound
 @onready var talk_sfx : AudioStreamPlayer = $TalkSoundPlayer
 
 const BUBBLE_MARGINS := Vector2(192/2 + 8,32 + 8)
-#const BUBBLE_TAIL_Y_OFFSET := 48
-#const BUBBLE_TAIL_X_LIMIT := 192/2 - 32
 
 const DEFAULT_CHARACTER_DELAY := 0.05
-const DEFAULT_SPEECH_DELAY := 1
+const DEFAULT_SPEECH_DELAY := 0.2
 const DEFAULT_SHOW_DURATION := 0.5
 
 var num_characters := 0
@@ -24,11 +22,13 @@ var parsed_dialouge := ""
 var speaker = null
 
 var interrupt := false
+var skip := false
 
 var is_presenting = false
 
 func appear() -> void:
 	graphic.visible = true
+	advance_arrow.visible = false
 	
 	var tween = get_tree().create_tween().set_parallel(true).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
 	tween.tween_property(graphic,'position',Vector2.ZERO,DEFAULT_SHOW_DURATION).from(Vector2(0,32))
@@ -54,6 +54,7 @@ func disappear() -> void:
 
 func appearImmediate() -> void:
 	graphic.visible = true
+	advance_arrow.visible = false
 	graphic.position = Vector2.ZERO
 	graphic.modulate = Color.WHITE
 
@@ -62,41 +63,32 @@ func disappearImmediate() -> void:
 
 func stop_dialouge() -> void:
 	interrupt = true
+	advance_arrow.visible = false
 
 func is_bubble_visible() -> bool:
 	return graphic.visible
 
-func set_dialouge(dialouge:String) -> void:
-	dialouge_label.text = "[appear]"+dialouge
-	parsed_dialouge = dialouge_label.get_parsed_text()
-	num_characters = parsed_dialouge.length()
-	_set_visible_characters(0)
-
-func set_speaker(new_speaker:Speaker) -> void:
-	speaker = new_speaker
-	portrait.frames = speaker
-	portrait.animation = &'default'
-	portrait.frame = 0
-	portrait.stop()
-	
-	talk_sfx.stream = speaker.talksound
-
-func set_speaker_animation(anim:StringName=&'default') -> void:
-	if speaker:
-		if portrait.frames.has_animation(anim):
-			portrait.animation = anim
-		else:
-			portrait.animation = &'default'
-			push_warning("Unknown animation for speaker " + speaker.speaker_name + " '" + str(anim) + "'")
-	else:
-		push_warning("No active speaker!")
+func _input(event):
+	if Input.is_action_just_pressed("advance_dialouge"):
+		skip = true
 
 # Actually do the thing
-func present(flags:Dictionary) -> void:
+func present(event) -> void:
 	
+	if event.type != &'dialouge':
+		push_error('Attempting to run a non-dialouge event on a speech bubble!')
+		return
+	
+	set_speaker(event.speaker)
+	set_speaker_animation(event.animation_name)
+	set_dialouge(event.dialouge)
+	
+	advance_arrow.visible = false
 	is_presenting = true
 	portrait.frame = 0
 	_set_visible_characters(0)
+	
+	var flags = event.flags
 	
 	# Set time from args
 	var character_delay = DEFAULT_CHARACTER_DELAY
@@ -106,6 +98,7 @@ func present(flags:Dictionary) -> void:
 	# Other flags
 	if not flags.has('noanimate') and not flags.has('na'):
 		portrait.play()
+	print(flags)
 	var play_sound = not flags.has('nosound') and not flags.has('ns')
 	
 	for i in range(num_characters):
@@ -127,8 +120,41 @@ func present(flags:Dictionary) -> void:
 	if not interrupt and not flags.has('nopause') and not flags.has('np'):
 		timer.start(DEFAULT_SPEECH_DELAY)
 		await timer.timeout
+		advance_arrow.visible = true
 	else:
 		interrupt = false
+
+func set_dialouge(dialouge:String) -> void:
+	dialouge_label.text = dialouge
+	parsed_dialouge = dialouge_label.get_parsed_text()
+	num_characters = parsed_dialouge.length()
+	_set_visible_characters(0)
+
+func set_speaker(new_speaker) -> bool:
+	if new_speaker is String:
+		if SpeakerLoader.speakers.has(new_speaker):
+			new_speaker = SpeakerLoader.speakers[new_speaker]
+		else:
+			return false
+	
+	speaker = new_speaker
+	portrait.frames = speaker
+	portrait.animation = &'default'
+	portrait.frame = 0
+	portrait.stop()
+	
+	talk_sfx.stream = speaker.talksound
+	return true
+
+func set_speaker_animation(anim:StringName=&'default') -> void:
+	if speaker:
+		if portrait.frames.has_animation(anim):
+			portrait.animation = anim
+		else:
+			portrait.animation = &'default'
+			push_warning("Unknown animation for speaker " + speaker.speaker_name + " '" + str(anim) + "'")
+	else:
+		push_warning("No active speaker!")
 
 func jump_to_end() -> void:
 	
@@ -161,4 +187,3 @@ func set_bubble_position(target_pos:Vector2) -> void:
 
 func _set_visible_characters(num:int) -> void:
 	dialouge_label.visible_characters = num
-	dialouge_label.custom_effects[0].visible_characters = num

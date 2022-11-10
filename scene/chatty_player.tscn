@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://0lewgghdh148"]
+[gd_scene load_steps=3 format=3 uid="uid://delotll1ag66s"]
 
 [ext_resource type="PackedScene" uid="uid://6mmv842l2nqv" path="res://scene/speech_bubble.tscn" id="1_gg5w2"]
-[ext_resource type="Script" path="res://scripts/chatty_player.gd" id="1_s8fyu"]
+[ext_resource type="Script" path="res://scripts/chatty/chatty_player.gd" id="1_s8fyu"]
 
 [node name="ChattyPlayer" type="Control"]
 clip_contents = true
@@ -10,11 +10,9 @@ anchors_preset = 0
 offset_right = 320.0
 offset_bottom = 256.0
 script = ExtResource("1_s8fyu")
-script_text = "jnfr: Hi!
-jnfr, mad: HEY
-#label1
-jnfr, happy [t=0.5,h,noanim]: We haven't tested flags yet!
->bg"
+script_text = "#label1
+jnfr [t=0.1, nopause]: Am I annoying you yet???
+>goto label1"
 
 [node name="Fill" type="ColorRect" parent="."]
 layout_mode = 1

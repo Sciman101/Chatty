@@ -9,6 +9,8 @@ class ChattyScript:
 	func add_label(label_text) -> void:
 		label_indices[label_text] = events.size()
 	
+	func size() -> int: return events.size()
+	
 	func debug_string() -> String:
 		return "====\nChattyScript:\nEvents: %s\nLabels: %s\n====" % [events,label_indices]
 
@@ -109,11 +111,12 @@ func _parse_line(line:String,line_num:int,script:ChattyScript) -> void:
 func _parse_flags(flag_list:Array) -> Dictionary:
 	var flags = {}
 	for f in flag_list:
+		f = f.strip_edges()
 		var equals_index = f.find('=')
 		if equals_index == -1:
 			flags[f] = true
 		else:
-			var key = f.substr(0,equals_index)
-			var val = f.substr(equals_index+1)
+			var key = f.substr(0,equals_index).strip_edges()
+			var val = f.substr(equals_index+1).strip_edges()
 			flags[key] = val
 	return flags

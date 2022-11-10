@@ -1,3 +1,4 @@
+AnimatedSprite2D
 Marker2D
 ColorRect
 Node2D
@@ -7,4 +8,3 @@ CanvasLayer
 AudioStreamPlayer
 Timer
 RichTextLabel
-AnimatedSprite2D
