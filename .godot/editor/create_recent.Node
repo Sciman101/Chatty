@@ -1,11 +1,13 @@
-AnimationPlayer
 TextureRect
+Sprite2D
+VBoxContainer
+Label
+AnimationPlayer
 Control
 AnimatedSprite2D
 Marker2D
 ColorRect
 Node2D
-Sprite2D
 CanvasLayer
 AudioStreamPlayer
 Timer

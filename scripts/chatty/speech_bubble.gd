@@ -153,6 +153,14 @@ func set_speaker_animation(anim:StringName=&'default') -> void:
 	else:
 		push_warning("No active speaker!")
 
+func set_wide(wide:bool) -> void:
+	graphic.frame = 1 if wide else 0
+	portrait.visible = !wide
+	if wide: portrait.stop()
+	
+	dialouge_label.position.x = -70 if not wide else -122
+	dialouge_label.size.x = 192 if not wide else 244
+
 func jump_to_end() -> void:
 	
 	if not is_bubble_visible():

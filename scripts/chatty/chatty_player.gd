@@ -1,5 +1,7 @@
 extends Control
 
+const DEFAULT_SPEECHBUBBLE_MOVE_DURATION = 0.5
+
 @onready var speech_bubble = $SpeechBubble
 @onready var bg_handler = $Background
 var _speech_bubble_positions = {}
@@ -46,6 +48,8 @@ func _run_current_script_event() -> void:
 			await _run_dialouge_event(event)
 		&'command':
 			await _run_command_event(event)
+		&'choice':
+			await _run_choice_event(event)
 		&'label':
 			pass # Labels do nothing. this is just here for completeness
 
@@ -54,18 +58,36 @@ func _run_dialouge_event(event) -> void:
 	speech_bubble.set_speaker(event.speaker)
 	speech_bubble.set_speaker_animation(event.animation_name)
 	speech_bubble.set_dialouge(event.dialouge)
+	speech_bubble.set_wide(event.flags.has('noface') or event.flags.has('nf'))
+	
+	var target_pos = null
+	if event.flags.has('p'):
+		var pos_name = event.flags.p
+		if _speech_bubble_positions.has(pos_name):
+			target_pos = _speech_bubble_positions[pos_name]
 	
 	if not speech_bubble.is_bubble_visible():
+		if target_pos:
+			speech_bubble.position = target_pos
+			target_pos = null
 		await speech_bubble.appear()
+	
+	if target_pos:
+		var tween = get_tree().create_tween()
+		tween.tween_property(speech_bubble,'position',target_pos,DEFAULT_SPEECHBUBBLE_MOVE_DURATION).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+		await tween.finished
+	
 	await speech_bubble.present(event)
 	
 	if not (event.flags.has('nopause') or event.flags.has('np')):
 		await _wait_for_input()
 
+func _run_choice_event(event) -> void:
+	pass
+
 func _run_command_event(event) -> void:
 	var cmd = event.cmd_name
 	var args = event.args
-	print(cmd)
 	match cmd:
 		
 		'goto':

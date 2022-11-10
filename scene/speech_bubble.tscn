@@ -37,11 +37,11 @@ volume_db = -10.0
 
 [node name="Graphic" type="Sprite2D" parent="."]
 texture = ExtResource("2_fjywy")
+vframes = 2
 
 [node name="Portrait" type="AnimatedSprite2D" parent="Graphic"]
 position = Vector2(-99, -2)
 frames = ExtResource("2_wboqa")
-animation = &"seethe"
 
 [node name="AdvanceArrow" type="AnimatedSprite2D" parent="Graphic"]
 position = Vector2(116, 22)
@@ -49,9 +49,9 @@ frames = SubResource("SpriteFrames_qc7q6")
 playing = true
 
 [node name="Dialouge" type="RichTextLabel" parent="Graphic"]
-offset_left = -70.0
+offset_left = -72.707
 offset_top = -30.0
-offset_right = 122.0
+offset_right = 119.293
 offset_bottom = 22.0
 mouse_force_pass_scroll_events = false
 theme_override_colors/default_color = Color(0, 0, 0, 1)
