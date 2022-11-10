@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c30x6n33dlb4u"
-path="res://.godot/imported/tail.png-96d103827b1707321fb2877f772d2ccd.ctex"
+uid="uid://wmnsukldm3fo"
+path="res://.godot/imported/atlas_ui.png-7dc5184fa897b834dbec2bda827c957b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://graphics/tail.png"
-dest_files=["res://.godot/imported/tail.png-96d103827b1707321fb2877f772d2ccd.ctex"]
+source_file="res://graphics/ui/atlas_ui.png"
+dest_files=["res://.godot/imported/atlas_ui.png-7dc5184fa897b834dbec2bda827c957b.ctex"]
 
 [params]
 

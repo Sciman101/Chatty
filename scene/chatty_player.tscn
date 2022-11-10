@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://delotll1ag66s"]
 
 [ext_resource type="Texture2D" uid="uid://g2u6a184qv08" path="res://graphics/backgrounds/white.png" id="1_al3ex"]
-[ext_resource type="PackedScene" uid="uid://6mmv842l2nqv" path="res://scene/speech_bubble.tscn" id="1_gg5w2"]
+[ext_resource type="PackedScene" uid="uid://cytc6l64hjpit" path="res://scene/speech_bubble.tscn" id="1_gg5w2"]
 [ext_resource type="Script" path="res://scripts/chatty/background_handler.gd" id="1_h6rm1"]
 [ext_resource type="Script" path="res://scripts/chatty/chatty_player.gd" id="1_vdit5"]
 [ext_resource type="Texture2D" uid="uid://cwvngy6xb4dub" path="res://graphics/backgrounds/black.png" id="4_8r503"]
@@ -162,7 +162,7 @@ jnfr [nf]: JNFR spent the next half-hour re-explaining her plan to steal the dec
 jnfr: Great! Let's go"
 
 [node name="Background" type="Control" parent="."]
-layout_mode = 1
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -177,7 +177,6 @@ libraries = {
 }
 
 [node name="CurrentBg" type="TextureRect" parent="Background"]
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -189,7 +188,6 @@ texture = ExtResource("1_al3ex")
 
 [node name="TempBg" type="TextureRect" parent="Background"]
 visible = false
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

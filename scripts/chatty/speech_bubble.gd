@@ -3,6 +3,9 @@ extends Node2D
 @onready var sfx_fade_in = preload("res://sounds/jump.wav")
 @onready var sfx_fade_out = preload("res://sounds/jump_backwards.wav")
 
+@onready var tex_default = preload("res://graphics/ui/ui_speechbubble_default.tres")
+@onready var tex_wide = preload("res://graphics/ui/ui_speechbubble_wide.tres")
+
 @onready var graphic : Sprite2D = $Graphic
 @onready var portrait : AnimatedSprite2D = $Graphic/Portrait
 @onready var advance_arrow : AnimatedSprite2D = $Graphic/AdvanceArrow
@@ -155,7 +158,7 @@ func set_speaker_animation(anim:StringName=&'default') -> void:
 		push_warning("No active speaker!")
 
 func set_wide(wide:bool) -> void:
-	graphic.frame = 1 if wide else 0
+	graphic.texture = tex_wide if wide else tex_default
 	portrait.visible = !wide
 	if wide: portrait.stop()
 	
