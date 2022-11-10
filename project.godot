@@ -12,7 +12,7 @@ _global_script_classes=[{
 "base": "SpriteFrames",
 "class": &"Speaker",
 "language": &"GDScript",
-"path": "res://scripts/chatty/speaker.gd"
+"path": "res://scripts/speaker.gd"
 }]
 _global_script_class_icons={
 "Speaker": ""
@@ -27,8 +27,8 @@ config/icon="res://graphics/icon.svg"
 
 [autoload]
 
-AssetHandler="*res://scripts/chatty/asset_handler.gd"
-ChattyParser="*res://scripts/chatty/chatty_parser.gd"
+AssetHandler="*res://scripts/singleton/asset_handler.gd"
+ChattyParser="*res://scripts/singleton/chatty_parser.gd"
 
 [display]
 

@@ -1,9 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://delotll1ag66s"]
+[gd_scene load_steps=13 format=3 uid="uid://ddxrp8fjmvx1d"]
 
 [ext_resource type="Texture2D" uid="uid://g2u6a184qv08" path="res://graphics/backgrounds/white.png" id="1_al3ex"]
-[ext_resource type="PackedScene" uid="uid://cytc6l64hjpit" path="res://scene/speech_bubble.tscn" id="1_gg5w2"]
-[ext_resource type="Script" path="res://scripts/chatty/background_handler.gd" id="1_h6rm1"]
-[ext_resource type="Script" path="res://scripts/chatty/chatty_player.gd" id="1_vdit5"]
+[ext_resource type="PackedScene" uid="uid://b418f1wdj3rvp" path="res://scene/speech_bubble.tscn" id="1_gg5w2"]
+[ext_resource type="Script" path="res://scripts/background_handler.gd" id="1_h6rm1"]
+[ext_resource type="Script" path="res://scripts/chatty_player.gd" id="1_vdit5"]
 [ext_resource type="Texture2D" uid="uid://cwvngy6xb4dub" path="res://graphics/backgrounds/black.png" id="4_8r503"]
 [ext_resource type="PackedScene" uid="uid://bdexttr3d1sjp" path="res://scene/choice_box.tscn" id="6_afs78"]
 

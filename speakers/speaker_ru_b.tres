@@ -1,7 +1,7 @@
-[gd_resource type="SpriteFrames" load_steps=8 format=3 uid="uid://capjwsnis1qdq"]
+[gd_resource type="SpriteFrames" load_steps=8 format=3]
 
 [ext_resource type="Texture2D" uid="uid://c78bn73iee0ls" path="res://graphics/rub_talksprite.png" id="1_4n7c4"]
-[ext_resource type="Script" path="res://scripts/chatty/speaker.gd" id="1_4nxmd"]
+[ext_resource type="Script" path="res://scripts/speaker.gd" id="1_4nxmd"]
 [ext_resource type="AudioStream" uid="uid://ctbuk0gisbfmi" path="res://sounds/talksound/rub-01.wav" id="3_f65ly"]
 [ext_resource type="AudioStream" uid="uid://bfuf7prsets1c" path="res://sounds/talksound/rub-02.wav" id="4_faeho"]
 [ext_resource type="AudioStream" uid="uid://cn06f3wcua53g" path="res://sounds/talksound/rub-03.wav" id="5_uajo4"]

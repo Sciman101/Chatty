@@ -1,8 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://cytc6l64hjpit"]
+[gd_scene load_steps=9 format=3 uid="uid://b418f1wdj3rvp"]
 
-[ext_resource type="Script" path="res://scripts/chatty/speech_bubble.gd" id="1_jl81n"]
+[ext_resource type="Script" path="res://scripts/speech_bubble.gd" id="1_jl81n"]
 [ext_resource type="Texture2D" path="res://graphics/ui/ui_speechbubble_default.tres" id="2_d65k0"]
-[ext_resource type="SpriteFrames" uid="uid://b8cxi2vptwohx" path="res://speakers/speaker_jnfr.tres" id="2_wboqa"]
+[ext_resource type="SpriteFrames" path="res://speakers/speaker_jnfr.tres" id="2_wboqa"]
 [ext_resource type="FontFile" uid="uid://bbnmo4grd6j5x" path="res://graphics/font/monogram.ttf" id="3_8txfa"]
 [ext_resource type="Texture2D" path="res://graphics/ui/ui_advance_arrow.tres" id="4_bm768"]
 [ext_resource type="Texture2D" path="res://graphics/ui/ui_advance_arrow_2.tres" id="5_pgxmu"]

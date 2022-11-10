@@ -3,6 +3,7 @@ extends Node
 class ChattyScript:
 	var events = []
 	var label_indices = {}
+	var raw_text : String = ""
 	
 	func add_event(event) -> void:
 		events.append(event)
@@ -19,6 +20,7 @@ var choice_queue = []
 func compile_script(script_text:String) -> ChattyScript:
 	var lines = Array(script_text.split('\n')).map(func(s): return s.strip_edges())
 	var script = ChattyScript.new()
+	script.raw_text = script_text
 	choice_queue = []
 	
 	var line_num := 0
