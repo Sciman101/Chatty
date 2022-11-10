@@ -21,8 +21,8 @@ tracks/0/keys = {
 "values": [1.0, 0.0]
 }
 
-[sub_resource type="Animation" id="Animation_3rh1o"]
-resource_name = "slide_right"
+[sub_resource type="Animation" id="Animation_mgmlb"]
+resource_name = "slide_down"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -33,7 +33,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(-320, 0), Vector2(0, 0)]
+"values": [Vector2(0, 256), Vector2(0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -45,7 +45,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(320, 0)]
+"values": [Vector2(0, 0), Vector2(0, -256)]
 }
 
 [sub_resource type="Animation" id="Animation_ho7wf"]
@@ -75,8 +75,8 @@ tracks/1/keys = {
 "values": [Vector2(0, 0), Vector2(-320, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_o1eex"]
-resource_name = "slide_up"
+[sub_resource type="Animation" id="Animation_3rh1o"]
+resource_name = "slide_right"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -87,7 +87,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(0, 256), Vector2(0, 0)]
+"values": [Vector2(-320, 0), Vector2(0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -99,11 +99,11 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(0, -256)]
+"values": [Vector2(0, 0), Vector2(320, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_mgmlb"]
-resource_name = "slide_down"
+[sub_resource type="Animation" id="Animation_o1eex"]
+resource_name = "slide_up"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -151,7 +151,7 @@ script_text = ">bg black
 jnfr: ... Anyways, how about we head back to my place?
 ru_b: Sure! I've been curious what your apartment is like.
 >disappear
->bg den slide_right 0.75
+>bg den slide_right 0.75 circ inout
 ru_b: ......
 jnfr, smug: Welcome to my [wave]Epic Gamer Den[/wave]
 ru_b [t=2]: ......
@@ -165,7 +165,8 @@ ru_b: Wh- were you DRINKING from this?
 ru_b: The inside is... sticky???
 jnfr, angry: Drin- Ru-b. I'm a robot, of course I wasn't drinking from that.
 jnfr: I was using it to hold coolant!
-ru_b: WHY IS YOUR COOLANT STICKY."
+ru_b: WHY IS YOUR COOLANT STICKY.
+>bg den"
 
 [node name="Background" type="Control" parent="."]
 layout_mode = 1
@@ -177,6 +178,7 @@ grow_vertical = 2
 script = ExtResource("1_h6rm1")
 
 [node name="BackroundAnimations" type="AnimationPlayer" parent="Background"]
+playback_process_mode = 2
 libraries = {
 "": SubResource("AnimationLibrary_6r0u6")
 }

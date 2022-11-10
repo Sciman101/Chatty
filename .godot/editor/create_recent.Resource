@@ -1,4 +1,4 @@
+TextEffectPauseTrigger (text_effect_pause_trigger.gd)
 SpriteFrames
 AnimatedTexture
-RichTextGlitch (text_effect_glitch.gd)
 Speaker (speaker.gd)
