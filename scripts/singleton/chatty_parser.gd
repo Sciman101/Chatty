@@ -1,5 +1,14 @@
 extends Node
 
+const VALID_FLAGS = {
+	'pos':['bottom','right','left','center','top'],
+	't':[0.01,1000],
+	'noanim':[true,false],
+	'nosound':[true,false],
+	'wide':[true,false],
+	'skip':[true,false]
+}
+
 class ChattyScript:
 	var events = []
 	var label_indices = {}
@@ -16,6 +25,7 @@ class ChattyScript:
 		return "====\nChattyScript:\nEvents: %s\nLabels: %s\n====" % [events,label_indices]
 
 var choice_queue = []
+var line_num := 0
 
 func compile_script(script_text:String) -> ChattyScript:
 	var lines = Array(script_text.split('\n')).map(func(s): return s.strip_edges())
@@ -23,9 +33,9 @@ func compile_script(script_text:String) -> ChattyScript:
 	script.raw_text = script_text
 	choice_queue = []
 	
-	var line_num := 0
+	line_num = 0
 	for line in lines:
-		_parse_line(line,line_num,script)
+		_parse_line(line,script)
 		line_num += 1
 	
 	# Add choice event
@@ -33,7 +43,7 @@ func compile_script(script_text:String) -> ChattyScript:
 	
 	return script
 
-func _parser_error(message:String,line_num:int) -> void:
+func _parser_error(message:String) -> void:
 	push_error(message + " @ line " + str(line_num))
 
 func _resolve_choice_event(script:ChattyScript) -> void:
@@ -46,7 +56,7 @@ func _resolve_choice_event(script:ChattyScript) -> void:
 		choice_queue = []
 		script.add_event(event)
 
-func _parse_line(line:String,line_num:int,script:ChattyScript) -> void:
+func _parse_line(line:String,script:ChattyScript) -> void:
 	
 	if line.begins_with('?'):
 		# Add choice
@@ -101,7 +111,7 @@ func _parse_line(line:String,line_num:int,script:ChattyScript) -> void:
 			# Format: [name]:[dialouge]
 			var colon_index = line.find(':')
 			if colon_index == -1:
-				_parser_error("Malformed dialouge line",line_num)
+				_parser_error("Malformed dialouge line")
 			else:
 				var params_string = line.substr(0,colon_index).strip_edges()
 				
@@ -112,7 +122,7 @@ func _parse_line(line:String,line_num:int,script:ChattyScript) -> void:
 				var speaker_name = ''
 				var animation_name = ''
 				var flags = []
-				if comma_index != -1:
+				if comma_index != -1 and (comma_index < bracket_index or bracket_index == -1):
 					if comma_index != 0:
 						speaker_name = params_string.substr(0,comma_index).strip_edges(false)
 					if bracket_index != -1:
@@ -146,10 +156,29 @@ func _parse_flags(flag_list:Array) -> Dictionary:
 	for f in flag_list:
 		f = f.strip_edges()
 		var equals_index = f.find('=')
-		if equals_index == -1:
-			flags[f] = true
+		var key = f
+		var val = true
+		if equals_index != -1:
+			key = f.substr(0,equals_index).strip_edges()
+			val = f.substr(equals_index+1).strip_edges()
+		
+		if not VALID_FLAGS.has(key):
+			_parser_error("Unknown flag '%s'" % [key])
 		else:
-			var key = f.substr(0,equals_index).strip_edges()
-			var val = f.substr(equals_index+1).strip_edges()
-			flags[key] = val
+			var accepted = VALID_FLAGS[key]
+			var ok = true
+			if accepted[0] is float:
+				var _min = accepted[0]
+				var _max = accepted[1]
+				val = val.to_float()
+				if val < _min or val > _max:
+					_parser_error("Flag value out of range for flag '%s', [%f,%f]" % [key,_min,_max])
+					ok = false
+			elif not val in accepted:
+				_parser_error("Invalid flag value for flag '%s' (Accepted values are %s)" % [key,accepted])
+				ok = false
+		
+			if ok:
+				flags[key] = val
+		
 	return flags

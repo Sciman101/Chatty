@@ -26,7 +26,8 @@ func present_choice(event) -> void:
 		visible = true
 		_hide_all_buttons()
 		for i in range(min(event.options.size(),MAX_OPTIONS)):
-			buttons[i].set_option(event.options[i])
+			var btn = buttons[i]
+			btn.set_option(event.options[i])
 
 func _hide_all_buttons() -> void:
 	for btn in buttons: btn.visible = false

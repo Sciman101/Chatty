@@ -1,7 +1,7 @@
 extends Node2D
 
-@onready var sfx_fade_in = preload("res://sounds/jump.wav")
-@onready var sfx_fade_out = preload("res://sounds/jump_backwards.wav")
+@onready var sfx_fade_in = preload("res://sounds/speechbubble_appear.wav")
+@onready var sfx_fade_out = preload("res://sounds/speechbubble_disappear.wav")
 
 @onready var tex_default = preload("res://graphics/ui/ui_speechbubble_default.tres")
 @onready var tex_wide = preload("res://graphics/ui/ui_speechbubble_wide.tres")
@@ -77,6 +77,11 @@ func _input(event):
 	if Input.is_action_just_pressed("advance_dialouge"):
 		skip = true
 
+func _ev_flag(event,flag,default=false):
+	if event.flags.has(flag):
+		return event.flags[flag]
+	return default
+
 # Actually do the thing
 func present(event) -> void:
 	
@@ -89,17 +94,14 @@ func present(event) -> void:
 	portrait.frame = 0
 	_set_visible_characters(0)
 	
-	var flags = event.flags
-	
 	# Set time from args
-	var character_delay = DEFAULT_CHARACTER_DELAY
-	if flags.has('t'):
-		character_delay = max(0.01,flags.t.to_float()/num_characters)
+	var time = _ev_flag(event,'t',DEFAULT_CHARACTER_DELAY*num_characters)
+	var character_delay = max(0.01,time/num_characters)
 	
 	# Other flags
-	if not flags.has('noanimate') and not flags.has('na'):
+	if not _ev_flag(event,'noanim'):
 		portrait.play()
-	var play_sound = not flags.has('nosound') and not flags.has('ns')
+	var play_sound = not _ev_flag(event,'nosound')
 	
 	for i in range(num_characters):
 		
@@ -117,7 +119,7 @@ func present(event) -> void:
 	jump_to_end()
 	
 	# Wait a second
-	if not interrupt and not flags.has('nopause') and not flags.has('np'):
+	if not interrupt and not _ev_flag(event,'skip'):
 		timer.start(DEFAULT_SPEECH_DELAY)
 		await timer.timeout
 		advance_arrow.visible = true

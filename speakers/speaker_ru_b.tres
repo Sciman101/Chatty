@@ -1,14 +1,34 @@
-[gd_resource type="SpriteFrames" load_steps=8 format=3]
+[gd_resource type="SpriteFrames" load_steps=13 format=3 uid="uid://dr63qb3x758xn"]
 
-[ext_resource type="Texture2D" uid="uid://c78bn73iee0ls" path="res://graphics/rub_talksprite.png" id="1_4n7c4"]
+[ext_resource type="Texture2D" uid="uid://dngko0l3tnsma" path="res://graphics/rub_talksprite.png" id="1_4n7c4"]
 [ext_resource type="Script" path="res://scripts/speaker.gd" id="1_4nxmd"]
 [ext_resource type="AudioStream" uid="uid://ctbuk0gisbfmi" path="res://sounds/talksound/rub-01.wav" id="3_f65ly"]
 [ext_resource type="AudioStream" uid="uid://bfuf7prsets1c" path="res://sounds/talksound/rub-02.wav" id="4_faeho"]
 [ext_resource type="AudioStream" uid="uid://cn06f3wcua53g" path="res://sounds/talksound/rub-03.wav" id="5_uajo4"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_a5j78"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_gya2l"]
 atlas = ExtResource("1_4n7c4")
 region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jwy45"]
+atlas = ExtResource("1_4n7c4")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ipeob"]
+atlas = ExtResource("1_4n7c4")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6vq2"]
+atlas = ExtResource("1_4n7c4")
+region = Rect2(0, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2it47"]
+atlas = ExtResource("1_4n7c4")
+region = Rect2(48, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ukr5n"]
+atlas = ExtResource("1_4n7c4")
+region = Rect2(96, 48, 48, 48)
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_26waf"]
 streams_count = 3
@@ -23,10 +43,10 @@ stream_2/weight = 1.0
 
 [resource]
 animations = [{
-"frames": [SubResource("AtlasTexture_a5j78")],
+"frames": [SubResource("AtlasTexture_gya2l"), SubResource("AtlasTexture_jwy45"), SubResource("AtlasTexture_ipeob"), SubResource("AtlasTexture_e6vq2"), SubResource("AtlasTexture_2it47"), SubResource("AtlasTexture_ukr5n")],
 "loop": true,
 "name": &"default",
-"speed": 8.0
+"speed": 5.0
 }]
 script = ExtResource("1_4nxmd")
 speaker_name = "Ru-B"

@@ -14,6 +14,9 @@ var interrupt := false
 @export_multiline var script_text : String
 
 func _ready() -> void:
+	
+	Engine.time_scale = 1
+	
 	# Get speech bubble positions
 	for child in $SpeechBubblePositions.get_children():
 		_speech_bubble_positions[str(child.name).to_lower()] = child.position
@@ -62,18 +65,22 @@ func _run_current_script_event() -> void:
 		&'label':
 			pass # Labels do nothing. this is just here for completeness
 
+func _ev_flag(event,flag,default=false):
+	if event.flags.has(flag):
+		return event.flags[flag]
+	return default
+
 func _run_dialouge_event(event) -> void:
 	# Show speech bubble, if it's not present already
 	speech_bubble.set_speaker(event.speaker)
 	speech_bubble.set_speaker_animation(event.animation_name)
 	speech_bubble.set_dialouge(event.dialouge)
-	speech_bubble.set_wide(event.flags.has('noface') or event.flags.has('nf'))
+	speech_bubble.set_wide(_ev_flag(event,'wide'))
 	
 	var target_pos = null
-	if event.flags.has('p'):
-		var pos_name = event.flags.p
-		if _speech_bubble_positions.has(pos_name):
-			target_pos = _speech_bubble_positions[pos_name]
+	var pos_name = _ev_flag(event,'pos','bottom')
+	if _speech_bubble_positions.has(pos_name):
+		target_pos = _speech_bubble_positions[pos_name]
 	
 	if not speech_bubble.is_bubble_visible():
 		if target_pos:
@@ -89,7 +96,7 @@ func _run_dialouge_event(event) -> void:
 	await speech_bubble.present(event)
 	
 	var next_event = _next_event()
-	if not (event.flags.has('nopause') or event.flags.has('np') or (next_event and next_event.type == &'choice')):
+	if not _ev_flag(event,'skip' or (next_event and next_event.type == &'choice')):
 		await _wait_for_input()
 
 func _run_choice_event(event) -> void:

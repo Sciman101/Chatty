@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=23 format=3]
+[gd_resource type="SpriteFrames" load_steps=23 format=3 uid="uid://bfnpm4bu5qoat"]
 
 [ext_resource type="Script" path="res://scripts/speaker.gd" id="1_4nxmd"]
 [ext_resource type="Texture2D" uid="uid://cpfgx4vmbe2do" path="res://graphics/jnfr_talksprite.png" id="1_q2b7s"]
