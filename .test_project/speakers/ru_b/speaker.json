@@ -4,7 +4,7 @@
 		"default": {
 			"spritesheet": "frames.png",
 			"frames": [0, 1, 2, 3, 4, 5],
-			"fps": 8
+			"fps": 6
 		}
 	},
 	"talksound": {

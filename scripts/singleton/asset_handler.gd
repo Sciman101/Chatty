@@ -124,6 +124,7 @@ func _load_speaker_talksound(speaker:Speaker,talksound:Dictionary,speaker_path:S
 		if strm:
 			stream.add_stream(0)
 			stream.set_stream(0,strm)
+	speaker.talksound = stream
 	print("Loaded " + str(stream.streams_count) + " talksounds")
 
 func _project_load_error(message:String,fatal:bool=false) -> void:
@@ -161,22 +162,19 @@ func _read_audio(path:String) -> AudioStream:
 		_project_load_error("Error loading sound file " + path)
 		return null
 	
-	# Get filesize
-	f.seek_end()
-	var fsize = f.get_position() + 1
-	f.seek(0)
-	var bytes = f.get_buffer(fsize)
-	
+	var bytes = f.get_buffer(f.get_length())
 	var stream = null
 	
 	var extension = path.get_extension().to_lower()
 	match extension:
 		'wav':
 			stream = AudioStreamWAV.new()
+			stream.format = AudioStreamWAV.FORMAT_16_BITS
 		'mp3':
 			stream = AudioStreamMP3.new()
-		'ogg':
-			stream = AudioStreamOggVorbis.new()
+		_:
+			_project_load_error("Unsupported file type, " + extension)
+			return null
 	if stream:
 		stream.set_data(bytes)
 	return stream
