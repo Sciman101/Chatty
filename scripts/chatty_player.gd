@@ -88,7 +88,7 @@ func _run_dialouge_event(event) -> void:
 			target_pos = null
 		await speech_bubble.appear()
 	
-	if target_pos:
+	if target_pos and speech_bubble.position != target_pos:
 		var tween = get_tree().create_tween()
 		tween.tween_property(speech_bubble,'position',target_pos,DEFAULT_SPEECHBUBBLE_MOVE_DURATION).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 		await tween.finished
