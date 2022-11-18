@@ -1,10 +1,10 @@
 [gd_scene load_steps=13 format=3 uid="uid://ddxrp8fjmvx1d"]
 
-[ext_resource type="Texture2D" uid="uid://g2u6a184qv08" path="res://graphics/backgrounds/white.png" id="1_al3ex"]
 [ext_resource type="PackedScene" uid="uid://b418f1wdj3rvp" path="res://scene/speech_bubble.tscn" id="1_gg5w2"]
 [ext_resource type="Script" path="res://scripts/background_handler.gd" id="1_h6rm1"]
 [ext_resource type="Script" path="res://scripts/chatty_player.gd" id="1_vdit5"]
-[ext_resource type="Texture2D" uid="uid://cwvngy6xb4dub" path="res://graphics/backgrounds/black.png" id="4_8r503"]
+[ext_resource type="Texture2D" uid="uid://0oq1ppm4tae4" path="res://graphics/white.png" id="3_8wa5c"]
+[ext_resource type="Texture2D" uid="uid://lpdqh7lyftu3" path="res://graphics/black.png" id="4_8cnja"]
 [ext_resource type="PackedScene" uid="uid://bdexttr3d1sjp" path="res://scene/choice_box.tscn" id="6_afs78"]
 
 [sub_resource type="Animation" id="Animation_povfc"]
@@ -199,7 +199,7 @@ ru_b: WHY IS YOUR COOLANT STICKY.
 jnfr, angry: Wow, judgy today, huh?"
 
 [node name="Background" type="Control" parent="."]
-layout_mode = 1
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -214,7 +214,6 @@ libraries = {
 }
 
 [node name="CurrentBg" type="TextureRect" parent="Background"]
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -222,16 +221,15 @@ offset_top = 256.0
 offset_bottom = 256.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_al3ex")
+texture = ExtResource("3_8wa5c")
 
 [node name="TempBg" type="TextureRect" parent="Background"]
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_8r503")
+texture = ExtResource("4_8cnja")
 
 [node name="SpeechBubble" parent="." instance=ExtResource("1_gg5w2")]
 position = Vector2(160, 210)

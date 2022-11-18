@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dyk7ude8qy7uj"
-path="res://.godot/imported/iekikatalk.png-f8d219abd14b25a624d4fae302004e03.ctex"
+uid="uid://0oq1ppm4tae4"
+path="res://.godot/imported/white.png-66c959ce62303b3c630f04ed0327137e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://graphics/iekikatalk.png"
-dest_files=["res://.godot/imported/iekikatalk.png-f8d219abd14b25a624d4fae302004e03.ctex"]
+source_file="res://graphics/white.png"
+dest_files=["res://.godot/imported/white.png-66c959ce62303b3c630f04ed0327137e.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dythba32xchvc"
-path="res://.godot/imported/gamer_den_cup.png-e1b66f9479f728a0a1be9efedca8ae61.ctex"
+uid="uid://lpdqh7lyftu3"
+path="res://.godot/imported/black.png-a52dbe0b591c81ae348fda1d5c59425b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://graphics/backgrounds/gamer_den_cup.png"
-dest_files=["res://.godot/imported/gamer_den_cup.png-e1b66f9479f728a0a1be9efedca8ae61.ctex"]
+source_file="res://graphics/black.png"
+dest_files=["res://.godot/imported/black.png-a52dbe0b591c81ae348fda1d5c59425b.ctex"]
 
 [params]
 

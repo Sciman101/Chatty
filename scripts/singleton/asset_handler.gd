@@ -1,22 +1,13 @@
 extends Node
 
-var speakers = {
-	jnfr = preload("res://speakers/speaker_jnfr.tres"),
-	ru_b = preload("res://speakers/speaker_ru_b.tres"),
-	iekika = preload("res://speakers/speaker_iekika.tres"),
-}
-
-var backgrounds = {
-	white = preload("res://graphics/backgrounds/white.png"),
-	black = preload("res://graphics/backgrounds/black.png"),
-	windowsxp = preload("res://graphics/backgrounds/windowsxp.png"),
-	den = preload("res://graphics/backgrounds/gamer_den.png"),
-	dencup = preload("res://graphics/backgrounds/gamer_den_cup.png"),
-}
-
 var PROJECT_TEMPLATE = ['name','version','start_script']
 var SPEAKER_TEMPLATE = ['name','animations']
 var ANIM_TEMPLATE = ['spritesheet','frames','fps']
+var TALKSOUND_TEMPLATE = ['clips','pitch_variance']
+
+# Public assets
+var speakers = {}
+var backgrounds = {}
 
 var _project_dir : String
 var _project
@@ -24,11 +15,12 @@ var _project
 var _sprite_load_cache = {}
 
 func _ready():
-	_load_project("res://test_project")
+	_load_project("res://.test_project")
 
 func _load_project(project_dir:String) -> void:
 	_project_dir = project_dir
 	_load_project_data()
+	_load_backgrounds()
 	_load_speakers()
 
 func _load_project_data() -> void:
@@ -39,6 +31,30 @@ func _load_project_data() -> void:
 		print("Loaded chatty.json!")
 	else:
 		_project_load_error("Can't read chatty.json!",true)
+
+func _load_backgrounds() -> void:
+	var bg_dir = _project_dir + "/backgrounds"
+	var dir = DirAccess.open(bg_dir)
+	if dir:
+		backgrounds = {}
+		print("Loading backgrounds")
+		dir.list_dir_begin()
+		var file_name = "z"
+		while file_name != "":
+			file_name = dir.get_next()
+			if not dir.current_is_dir() and file_name != "":
+				_load_background(file_name)
+				
+		dir.list_dir_end()
+	else:
+		_project_load_error("No backgrounds directory present!",false)
+
+func _load_background(bg_file:String) -> void:
+	var bg_path = _project_dir + "/backgrounds/" + bg_file
+	var bg = _read_texture(bg_path)
+	if bg:
+		backgrounds[bg_file.get_basename()] = bg
+		print("\tLoaded background " + bg_file)
 
 func _load_speakers() -> void:
 	var dir = DirAccess.open(_project_dir+"/speakers")
@@ -69,6 +85,9 @@ func _load_speaker(speaker_name:String) -> void:
 	for anim_name in data.animations:
 		_load_speaker_animation(speaker,anim_name,data.animations[anim_name],speaker_path)
 	
+	if data.has('talksound'):
+		_load_speaker_talksound(speaker,data.talksound,speaker_path)
+	
 	speakers[speaker_name] = speaker
 	print("Done!")
 
@@ -94,6 +113,18 @@ func _load_speaker_animation(speaker:Speaker,anim_name:String,anim:Dictionary,sp
 		speaker.add_frame(anim_name,at)
 	print("\tLoaded animation " + anim_name)
 
+func _load_speaker_talksound(speaker:Speaker,talksound:Dictionary,speaker_path:String) -> void:
+	_validate_json(talksound,TALKSOUND_TEMPLATE)
+	
+	var stream = AudioStreamRandomizer.new()
+	stream.random_pitch = 1 + talksound.pitch_variance
+	
+	for clip in talksound.clips:
+		var strm = _read_audio(speaker_path+"/"+clip)
+		if strm:
+			stream.add_stream(0)
+			stream.set_stream(0,strm)
+	print("Loaded " + str(stream.streams_count) + " talksounds")
 
 func _project_load_error(message:String,fatal:bool=false) -> void:
 	push_error(message)
@@ -123,6 +154,32 @@ func _read_jsonfile(path:String):
 		return JSON.parse_string(text)
 	else:
 		return false
+
+func _read_audio(path:String) -> AudioStream:
+	var f = FileAccess.open(path,FileAccess.READ)
+	if not f:
+		_project_load_error("Error loading sound file " + path)
+		return null
+	
+	# Get filesize
+	f.seek_end()
+	var fsize = f.get_position() + 1
+	f.seek(0)
+	var bytes = f.get_buffer(fsize)
+	
+	var stream = null
+	
+	var extension = path.get_extension().to_lower()
+	match extension:
+		'wav':
+			stream = AudioStreamWAV.new()
+		'mp3':
+			stream = AudioStreamMP3.new()
+		'ogg':
+			stream = AudioStreamOggVorbis.new()
+	if stream:
+		stream.set_data(bytes)
+	return stream
 
 func _validate_json(json:Dictionary,template:Array):
 	for key in template:
