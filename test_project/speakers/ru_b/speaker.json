@@ -1,0 +1,15 @@
+{
+	"name": "Ru-B",
+	"animations": {
+		"default": {
+			"spritesheet": "frames.png",
+			"frames": [0, 1, 2, 3, 4, 5],
+			"fps": 8
+		}
+	},
+	"talksound": {
+		"clips": ["talk1.wav","talk2.wav","talk3.wav"],
+		"pitch_variance": 0.2
+	},
+	"ui_atlas_override": "custom_ui_atlas.png"
+}

@@ -1,0 +1,6 @@
+{
+	"name": "Test Project",
+	"description": "A test project!",
+	"version": 1,
+	"start_script": "start.chat"
+}

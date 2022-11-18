@@ -1,0 +1,35 @@
+{
+	"name": "J.N.F.R.",
+	"animations": {
+		"default": {
+			"spritesheet": "frames.png",
+			"frames": [0, 1, 2],
+			"fps": 8
+		},
+		"angry": {
+			"spritesheet": "frames.png",
+			"frames": [3, 4, 5],
+			"fps": 8
+		},
+		"shocked": {
+			"spritesheet": "frames.png",
+			"frames": [6, 7, 8],
+			"fps": 8
+		},
+		"yelling": {
+			"spritesheet": "frames.png",
+			"frames": [9, 10, 11],
+			"fps": 8
+		},
+		"smug": {
+			"spritesheet": "frames.png",
+			"frames": [12, 13, 14],
+			"fps": 8
+		}
+	},
+	"talksound": {
+		"clips": ["talk1.wav","talk2.wav","talk3.wav"],
+		"pitch_variance": 0.2
+	},
+	"ui_atlas_override": "custom_ui_atlas.png"
+}
