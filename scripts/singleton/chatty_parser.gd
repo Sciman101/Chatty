@@ -9,6 +9,11 @@ const VALID_FLAGS = {
 	'skip':[true,false]
 }
 
+const MD_TO_BBCODE = {
+	'*': 'b',
+	'^': 'wave'
+}
+
 class ChattyScript:
 	var events = []
 	var label_indices = {}
@@ -141,13 +146,15 @@ func _parse_line(line:String,script:ChattyScript) -> void:
 					flags = params_string.substr(bracket_index+1,len(params_string)-bracket_index-2).strip_edges().split(',')
 				
 				var dialouge = line.substr(colon_index+1).strip_edges()
+				var result = _markdownish_to_bbcode(dialouge)
 				
 				var event = {
 					'type': &'dialouge',
 					'speaker': speaker_name,
 					'animation_name': animation_name,
 					'flags': _parse_flags(flags),
-					'dialouge': dialouge
+					'dialouge': result.bbcode,
+					'triggers': result.triggers
 				}
 				script.add_event(event)
 
@@ -182,3 +189,44 @@ func _parse_flags(flag_list:Array) -> Dictionary:
 				flags[key] = val
 		
 	return flags
+
+# Converts a markdown-esque syntax into bbcode
+# Also parses events
+func _markdownish_to_bbcode(md:String) -> Dictionary:
+	var result = {bbcode="",triggers={}}
+	var final_index = 0
+	var index = 0
+	
+	var open_tags = {}
+	
+	while index < md.length():
+		var c = md[index]
+		
+		if c in MD_TO_BBCODE:
+			if open_tags.has(c) and open_tags[c]:
+				result.bbcode += '[/%s]' % MD_TO_BBCODE[c]
+				open_tags[c] = false
+			else:
+				# Mak tag as open
+				result.bbcode += '[%s]' % MD_TO_BBCODE[c]
+				open_tags[c] = true
+		
+		elif c == '<':
+			
+			var i = index
+			while i < md.length() and md[i] != '>': i += 1
+			if md[i] != '>':
+				_parser_error("Unclosed dialouge event")
+			
+			var event_def = md.substr(index+1,i-index-1).strip_edges().split(' ')
+			result.triggers[final_index] = event_def
+			
+			index = i
+			
+		else:
+			result.bbcode += c
+			final_index += 1
+		
+		index = index + 1
+	
+	return result

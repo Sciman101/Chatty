@@ -103,6 +103,8 @@ func present(event) -> void:
 		portrait.play()
 	var play_sound = not _ev_flag(event,'nosound')
 	
+	var triggers = event.triggers
+	
 	for i in range(num_characters):
 		
 		if interrupt:
@@ -115,6 +117,9 @@ func present(event) -> void:
 		
 		timer.start(character_delay)
 		await timer.timeout
+		
+		if triggers.has(i):
+			await _handle_trigger(triggers[i])
 	
 	jump_to_end()
 	
@@ -125,6 +130,18 @@ func present(event) -> void:
 		advance_arrow.visible = true
 	else:
 		interrupt = false
+
+func _handle_trigger(trigger) -> void:
+	
+	match trigger[0]:
+		'pause':
+			var was_playing = portrait.playing
+			portrait.stop()
+			portrait.frame = 0
+			timer.start(trigger[1].to_float())
+			await timer.timeout
+			if was_playing:
+				portrait.play()
 
 func set_dialouge(dialouge:String) -> void:
 	dialouge_label.text = dialouge

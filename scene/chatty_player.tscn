@@ -150,30 +150,9 @@ script_text = ">bg black
 >wait 0.5
 >bg windowsxp fade 0.5
 
-jnfr: Hey, Rubes?
-ru_b: Yeah?
-jnfr: You... like me, right?
-
-ru_b [skip]:
-?yes:Yeah
-?no:Not really
-
-#yes
-ru_b: As difficult as you make it, sometimes, yeah
-jnfr [noanim, nosound]: ...
-ru_b: Just messing around, of course I like ya, J.
-ru_b: Wouldn't be hanging out with you all the time, otherwise.
->goto end
-
-#no
-ru_b: Not... really, I guess.
-jnfr, shocked: ... Oh.
-jnfr, sad: ... really?
-ru_b [noanim, nosound[: ...
-jnfr, sad: that's... yeah, I guess I figured as much.
->goto end
-
-#end"
+jnfr: Hey...<pause 0.5> Rubes?
+ru_b: *Yeah?*
+jnfr: You... ^like me^, right?"
 
 [node name="Background" type="Control" parent="."]
 layout_mode = 1
