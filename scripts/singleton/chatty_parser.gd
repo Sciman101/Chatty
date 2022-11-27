@@ -11,7 +11,9 @@ const VALID_FLAGS = {
 
 const MD_TO_BBCODE = {
 	'*': 'b',
-	'^': 'wave'
+	'^': 'wave',
+	'_': 'u',
+	'~': 's'
 }
 
 class ChattyScript:
@@ -202,7 +204,12 @@ func _markdownish_to_bbcode(md:String) -> Dictionary:
 	while index < md.length():
 		var c = md[index]
 		
-		if c in MD_TO_BBCODE:
+		# Escape character
+		if index != md.length() - 1 and c == '\\' and md[index+1] in MD_TO_BBCODE:
+			result.bbcode += md[index+1]
+			index += 1
+		
+		elif c in MD_TO_BBCODE:
 			if open_tags.has(c) and open_tags[c]:
 				result.bbcode += '[/%s]' % MD_TO_BBCODE[c]
 				open_tags[c] = false
