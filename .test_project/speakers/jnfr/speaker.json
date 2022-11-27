@@ -25,6 +25,11 @@
 			"spritesheet": "frames.png",
 			"frames": [12, 13, 14],
 			"fps": 8
+		},
+		"sad": {
+			"spritesheet": "frames.png",
+			"frames": [15, 16, 17],
+			"fps": 6
 		}
 	},
 	"talksound": {

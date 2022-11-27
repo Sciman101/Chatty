@@ -1,0 +1,51 @@
+>bg black
+>wait 0.5
+>bg windowsxp fade 0.5
+jnfr: ... Anyways, how about we head back to my place?
+ru_b: Sure! I've been curious what your apartment is like.
+>disappear
+>bg den slide_right 0.75
+ru_b: ......
+jnfr, smug: Welcome to my [wave]Epic Gamer Den[/wave]
+ru_b [t=2, noanim]: ......
+jnfr, smug:  At a loss for words?
+ru_b: It's...
+?horrible:Horrible
+?interesting:... Interesting
+?amazing:Really cool
+
+#horrible
+ru_b: JNFR this is.... [shake]horrible.
+jnfr, angry: Oh, come on, it's not THAT bad.
+ru_b: You don't EAT. Why is there [shake]FOOD[/shake] in here????
+jnfr: I tried doing doordash for a bit.
+>goto cup
+
+#interesting
+ru_b: It's, uh, it's... interesting?
+jnfr: Interesting... how?
+ru_b: You have a neat collection of... items...
+ru_b: Like, that, uh...
+ru_b: ... Black mold?
+jnfr: Thanks! I've been cultivating that one for weeks!
+ru_b: And...
+>goto cup
+
+#amazing
+ru_b: It's, uh,
+jnfr [wide]: Ru-B tries not to gag.
+jnfr [wide]: Being a robot, the fact this is an issue is impressive on JNFR's behalf.
+ru_b: Really good! Nice job, with the place, jen
+jnfr: Aw, thanks!
+ru_b: ... Hang on,
+>goto cup
+
+#cup
+>bg dencup
+ru_b: Wh- were you DRINKING from this?
+ru_b: The inside is... sticky???
+jnfr, angry: Drin- Ru-b. I'm a robot, of course I wasn't drinking from that.
+jnfr: I was using it to hold coolant!
+ru_b: WHY IS YOUR COOLANT STICKY.
+>bg den
+jnfr, angry: Wow, judgy today, huh?

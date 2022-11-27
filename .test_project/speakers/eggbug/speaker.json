@@ -1,0 +1,11 @@
+{
+	"name": "Eggbug",
+	"animations": {
+		"default": {
+			"spritesheet": "eggbug.png",
+			"frames": [0, 1, 2, 3],
+			"fps": 8
+		}
+	},
+	"ui_atlas_override": "custom_ui_atlas.png"
+}

@@ -100,6 +100,10 @@ func _load_speaker_animation(speaker:Speaker,anim_name:String,anim:Dictionary,sp
 	speaker.set_animation_speed(anim_name,anim.fps)
 	speaker.set_animation_loop(anim_name,true)
 	
+	if not atlas:
+		_project_load_error("No atlas for animation " + anim_name)
+		return
+	
 	var w = atlas.get_width() / 48
 	var h = atlas.get_height() / 48
 	
