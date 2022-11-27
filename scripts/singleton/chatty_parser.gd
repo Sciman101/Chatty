@@ -16,6 +16,8 @@ const MD_TO_BBCODE = {
 	'~': 's'
 }
 
+const ESCAPED_CHARS = {'n':'\n','t':'\t'}
+
 class ChattyScript:
 	var events = []
 	var label_indices = {}
@@ -204,10 +206,17 @@ func _markdownish_to_bbcode(md:String) -> Dictionary:
 	while index < md.length():
 		var c = md[index]
 		
+		if index != md.length() - 1 and c == '\\':
+			if md[index+1] in ESCAPED_CHARS:
+				result.bbcode += ESCAPED_CHARS[md[index+1]]
+				index += 1
+				final_index += 2
+		
 		# Escape character
-		if index != md.length() - 1 and c == '\\' and md[index+1] in MD_TO_BBCODE:
+		elif index != md.length() - 1 and c == '\\' and md[index+1] in MD_TO_BBCODE:
 			result.bbcode += md[index+1]
 			index += 1
+			final_index += 2
 		
 		elif c in MD_TO_BBCODE:
 			if open_tags.has(c) and open_tags[c]:

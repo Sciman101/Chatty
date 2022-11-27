@@ -150,9 +150,7 @@ script_text = ">bg black
 >wait 0.5
 >bg windowsxp fade 0.5
 
-jnfr: Hey...<pause 0.5> _Rubes?_
-ru_b: *Yeah?*
-jnfr: You... ^like me^, right?"
+jnfr, angry: GOD<pause 0.3>\\n*DAMN IT*"
 
 [node name="Background" type="Control" parent="."]
 layout_mode = 1
