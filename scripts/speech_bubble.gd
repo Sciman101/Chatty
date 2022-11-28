@@ -26,6 +26,7 @@ var speaker = null
 
 var interrupt := false
 var skip := false
+var talk_speed_multiplier := 1.0
 
 var is_presenting = false
 
@@ -98,6 +99,8 @@ func present(event) -> void:
 	var time = _ev_flag(event,'t',DEFAULT_CHARACTER_DELAY*num_characters)
 	var character_delay = max(0.01,time/num_characters)
 	
+	talk_speed_multiplier = _ev_flag(event,'s',1)
+	
 	# Other flags
 	if not _ev_flag(event,'noanim'):
 		portrait.play()
@@ -115,7 +118,7 @@ func present(event) -> void:
 		if play_sound and parsed_dialouge[i] != ' ':
 			talk_sfx.play()
 		
-		timer.start(character_delay)
+		timer.start(character_delay * talk_speed_multiplier)
 		await timer.timeout
 		
 		if triggers.has(i):
@@ -142,6 +145,10 @@ func _handle_trigger(trigger) -> void:
 			await timer.timeout
 			if was_playing:
 				portrait.play()
+		
+		'speed':
+			if trigger.size() >= 2:
+				talk_speed_multiplier = clamp(trigger[1].to_float(),0.01,10)
 
 func set_dialouge(dialouge:String) -> void:
 	dialouge_label.text = dialouge

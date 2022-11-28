@@ -11,6 +11,9 @@ var current_script = null
 var script_event_index := -1
 var interrupt := false
 
+var _return_stack = []
+var _aliases = {}
+
 @export_multiline var script_text : String
 
 func _ready() -> void:
@@ -107,6 +110,14 @@ func _run_choice_event(event) -> void:
 func _run_command_event(event) -> void:
 	var cmd = event.cmd_name
 	var args = event.args
+	
+	if cmd.begins_with('>'):
+		# Alias
+		var alias_name = cmd.substr(1)
+		if _aliases.has(alias_name):
+			var alias = _aliases[alias_name]
+			_run_command_event(alias)
+	
 	match cmd:
 		
 		'goto':
@@ -138,9 +149,26 @@ func _run_command_event(event) -> void:
 					speech_bubble.disappearImmediate()
 				else:
 					await speech_bubble.disappear()
+		
+		'alias':
+			if args.size() >= 2:
+				var alias_name = args[0]
+				var alias_cmd = args.slice(1)
+				_aliases[alias_name] = {
+					cmd_name = alias_cmd[0],
+					args = alias_cmd.slice(1)
+				}
+		
+		'return':
+			if _return_stack.size() > 0:
+				# Go back
+				script_event_index = _return_stack.pop_back()
+			else:
+				_player_error("Nothing to return to!")
 
 func _goto_label(label_string:String) -> void:
 	if current_script.label_indices.has(label_string):
+		_return_stack.push_back(script_event_index)
 		script_event_index = current_script.label_indices[label_string] - 1
 	else:
 		_player_error("No such label " + label_string)

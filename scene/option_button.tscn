@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://dp0dajfhdf5wy"]
 
-[ext_resource type="Texture2D" uid="uid://oceavg6ymafc" path="res://graphics/ui/ui_choicebutton_default.tres" id="1_223mm"]
+[ext_resource type="Texture2D" path="res://graphics/ui/ui_choicebutton_default.tres" id="1_223mm"]
 [ext_resource type="FontFile" uid="uid://bbnmo4grd6j5x" path="res://graphics/font/monogram.ttf" id="2_fpf4x"]
-[ext_resource type="Texture2D" uid="uid://dagq5wg4gwy3s" path="res://graphics/ui/ui_choicebutton_pressed.tres" id="2_qw7ak"]
+[ext_resource type="Texture2D" path="res://graphics/ui/ui_choicebutton_pressed.tres" id="2_qw7ak"]
 [ext_resource type="Script" path="res://scripts/option_button.gd" id="2_vrgj4"]
-[ext_resource type="Texture2D" uid="uid://b1raqf81whokf" path="res://graphics/ui/ui_choicebutton_hover.tres" id="3_snwm2"]
+[ext_resource type="Texture2D" path="res://graphics/ui/ui_choicebutton_hover.tres" id="3_snwm2"]
 
 [node name="OptionButton" type="TextureButton"]
 offset_left = 48.0
