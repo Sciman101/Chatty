@@ -18,8 +18,6 @@ var ffwd := false
 var _return_stack = []
 var _aliases = {}
 
-@export_multiline var script_text : String
-
 func _ready() -> void:
 	
 	Engine.time_scale = 1
@@ -29,9 +27,9 @@ func _ready() -> void:
 		_speech_bubble_positions[str(child.name).to_lower()] = child.position
 	speech_bubble.disappearImmediate()
 	
-	# DEBUG
-	current_script = ChattyParser.compile_script(script_text)
-	run_script(current_script)
+	current_script = AssetHandler.start_script
+	if current_script:
+		run_script(current_script)
 
 # DEBUGGING
 # TODO clean this up
@@ -118,9 +116,15 @@ func _run_dialouge_event(event) -> void:
 	
 	await speech_bubble.present(event)
 	
-	var next_event = _next_event()
-	if not (ffwd or _ev_flag(event,'skip') or not (next_event and next_event.type == &'choice')):
+	if _should_wait_for_input(event):
 		await _wait_for_input()
+
+func _should_wait_for_input(event) -> bool:
+	if ffwd: return false
+	if _ev_flag(event,'skip'): return false
+	var next_event = _next_event()
+	if next_event and next_event.type == &'choice': return false
+	return true
 
 func _run_choice_event(event) -> void:
 	choice_box.present_choice(event)

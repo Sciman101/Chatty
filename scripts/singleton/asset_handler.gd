@@ -8,6 +8,9 @@ var TALKSOUND_TEMPLATE = ['clips','pitch_variance']
 # Public assets
 var speakers = {}
 var backgrounds = {}
+var scripts = {}
+
+var start_script = null
 
 var _project_dir : String
 var _project
@@ -15,13 +18,28 @@ var _project
 var _sprite_load_cache = {}
 
 func _ready():
-	_load_project("res://.test_project")
+	var project_path = "res://.chatty_project"
+	if OS.has_feature('standalone'):
+		project_path = OS.get_executable_path().get_base_dir() + "/project"
+	_load_project(project_path)
 
 func _load_project(project_dir:String) -> void:
 	_project_dir = project_dir
 	_load_project_data()
-	_load_backgrounds()
-	_load_speakers()
+	# Clear
+	speakers = {}
+	backgrounds = {}
+	scripts = {}
+	
+	_load_from_folder('scripts',_load_script)
+	_load_from_folder('speakers',_load_speaker,true)
+	_load_from_folder('backgrounds',_load_background)
+	
+	print("Looking for starting script '%s'" % _project.start_script)
+	if not scripts.has(_project.start_script):
+		print("Start script is missing!")
+	else:
+		start_script = scripts[_project.start_script]
 
 func _load_project_data() -> void:
 	var project = _read_jsonfile(_project_dir+"/chatty.json")
@@ -32,22 +50,34 @@ func _load_project_data() -> void:
 	else:
 		_project_load_error("Can't read chatty.json!",true)
 
-func _load_backgrounds() -> void:
-	var bg_dir = _project_dir + "/backgrounds"
-	var dir = DirAccess.open(bg_dir)
+func _load_from_folder(folder_name:String,load_func:Callable,load_dirs:bool=false) -> void:
+	var path = _project_dir + "/" + folder_name
+	var dir = DirAccess.open(path)
 	if dir:
-		backgrounds = {}
-		print("Loading backgrounds")
+		print("Loading %s" % folder_name)
 		dir.list_dir_begin()
 		var file_name = "z"
 		while file_name != "":
 			file_name = dir.get_next()
-			if not dir.current_is_dir() and file_name != "":
-				_load_background(file_name)
+			if (dir.current_is_dir() == load_dirs) and file_name != "":
+				load_func.call(file_name)
 				
 		dir.list_dir_end()
 	else:
-		_project_load_error("No backgrounds directory present!",false)
+		_project_load_error("No %s directory present!" % folder_name,true)
+
+func _load_script(script_file:String) -> void:
+	var script_path = _project_dir + "/scripts/" + script_file
+	var script_text = _read_textfile(script_path)
+	if script_text:
+		print("\tParsing script " + script_file)
+		var script_object = ChattyParser.compile_script(script_text)
+		if ChattyParser.error:
+			print("\tError loading script! " + ChattyParser.error)
+		else:
+			scripts[script_file.get_basename()] = script_object
+			print("\tSuccess!")
+	
 
 func _load_background(bg_file:String) -> void:
 	var bg_path = _project_dir + "/backgrounds/" + bg_file
@@ -55,22 +85,6 @@ func _load_background(bg_file:String) -> void:
 	if bg:
 		backgrounds[bg_file.get_basename()] = bg
 		print("\tLoaded background " + bg_file)
-
-func _load_speakers() -> void:
-	var dir = DirAccess.open(_project_dir+"/speakers")
-	if dir:
-		speakers = {}
-		
-		dir.list_dir_begin()
-		var file_name = "z"
-		while file_name != "":
-			file_name = dir.get_next()
-			if dir.current_is_dir() and file_name != "":
-				_load_speaker(file_name)
-				
-		dir.list_dir_end()
-	else:
-		_project_load_error("No speakers directory present!",true)
 
 func _load_speaker(speaker_name:String) -> void:
 	var speaker_path = _project_dir + "/speakers/" + speaker_name
@@ -129,7 +143,7 @@ func _load_speaker_talksound(speaker:Speaker,talksound:Dictionary,speaker_path:S
 			stream.add_stream(0)
 			stream.set_stream(0,strm)
 	speaker.talksound = stream
-	print("Loaded " + str(stream.streams_count) + " talksounds")
+	print("\tLoaded " + str(stream.streams_count) + " talksounds")
 
 func _project_load_error(message:String,fatal:bool=false) -> void:
 	push_error(message)

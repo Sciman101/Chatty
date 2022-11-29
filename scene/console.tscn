@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://buldjgtgtgnj"]
+
+[ext_resource type="FontFile" uid="uid://bbnmo4grd6j5x" path="res://graphics/font/monogram.ttf" id="1_3el86"]
+
+[node name="Console" type="CanvasLayer"]
+
+[node name="Container" type="Control" parent="."]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 320.0
+offset_bottom = 256.0
+
+[node name="Contents" type="RichTextLabel" parent="Container"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("1_3el86")
+bbcode_enabled = true

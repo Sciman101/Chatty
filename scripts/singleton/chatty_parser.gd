@@ -19,6 +19,8 @@ const MD_TO_BBCODE = {
 
 const ESCAPED_CHARS = {'n':'\n','t':'\t'}
 
+var error = false
+
 class ChattyScript:
 	var events = []
 	var label_indices = {}
@@ -38,6 +40,8 @@ var choice_queue = []
 var line_num := 0
 
 func compile_script(script_text:String) -> ChattyScript:
+	error = false
+	
 	var lines = Array(script_text.split('\n')).map(func(s): return s.strip_edges())
 	var script = ChattyScript.new()
 	script.raw_text = script_text
@@ -54,6 +58,7 @@ func compile_script(script_text:String) -> ChattyScript:
 	return script
 
 func _parser_error(message:String) -> void:
+	error = message + " @ line " + str(line_num)
 	push_error(message + " @ line " + str(line_num))
 
 func _resolve_choice_event(script:ChattyScript) -> void:

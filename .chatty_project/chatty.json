@@ -2,5 +2,5 @@
 	"name": "Test Project",
 	"description": "A test project!",
 	"version": 1,
-	"start_script": "start.chat"
+	"start_script": "main"
 }

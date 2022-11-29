@@ -147,21 +147,6 @@ anchors_preset = 0
 offset_right = 320.0
 offset_bottom = 256.0
 script = ExtResource("1_vdit5")
-script_text = ">bg black
->wait 0.5
->bg windowsxp fade 0.5
->goto start
-
-#swearing
-jnfr, shocked: wait *FUCK*
->return
-
-#start
-jnfr: There's no WAY we can go back in the script
->goto swearing
-jnfr: Ok well at the very least we can't repeat the same label since it can't return dynamically
->goto swearing
-jnfr, angry: Ok, <pause 0.2>haha, <pause 0.2>guess I'm wrong"
 
 [node name="Background" type="Control" parent="."]
 layout_mode = 1
