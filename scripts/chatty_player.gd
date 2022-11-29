@@ -2,6 +2,8 @@ extends Control
 
 const DEFAULT_SPEECHBUBBLE_MOVE_DURATION = 0.5
 
+@onready var ffwd_indicator = $FFWD
+
 @onready var speech_bubble = $SpeechBubble
 @onready var bg_handler = $Background
 @onready var choice_box = $ChoiceBox
@@ -10,6 +12,8 @@ var _speech_bubble_positions = {}
 var current_script = null
 var script_event_index := -1
 var interrupt := false
+
+var ffwd := false
 
 var _return_stack = []
 var _aliases = {}
@@ -28,6 +32,22 @@ func _ready() -> void:
 	# DEBUG
 	current_script = ChattyParser.compile_script(script_text)
 	run_script(current_script)
+
+# DEBUGGING
+# TODO clean this up
+func _input(event):
+	if event is InputEventKey:
+		if Input.is_action_just_pressed("restart"):
+			get_tree().reload_current_scene()
+		
+		elif Input.is_action_just_pressed("fast_forward"):
+			ffwd_indicator.visible = true
+			ffwd = true
+			Engine.time_scale = 10
+		elif Input.is_action_just_released("fast_forward"):
+			ffwd_indicator.visible = false
+			ffwd = false
+			Engine.time_scale = 1
 
 func run_script(script) -> void:
 	current_script = script
@@ -99,7 +119,7 @@ func _run_dialouge_event(event) -> void:
 	await speech_bubble.present(event)
 	
 	var next_event = _next_event()
-	if not _ev_flag(event,'skip' or (next_event and next_event.type == &'choice')):
+	if not (ffwd or _ev_flag(event,'skip') or not (next_event and next_event.type == &'choice')):
 		await _wait_for_input()
 
 func _run_choice_event(event) -> void:

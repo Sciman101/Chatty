@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ddxrp8fjmvx1d"]
+[gd_scene load_steps=14 format=3 uid="uid://ddxrp8fjmvx1d"]
 
 [ext_resource type="PackedScene" uid="uid://b418f1wdj3rvp" path="res://scene/speech_bubble.tscn" id="1_gg5w2"]
 [ext_resource type="Script" path="res://scripts/background_handler.gd" id="1_h6rm1"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://0oq1ppm4tae4" path="res://graphics/white.png" id="3_8wa5c"]
 [ext_resource type="Texture2D" uid="uid://lpdqh7lyftu3" path="res://graphics/black.png" id="4_8cnja"]
 [ext_resource type="PackedScene" uid="uid://bdexttr3d1sjp" path="res://scene/choice_box.tscn" id="6_afs78"]
+[ext_resource type="Texture2D" uid="uid://b6oj7e1hbwkhn" path="res://graphics/ui/ffwd.png" id="7_l5yfi"]
 
 [sub_resource type="Animation" id="Animation_povfc"]
 resource_name = "fade"
@@ -220,3 +221,8 @@ position = Vector2(190, 128)
 
 [node name="top" type="Marker2D" parent="SpeechBubblePositions"]
 position = Vector2(160, 40)
+
+[node name="FFWD" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(32, 32)
+texture = ExtResource("7_l5yfi")
