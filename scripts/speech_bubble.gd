@@ -24,8 +24,7 @@ var num_characters := 0
 var parsed_dialouge := ""
 var speaker = null
 
-var interrupt := false
-var skip := false
+var skip_event := false
 var talk_speed_multiplier := 1.0
 
 var is_presenting = false
@@ -67,16 +66,13 @@ func disappearImmediate() -> void:
 	dialouge_label.text = ''
 	graphic.visible = false
 
-func stop_dialouge() -> void:
-	interrupt = true
-	advance_arrow.visible = false
-
 func is_bubble_visible() -> bool:
 	return graphic.visible
 
+# Listen for click so we can skip
 func _input(event):
 	if Input.is_action_just_pressed("advance_dialouge"):
-		skip = true
+		skip_event = true
 
 func _ev_flag(event,flag,default=false):
 	if event.flags.has(flag):
@@ -85,6 +81,8 @@ func _ev_flag(event,flag,default=false):
 
 # Actually do the thing
 func present(event) -> void:
+	# Reset
+	skip_event = false
 	
 	if event.type != &'dialouge':
 		Console.error('Attempting to run a non-dialouge event on a speech bubble!')
@@ -106,33 +104,41 @@ func present(event) -> void:
 		portrait.play()
 	var play_sound = not _ev_flag(event,'nosound')
 	
+	# Play once
+	if speaker.voice_mode == Speaker.VoiceMode.ONCE and play_sound:
+		play_sound = false
+		talk_sfx.play()
+	
 	var triggers = event.triggers
 	
 	for i in range(num_characters):
 		
-		if interrupt:
+		# If we're told to skip, end the event
+		if skip_event and i > 1:
+			skip_event = false
 			break
 		
 		_set_visible_characters(i)
 		
 		if play_sound and parsed_dialouge[i] != ' ':
-			talk_sfx.play()
+			if not (speaker.voice_mode == Speaker.VoiceMode.WAIT and talk_sfx.playing):
+				talk_sfx.play()
 		
-		timer.start(character_delay * talk_speed_multiplier)
+		if talk_speed_multiplier == 0: talk_speed_multiplier = 0.01
+		timer.start(character_delay / talk_speed_multiplier)
 		await timer.timeout
 		
 		if triggers.has(i):
 			await _handle_trigger(triggers[i])
+
 	
 	jump_to_end()
 	
 	# Wait a second
-	if not interrupt and not _ev_flag(event,'skip'):
+	if not _ev_flag(event,'skip'):
 		timer.start(DEFAULT_SPEECH_DELAY)
 		await timer.timeout
 		advance_arrow.visible = true
-	else:
-		interrupt = false
 
 func _handle_trigger(trigger) -> void:
 	

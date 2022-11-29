@@ -17,13 +17,7 @@ var _project
 
 var _sprite_load_cache = {}
 
-func _ready():
-	var project_path = "res://.chatty_project"
-	if OS.has_feature('standalone'):
-		project_path = OS.get_executable_path().get_base_dir() + "/project"
-	_load_project(project_path)
-
-func _load_project(project_dir:String) -> void:
+func load_project(project_dir:String) -> void:
 	_project_dir = project_dir
 	_load_project_data()
 	# Clear
@@ -136,6 +130,15 @@ func _load_speaker_talksound(speaker:Speaker,talksound:Dictionary,speaker_path:S
 	
 	var stream = AudioStreamRandomizer.new()
 	stream.random_pitch = 1 + talksound.pitch_variance
+	
+	speaker.voice_mode = Speaker.VoiceMode.PER_CHAR
+	if talksound.has('mode'):
+		var mode = talksound.mode.to_lower()
+		match mode:
+			'character': pass
+			'wait': speaker.voice_mode = Speaker.VoiceMode.WAIT
+			'once': speaker.voice_mode = Speaker.VoiceMode.ONCE
+			_: _project_load_error("Unknown talksound mode " + mode)
 	
 	for clip in talksound.clips:
 		var strm = _read_audio(speaker_path+"/"+clip)

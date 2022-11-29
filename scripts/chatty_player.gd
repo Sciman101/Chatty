@@ -27,6 +27,11 @@ func _ready() -> void:
 		_speech_bubble_positions[str(child.name).to_lower()] = child.position
 	speech_bubble.disappearImmediate()
 	
+	var project_path = "res://.chatty_project"
+	if OS.has_feature('standalone'):
+		project_path = OS.get_executable_path().get_base_dir() + "/project"
+	AssetHandler.load_project(project_path)
+	
 	current_script = AssetHandler.start_script
 	if current_script:
 		run_script(current_script)

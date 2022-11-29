@@ -9,7 +9,8 @@
 	},
 	"talksound": {
 		"clips": ["talksound/rub-01.wav","talksound/rub-02.wav","talksound/rub-03.wav"],
-		"pitch_variance": 0.2
+		"pitch_variance": 0.2,
+        "mode": "wait"
 	},
 	"ui_atlas_override": "custom_ui_atlas.png"
 }
