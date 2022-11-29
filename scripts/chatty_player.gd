@@ -101,7 +101,7 @@ func _run_dialouge_event(event) -> void:
 	speech_bubble.set_speaker(event.speaker)
 	speech_bubble.set_speaker_animation(event.animation_name)
 	speech_bubble.set_dialouge(event.dialouge)
-	speech_bubble.set_wide(_ev_flag(event,'wide'))
+	speech_bubble.set_wide(_ev_flag(event,'noportrait'))
 	
 	var target_pos = null
 	var pos_name = _ev_flag(event,'pos','bottom')

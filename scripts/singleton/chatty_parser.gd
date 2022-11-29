@@ -2,11 +2,11 @@ extends Node
 
 const VALID_FLAGS = {
 	'pos':['bottom','right','left','center','top'],
-	't':[0.01,1000],
-	's':[0.001,10],
+	'duration':[0.01,1000],
+	'speed':[0.001,10],
 	'noanim':[true,false],
 	'nosound':[true,false],
-	'wide':[true,false],
+	'noportrait':[true,false],
 	'skip':[true,false]
 }
 
@@ -14,7 +14,8 @@ const MD_TO_BBCODE = {
 	'*': 'b',
 	'^': 'wave',
 	'_': 'u',
-	'~': 's'
+	'~': 's',
+	'%': 'shake'
 }
 
 const ESCAPED_CHARS = {'n':'\n','t':'\t'}
@@ -220,6 +221,11 @@ func _markdownish_to_bbcode(md:String) -> Dictionary:
 		
 		# Escape character
 		elif index != md.length() - 1 and c == '\\' and md[index+1] in MD_TO_BBCODE:
+			result.bbcode += md[index+1]
+			index += 1
+			final_index += 2
+		
+		elif index != md.length() - 1 and c == '\\' and md[index+1] == '<':
 			result.bbcode += md[index+1]
 			index += 1
 			final_index += 2

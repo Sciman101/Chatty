@@ -89,6 +89,9 @@ func _load_speaker(speaker_name:String) -> void:
 	var speaker = Speaker.new()
 	speaker.speaker_name = data.name
 	
+	if data.has('text_color'):
+		speaker.text_color = Color.from_string(data.text_color.to_upper(),Color.BLACK)
+	
 	Console.print("Loading speaker " + data.name)
 	for anim_name in data.animations:
 		_load_speaker_animation(speaker,anim_name,data.animations[anim_name],speaker_path)

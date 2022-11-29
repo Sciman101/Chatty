@@ -94,10 +94,10 @@ func present(event) -> void:
 	_set_visible_characters(0)
 	
 	# Set time from args
-	var time = _ev_flag(event,'t',DEFAULT_CHARACTER_DELAY*num_characters)
+	var time = _ev_flag(event,'duration',DEFAULT_CHARACTER_DELAY*num_characters)
 	var character_delay = max(0.01,time/num_characters)
 	
-	talk_speed_multiplier = _ev_flag(event,'s',1)
+	talk_speed_multiplier = _ev_flag(event,'speed',1)
 	
 	# Other flags
 	if not _ev_flag(event,'noanim'):
@@ -157,6 +157,8 @@ func _handle_trigger(trigger) -> void:
 				talk_speed_multiplier = clamp(trigger[1].to_float(),0.01,10)
 
 func set_dialouge(dialouge:String) -> void:
+	if speaker.text_color:
+		dialouge = '[color=%s]%s' % [speaker.text_color.to_string(),dialouge]
 	dialouge_label.text = dialouge
 	parsed_dialouge = dialouge_label.get_parsed_text()
 	num_characters = parsed_dialouge.length()

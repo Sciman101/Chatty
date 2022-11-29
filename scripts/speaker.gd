@@ -12,3 +12,5 @@ enum VoiceMode {
 @export var ui_atlas_override : ImageTexture
 
 @export_enum(VoiceMode) var voice_mode
+
+@export var text_color : Color = Color.BLACK

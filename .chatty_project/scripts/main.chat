@@ -6,8 +6,8 @@ ru_b: Sure! I've been curious what your apartment is like.
 >disappear
 >bg den slide_right 0.75
 ru_b: ......
-jnfr, smug: Welcome to my [wave]Epic Gamer Den[/wave]
-ru_b [t=2, noanim]: ......
+jnfr, smug: Welcome to my ^Epic Gamer Den^
+ru_b [duration=2, noanim]: ......
 jnfr, smug:  At a loss for words?
 ru_b: It's...
 ?horrible:Horrible
@@ -15,9 +15,9 @@ ru_b: It's...
 ?amazing:Really cool
 
 #horrible
-ru_b: JNFR this is.... [shake]horrible.
+ru_b: JNFR this is.... %horrible.%
 jnfr, angry: Oh, come on, it's not THAT bad.
-ru_b: You don't EAT. Why is there [shake]FOOD[/shake] in here????
+ru_b: You don't EAT. Why is there %FOOD% in here????
 jnfr: I tried doing doordash for a bit.
 >goto cup
 
@@ -33,8 +33,8 @@ ru_b: And...
 
 #amazing
 ru_b: It's, uh,
-jnfr [wide]: Ru-B tries not to gag.
-jnfr [wide]: Being a robot, the fact this is an issue is impressive on JNFR's behalf.
+jnfr [noportrait]: Ru-B tries not to gag.
+jnfr [noportrait]: Being a robot, the fact this is an issue is impressive on JNFR's behalf.
 ru_b: Really good! Nice job, with the place, jen
 jnfr: Aw, thanks!
 ru_b: ... Hang on,
