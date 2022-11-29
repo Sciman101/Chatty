@@ -202,4 +202,5 @@ func interrupt_script() -> void:
 	current_script = null
 
 func _player_error(message:String) -> void:
+	Console.error(message)
 	push_error(message)

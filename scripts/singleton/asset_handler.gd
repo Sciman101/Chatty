@@ -35,9 +35,9 @@ func _load_project(project_dir:String) -> void:
 	_load_from_folder('speakers',_load_speaker,true)
 	_load_from_folder('backgrounds',_load_background)
 	
-	print("Looking for starting script '%s'" % _project.start_script)
+	Console.print("Looking for starting script '%s'" % _project.start_script)
 	if not scripts.has(_project.start_script):
-		print("Start script is missing!")
+		_project_load_error("Start script is missing!")
 	else:
 		start_script = scripts[_project.start_script]
 
@@ -46,7 +46,7 @@ func _load_project_data() -> void:
 	if project:
 		_validate_json(project,PROJECT_TEMPLATE)
 		_project = project
-		print("Loaded chatty.json!")
+		Console.print("Loaded chatty.json!")
 	else:
 		_project_load_error("Can't read chatty.json!",true)
 
@@ -54,7 +54,7 @@ func _load_from_folder(folder_name:String,load_func:Callable,load_dirs:bool=fals
 	var path = _project_dir + "/" + folder_name
 	var dir = DirAccess.open(path)
 	if dir:
-		print("Loading %s" % folder_name)
+		Console.print("Loading %s" % folder_name)
 		dir.list_dir_begin()
 		var file_name = "z"
 		while file_name != "":
@@ -70,13 +70,13 @@ func _load_script(script_file:String) -> void:
 	var script_path = _project_dir + "/scripts/" + script_file
 	var script_text = _read_textfile(script_path)
 	if script_text:
-		print("\tParsing script " + script_file)
+		Console.print("\tParsing script " + script_file)
 		var script_object = ChattyParser.compile_script(script_text)
 		if ChattyParser.error:
-			print("\tError loading script! " + ChattyParser.error)
+			Console.print("\tError loading script! " + ChattyParser.error)
 		else:
 			scripts[script_file.get_basename()] = script_object
-			print("\tSuccess!")
+			Console.print("\tSuccess!")
 	
 
 func _load_background(bg_file:String) -> void:
@@ -84,7 +84,7 @@ func _load_background(bg_file:String) -> void:
 	var bg = _read_texture(bg_path)
 	if bg:
 		backgrounds[bg_file.get_basename()] = bg
-		print("\tLoaded background " + bg_file)
+		Console.print("\tLoaded background " + bg_file)
 
 func _load_speaker(speaker_name:String) -> void:
 	var speaker_path = _project_dir + "/speakers/" + speaker_name
@@ -95,7 +95,7 @@ func _load_speaker(speaker_name:String) -> void:
 	var speaker = Speaker.new()
 	speaker.speaker_name = data.name
 	
-	print("Loading speaker " + data.name)
+	Console.print("Loading speaker " + data.name)
 	for anim_name in data.animations:
 		_load_speaker_animation(speaker,anim_name,data.animations[anim_name],speaker_path)
 	
@@ -103,7 +103,7 @@ func _load_speaker(speaker_name:String) -> void:
 		_load_speaker_talksound(speaker,data.talksound,speaker_path)
 	
 	speakers[speaker_name] = speaker
-	print("Done!")
+	Console.print("Done!")
 
 func _load_speaker_animation(speaker:Speaker,anim_name:String,anim:Dictionary,speaker_path:String) -> void:
 	_validate_json(anim,ANIM_TEMPLATE)
@@ -129,7 +129,7 @@ func _load_speaker_animation(speaker:Speaker,anim_name:String,anim:Dictionary,sp
 		at.atlas = atlas
 		at.region = rect
 		speaker.add_frame(anim_name,at)
-	print("\tLoaded animation " + anim_name)
+	Console.print("\tLoaded animation " + anim_name)
 
 func _load_speaker_talksound(speaker:Speaker,talksound:Dictionary,speaker_path:String) -> void:
 	_validate_json(talksound,TALKSOUND_TEMPLATE)
@@ -143,10 +143,10 @@ func _load_speaker_talksound(speaker:Speaker,talksound:Dictionary,speaker_path:S
 			stream.add_stream(0)
 			stream.set_stream(0,strm)
 	speaker.talksound = stream
-	print("\tLoaded " + str(stream.streams_count) + " talksounds")
+	Console.print("\tLoaded " + str(stream.streams_count) + " talksounds")
 
 func _project_load_error(message:String,fatal:bool=false) -> void:
-	push_error(message)
+	Console.error(message)
 
 func _read_texture(path:String) -> ImageTexture:
 	if _sprite_load_cache.has(path):

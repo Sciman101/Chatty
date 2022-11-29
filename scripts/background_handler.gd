@@ -52,7 +52,7 @@ func transition_background(args) -> void:
 	if AssetHandler.backgrounds.has(next):
 		current_bg.texture = AssetHandler.backgrounds[next]
 	else:
-		push_error("No such background '%s'!" % [next])
+		Console.error("No such background '%s'!" % [next])
 		return
 	
 	if animation != '':

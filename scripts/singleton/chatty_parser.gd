@@ -59,7 +59,7 @@ func compile_script(script_text:String) -> ChattyScript:
 
 func _parser_error(message:String) -> void:
 	error = message + " @ line " + str(line_num)
-	push_error(message + " @ line " + str(line_num))
+	Console.error(error)
 
 func _resolve_choice_event(script:ChattyScript) -> void:
 	# Add choice event

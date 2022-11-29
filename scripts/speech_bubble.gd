@@ -87,7 +87,7 @@ func _ev_flag(event,flag,default=false):
 func present(event) -> void:
 	
 	if event.type != &'dialouge':
-		push_error('Attempting to run a non-dialouge event on a speech bubble!')
+		Console.error('Attempting to run a non-dialouge event on a speech bubble!')
 		return
 	
 	advance_arrow.visible = false

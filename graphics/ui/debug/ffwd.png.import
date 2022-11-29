@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b6oj7e1hbwkhn"
-path="res://.godot/imported/ffwd.png-e9088c9fea5391b17f31d45fdb6bfb95.ctex"
+path="res://.godot/imported/ffwd.png-9a26ddba71d1230220234011a887b430.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://graphics/ui/ffwd.png"
-dest_files=["res://.godot/imported/ffwd.png-e9088c9fea5391b17f31d45fdb6bfb95.ctex"]
+source_file="res://graphics/ui/debug/ffwd.png"
+dest_files=["res://.godot/imported/ffwd.png-9a26ddba71d1230220234011a887b430.ctex"]
 
 [params]
 
