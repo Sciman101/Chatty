@@ -180,6 +180,20 @@ func _run_command_event(event) -> void:
 				else:
 					await speech_bubble.disappear()
 		
+		'sound':
+			if args.size() > 0:
+				if AssetHandler.sounds.has(args[0]):
+					var sound = AssetHandler.sounds[args[0]]
+					var player = AudioStreamPlayer.new()
+					add_child(player)
+					player.stream = sound
+					player.finished.connect(player.queue_free)
+					player.play()
+					if not (args.size() >= 2 and args[1] == 'async'):
+						await player.finished
+				else:
+					_player_error("Trying to play unknown sound " + args[0])
+		
 		'alias':
 			if args.size() >= 2:
 				var alias_name = args[0]

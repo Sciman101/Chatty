@@ -2,5 +2,6 @@
 >wait 0.5
 >bg windowsxp fade 0.5
 jnfr: Test!
-jnfr: [b]test 2[/b]
+>sound clank async
+ru_b: [b]test 2[/b]
 jnfr: [color=red]test <pause 1>3[/color] hhhh

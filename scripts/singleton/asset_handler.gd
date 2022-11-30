@@ -9,6 +9,7 @@ var TALKSOUND_TEMPLATE = ['clips','pitch_variance']
 var speakers = {}
 var backgrounds = {}
 var scripts = {}
+var sounds = {}
 
 var defaults = {}
 
@@ -26,12 +27,14 @@ func load_project(project_dir:String) -> void:
 	speakers = {}
 	backgrounds = {}
 	scripts = {}
+	sounds = {}
 	
 	_load_defaults()
 	
 	_load_from_folder('scripts',_load_script)
 	_load_from_folder('speakers',_load_speaker,true)
 	_load_from_folder('backgrounds',_load_background)
+	_load_from_folder('sounds',_load_sounds)
 	
 	Console.print("Looking for starting script '%s'" % _project.start_script)
 	if not scripts.has(_project.start_script):
@@ -86,6 +89,13 @@ func _load_background(bg_file:String) -> void:
 	if bg:
 		backgrounds[bg_file.get_basename()] = bg
 		Console.print("\tLoaded background " + bg_file)
+
+func _load_sounds(sound_file:String) -> void:
+	var sound_path = _project_dir + "/sounds/" + sound_file
+	var sound = _read_audio(sound_path)
+	if sound:
+		sounds[sound_file.get_basename()] = sound
+		Console.print("\tLoaded sound " + sound_file)
 
 func _load_speaker(speaker_name:String) -> void:
 	var speaker_path = _project_dir + "/speakers/" + speaker_name
@@ -207,6 +217,16 @@ func _read_audio(path:String) -> AudioStream:
 		'wav':
 			stream = AudioStreamWAV.new()
 			stream.format = AudioStreamWAV.FORMAT_16_BITS
+			stream.mix_rate = 44100
+			
+			# Strip out the wav header
+			# TODO make this better
+			var i = 0
+			while str(char(bytes[i])+char(bytes[i+1])+char(bytes[i+2])+char(bytes[i+3])) != "data":
+				i += 1
+			var audio_data_size = bytes[i+4] + (bytes[i+5] << 8) + (bytes[i+6] << 16) + (bytes[i+7] << 32)
+			var data_entry_point = i+8
+			bytes = bytes.slice(data_entry_point, data_entry_point + audio_data_size - 1)
 		'mp3':
 			stream = AudioStreamMP3.new()
 		_:
@@ -214,6 +234,7 @@ func _read_audio(path:String) -> AudioStream:
 			return null
 	if stream:
 		stream.set_data(bytes)
+	f = null
 	return stream
 
 func _validate_json(json:Dictionary,template:Array):
