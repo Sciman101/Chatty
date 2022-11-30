@@ -3,6 +3,7 @@ extends Node
 const VALID_FLAGS = {
 	'pos':['bottom','right','left','center','top'],
 	'duration':[0.01,1000],
+	'frame':[0.0,9999],
 	'speed':[0.001,10],
 	'noanim':[true,false],
 	'nosound':[true,false],

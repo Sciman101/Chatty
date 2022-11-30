@@ -4,8 +4,7 @@ const MESSAGE_FADE_DURATION := 1.0
 const MESSAGE_FADE_DELAY := 2.0
 const ConsoleMessage = preload("res://scene/console_message.tscn")
 
-@onready var message_list = $Contents/List
-@onready var scroll = $Contents
+@onready var label = $Messages
 
 func _ready():
 	visible = false
@@ -26,25 +25,12 @@ func _input(event):
 		visible = not visible
 
 func _push_message(text:String,color:Color) -> void:
-	print(text)
 	
-	var at_beginning = scroll.scroll_vertical == 0
-	
-	var inst = ConsoleMessage.instantiate()
-	message_list.add_child(inst)
-	message_list.move_child(inst,0)
-	
-	var label = inst.get_node("Label")
-	label.text = text
-	label.modulate = color
-	
-	if at_beginning:
-		scroll.scroll_vertical = 0
+	label.text += '[color=%s]%s\n' % [color.to_html(),text]
 	
 	#var tween = get_tree().create_tween()
 	#tween.tween_property(inst,'modulate',Color(1,1,1,0),MESSAGE_FADE_DURATION).set_delay(MESSAGE_FADE_DELAY)
 	#tween.tween_callback(inst.queue_free)
 
 func _on_clear_button_pressed():
-	for n in message_list.get_children():
-		n.queue_free()
+	label.text = ""

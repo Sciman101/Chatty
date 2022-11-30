@@ -35,6 +35,5 @@
 	"talksound": {
 		"clips": ["talksound/keys-01.wav","talksound/keys-02.wav","talksound/keys-03.wav","talksound/keys-04.wav"],
 		"pitch_variance": 0.2
-	},
-	"ui_atlas_override": "custom_ui_atlas.png"
+	}
 }

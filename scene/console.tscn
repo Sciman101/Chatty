@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://buldjgtgtgnj"]
+[gd_scene load_steps=3 format=3 uid="uid://buldjgtgtgnj"]
 
 [ext_resource type="Script" path="res://scripts/console.gd" id="1_wg4o4"]
+[ext_resource type="FontFile" uid="uid://bbnmo4grd6j5x" path="res://graphics/font/monogram.ttf" id="2_fnrc5"]
 
 [node name="Console" type="CanvasLayer"]
 script = ExtResource("1_wg4o4")
@@ -8,25 +9,20 @@ script = ExtResource("1_wg4o4")
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_right = 320.0
 offset_bottom = 256.0
-color = Color(0, 0, 0, 0.392157)
+color = Color(0, 0, 0, 0.588235)
 
-[node name="Contents" type="ScrollContainer" parent="."]
+[node name="Messages" type="RichTextLabel" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 8.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="List" type="VBoxContainer" parent="Contents"]
-offset_right = 328.0
-offset_bottom = 256.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/separation = 0
+focus_mode = 2
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_fonts/normal_font = ExtResource("2_fnrc5")
+bbcode_enabled = true
+scroll_following = true
+selection_enabled = true
 
 [node name="Button" type="Button" parent="."]
 anchors_preset = 3

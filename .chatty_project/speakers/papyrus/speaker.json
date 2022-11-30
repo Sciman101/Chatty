@@ -1,0 +1,17 @@
+{
+	"name": "Papyrus",
+	"animations": {
+		"default": {
+			"spritesheet": "frames.png",
+			"frames": [0, 1],
+			"fps": 6
+		}
+	},
+	"talksound": {
+		"clips": ["talking.wav"],
+		"mode": "wait",
+		"pitch_variance": 0
+	},
+	"ui_atlas_override": "ui_atlas_ut.png",
+	"text_color": "white"
+}

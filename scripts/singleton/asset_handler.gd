@@ -10,6 +10,8 @@ var speakers = {}
 var backgrounds = {}
 var scripts = {}
 
+var defaults = {}
+
 var start_script = null
 
 var _project_dir : String
@@ -25,6 +27,8 @@ func load_project(project_dir:String) -> void:
 	backgrounds = {}
 	scripts = {}
 	
+	_load_defaults()
+	
 	_load_from_folder('scripts',_load_script)
 	_load_from_folder('speakers',_load_speaker,true)
 	_load_from_folder('backgrounds',_load_background)
@@ -34,6 +38,9 @@ func load_project(project_dir:String) -> void:
 		_project_load_error("Start script is missing!")
 	else:
 		start_script = scripts[_project.start_script]
+
+func _load_defaults() -> void:
+	defaults.ui_atlas = load("res://graphics/ui/atlas/atlas_ui.png")
 
 func _load_project_data() -> void:
 	var project = _read_jsonfile(_project_dir+"/chatty.json")
@@ -89,15 +96,18 @@ func _load_speaker(speaker_name:String) -> void:
 	var speaker = Speaker.new()
 	speaker.speaker_name = data.name
 	
-	if data.has('text_color'):
-		speaker.text_color = Color.from_string(data.text_color.to_upper(),Color.BLACK)
-	
 	Console.print("Loading speaker " + data.name)
 	for anim_name in data.animations:
 		_load_speaker_animation(speaker,anim_name,data.animations[anim_name],speaker_path)
 	
 	if data.has('talksound'):
 		_load_speaker_talksound(speaker,data.talksound,speaker_path)
+	
+	if data.has('text_color'):
+		speaker.text_color = Color.from_string(data.text_color.to_upper(),Color.BLACK)
+	
+	if data.has('ui_atlas_override'):
+		speaker.ui_atlas_override = _read_texture(speaker_path+'/'+data.ui_atlas_override)
 	
 	speakers[speaker_name] = speaker
 	Console.print("Done!")
@@ -109,7 +119,10 @@ func _load_speaker_animation(speaker:Speaker,anim_name:String,anim:Dictionary,sp
 	if anim_name != "default":
 		speaker.add_animation(anim_name)
 	speaker.set_animation_speed(anim_name,anim.fps)
+	
 	speaker.set_animation_loop(anim_name,true)
+	if anim.has('loop'):
+		speaker.set_animation_loop(anim_name,anim.loop)
 	
 	if not atlas:
 		_project_load_error("No atlas for animation " + anim_name)

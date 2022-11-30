@@ -3,6 +3,8 @@ extends Node2D
 @onready var sfx_fade_in = preload("res://sounds/speechbubble_appear.wav")
 @onready var sfx_fade_out = preload("res://sounds/speechbubble_disappear.wav")
 
+@onready var ui_atlas_redirect_texture = preload("res://graphics/ui/atlas/atlas_ui_redirect.tres")
+
 @onready var tex_default = preload("res://graphics/ui/ui_speechbubble_default.tres")
 @onready var tex_wide = preload("res://graphics/ui/ui_speechbubble_wide.tres")
 
@@ -90,7 +92,6 @@ func present(event) -> void:
 	
 	advance_arrow.visible = false
 	is_presenting = true
-	portrait.frame = 0
 	_set_visible_characters(0)
 	
 	# Set time from args
@@ -130,7 +131,6 @@ func present(event) -> void:
 		
 		if triggers.has(i):
 			await _handle_trigger(triggers[i])
-
 	
 	jump_to_end()
 	
@@ -158,7 +158,7 @@ func _handle_trigger(trigger) -> void:
 
 func set_dialouge(dialouge:String) -> void:
 	if speaker.text_color:
-		dialouge = '[color=%s]%s' % [speaker.text_color.to_string(),dialouge]
+		dialouge = '[color=%s]%s' % [speaker.text_color.to_html(),dialouge]
 	dialouge_label.text = dialouge
 	parsed_dialouge = dialouge_label.get_parsed_text()
 	num_characters = parsed_dialouge.length()
@@ -178,6 +178,13 @@ func set_speaker(new_speaker) -> bool:
 	portrait.stop()
 	
 	talk_sfx.stream = speaker.talksound
+	
+	# Change ui atlas
+	if speaker.ui_atlas_override:
+		ui_atlas_redirect_texture.atlas = speaker.ui_atlas_override
+	else:
+		ui_atlas_redirect_texture.atlas = AssetHandler.defaults.ui_atlas
+	
 	return true
 
 func set_speaker_animation(anim:StringName=&'default') -> void:
@@ -190,6 +197,9 @@ func set_speaker_animation(anim:StringName=&'default') -> void:
 			push_warning("Unknown animation for speaker " + speaker.speaker_name + " '" + str(anim) + "'")
 	else:
 		push_warning("No active speaker!")
+
+func set_frame(frame:int) -> void:
+	portrait.frame = frame
 
 func set_wide(wide:bool) -> void:
 	graphic.texture = tex_wide if wide else tex_default
@@ -206,8 +216,9 @@ func jump_to_end() -> void:
 	
 	_set_visible_characters(-1)
 	
-	portrait.stop()
-	portrait.frame = 0
+	if portrait.playing:
+		portrait.stop()
+		portrait.frame = 0
 	
 	is_presenting = false
 
