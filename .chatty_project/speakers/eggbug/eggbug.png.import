@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b08nfbxqtetpa"
-path="res://.godot/imported/frames.png-0feb333354dff969969ceae66e6d3025.ctex"
+uid="uid://dg2li1wtgtd0q"
+path="res://.godot/imported/eggbug.png-fd309ad03486eed19f62cd5fda0643fe.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://h.chatty_project/speakers/ru_b/frames.png"
-dest_files=["res://.godot/imported/frames.png-0feb333354dff969969ceae66e6d3025.ctex"]
+source_file="res://h.chatty_project/speakers/eggbug/eggbug.png"
+dest_files=["res://.godot/imported/eggbug.png-fd309ad03486eed19f62cd5fda0643fe.ctex"]
 
 [params]
 

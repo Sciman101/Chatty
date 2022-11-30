@@ -1,25 +1,16 @@
 extends Node
 
+const BOOLS = [true,false]
 const VALID_FLAGS = {
 	'pos':['bottom','right','left','center','top'],
 	'duration':[0.01,1000],
 	'frame':[0.0,9999],
 	'speed':[0.001,10],
-	'noanim':[true,false],
-	'nosound':[true,false],
-	'noportrait':[true,false],
-	'skip':[true,false]
+	'noanim':BOOLS,
+	'nosound':BOOLS,
+	'noportrait':BOOLS,
+	'skip':BOOLS
 }
-
-const MD_TO_BBCODE = {
-	'*': 'b',
-	'^': 'wave',
-	'_': 'u',
-	'~': 's',
-	'%': 'shake'
-}
-
-const ESCAPED_CHARS = {'n':'\n','t':'\t'}
 
 var error = false
 
@@ -158,7 +149,7 @@ func _parse_line(line:String,script:ChattyScript) -> void:
 					flags = params_string.substr(bracket_index+1,len(params_string)-bracket_index-2).strip_edges().split(',')
 				
 				var dialouge = line.substr(colon_index+1).strip_edges()
-				var result = _markdownish_to_bbcode(dialouge)
+				var result = _strip_triggers_from_bbcode(dialouge)
 				
 				var event = {
 					'type': &'dialouge',
@@ -204,58 +195,42 @@ func _parse_flags(flag_list:Array) -> Dictionary:
 
 # Converts a markdown-esque syntax into bbcode
 # Also parses events
-func _markdownish_to_bbcode(md:String) -> Dictionary:
+func _strip_triggers_from_bbcode(bbcode:String) -> Dictionary:
 	var result = {bbcode="",triggers={}}
-	var final_index = 0
-	var index = 0
+	
+	var raw_string_index = 0
+	var displayed_string_index = 0
 	
 	var open_tags = {}
 	
-	while index < md.length():
-		var c = md[index]
+	while raw_string_index < bbcode.length():
+		var char = bbcode[raw_string_index]
 		
-		if index != md.length() - 1 and c == '\\':
-			if md[index+1] in ESCAPED_CHARS:
-				result.bbcode += ESCAPED_CHARS[md[index+1]]
-				index += 1
-				final_index += 2
+		# bbcode tags
+		if char == '[':
+			var temp_string_index = raw_string_index
+			while bbcode[temp_string_index] != ']' and temp_string_index < bbcode.length():
+				temp_string_index += 1
+			if temp_string_index != bbcode.length():
+				# Jump index ahead
+				result.bbcode += bbcode.substr(raw_string_index,temp_string_index-raw_string_index+1)
+				raw_string_index = temp_string_index
 		
-		# Escape character
-		elif index != md.length() - 1 and c == '\\' and md[index+1] in MD_TO_BBCODE:
-			result.bbcode += md[index+1]
-			index += 1
-			final_index += 2
-		
-		elif index != md.length() - 1 and c == '\\' and md[index+1] == '<':
-			result.bbcode += md[index+1]
-			index += 1
-			final_index += 2
-		
-		elif c in MD_TO_BBCODE:
-			if open_tags.has(c) and open_tags[c]:
-				result.bbcode += '[/%s]' % MD_TO_BBCODE[c]
-				open_tags[c] = false
-			else:
-				# Mak tag as open
-				result.bbcode += '[%s]' % MD_TO_BBCODE[c]
-				open_tags[c] = true
-		
-		elif c == '<':
-			
-			var i = index
-			while i < md.length() and md[i] != '>': i += 1
-			if md[i] != '>':
-				_parser_error("Unclosed dialouge event")
-			
-			var event_def = md.substr(index+1,i-index-1).strip_edges().split(' ')
-			result.triggers[final_index] = event_def
-			
-			index = i
-			
+		elif char == '<':
+			var temp_string_index = raw_string_index
+			while bbcode[temp_string_index] != '>' and temp_string_index < bbcode.length():
+				temp_string_index += 1
+			if temp_string_index != bbcode.length():
+				# Get the trigger
+				var trigger = bbcode.substr(raw_string_index+1,temp_string_index-raw_string_index-1)
+				result.triggers[displayed_string_index] = trigger.split(' ')
+				print(trigger)
+				raw_string_index = temp_string_index
 		else:
-			result.bbcode += c
-			final_index += 1
+			# Just add the character
+			displayed_string_index += 1
+			result.bbcode += bbcode[raw_string_index]
 		
-		index = index + 1
+		raw_string_index += 1
 	
 	return result

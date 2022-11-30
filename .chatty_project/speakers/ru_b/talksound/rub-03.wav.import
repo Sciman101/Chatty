@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://dh7235kk0v0b3"
-path="res://.godot/imported/rub-03.wav-5e0d52c7edc2bf13b675f694f4988599.sample"
+path="res://.godot/imported/rub-03.wav-410b8eeca51327b3574c4a714556db5c.sample"
 
 [deps]
 
-source_file="res://test_project/speakers/ru_b/talksound/rub-03.wav"
-dest_files=["res://.godot/imported/rub-03.wav-5e0d52c7edc2bf13b675f694f4988599.sample"]
+source_file="res://h.chatty_project/speakers/ru_b/talksound/rub-03.wav"
+dest_files=["res://.godot/imported/rub-03.wav-410b8eeca51327b3574c4a714556db5c.sample"]
 
 [params]
 

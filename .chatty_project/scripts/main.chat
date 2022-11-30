@@ -1,14 +1,6 @@
 >bg black
 >wait 0.5
 >bg windowsxp fade 0.5
-jnfr: Chatty update!
-jnfr: We're now on version 0.1
-jnfr, shocked: So... what's new?
-
-jnfr: There's some under-the-hood changes and new syntax
-jnfr: Mostly just to make things clearer
-jnfr: For instance, the 't' flag was changed to 'duration'
-
-jnfr: You can also advance past text now, by clicking mid-sentence!
-jnfr [skip]: Now you can get through long, boring, monotonous, unlikable chunks of dense, dry text, longer than it would have taken before
-jnfr, angry: STOP SKIPPING ME >:(
+jnfr: Test!
+jnfr: [b]test 2[/b]
+jnfr: [color=red]test <pause 1>3[/color] hhhh
