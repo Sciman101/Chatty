@@ -104,6 +104,11 @@ func _run_dialouge_event(event) -> void:
 	speech_bubble.set_wide(_ev_flag(event,'noportrait'))
 	speech_bubble.set_frame(_ev_flag(event,'frame',0))
 	
+	if _ev_flag(event,'noname'):
+		speech_bubble.set_speaker_name("")
+	elif _ev_flag(event,'name'):
+		speech_bubble.set_speaker_name(_ev_flag(event,'name'))
+	
 	var target_pos = null
 	var pos_name = _ev_flag(event,'pos','bottom')
 	if _speech_bubble_positions.has(pos_name):

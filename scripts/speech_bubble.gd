@@ -12,6 +12,9 @@ extends Node2D
 @onready var portrait : AnimatedSprite2D = $Graphic/Portrait
 @onready var advance_arrow : AnimatedSprite2D = $Graphic/AdvanceArrow
 @onready var dialouge_label : RichTextLabel = $Graphic/Dialouge
+
+@onready var speaker_name_container := $Graphic/SpeakerNameBadge
+
 @onready var timer : Timer = $Timer
 @onready var fade_sfx : AudioStreamPlayer = $FadeInSound
 @onready var talk_sfx : AudioStreamPlayer = $TalkSoundPlayer
@@ -141,7 +144,6 @@ func present(event) -> void:
 		advance_arrow.visible = true
 
 func _handle_trigger(trigger) -> void:
-	
 	match trigger[0]:
 		'pause':
 			var was_playing = portrait.playing
@@ -179,13 +181,20 @@ func set_speaker(new_speaker) -> bool:
 	
 	talk_sfx.stream = speaker.talksound
 	
+	set_speaker_name(speaker.speaker_name,speaker.text_color)
+	
 	# Change ui atlas
 	if speaker.ui_atlas_override:
 		ui_atlas_redirect_texture.atlas = speaker.ui_atlas_override
 	else:
 		ui_atlas_redirect_texture.atlas = AssetHandler.defaults.ui_atlas
 	
+	
+	
 	return true
+
+func set_speaker_name(name:String,color:Color=Color.BLACK) -> void:
+	speaker_name_container.set_name_display(name,color)
 
 func set_speaker_animation(anim:StringName=&'default') -> void:
 	if anim == &'': anim = &'default'

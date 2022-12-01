@@ -3,12 +3,14 @@ extends Node
 const BOOLS = [true,false]
 const VALID_FLAGS = {
 	'pos':['bottom','right','left','center','top'],
+	'name':['string'],
 	'duration':[0.01,1000],
 	'frame':[0.0,9999],
 	'speed':[0.001,10],
 	'noanim':BOOLS,
 	'nosound':BOOLS,
 	'noportrait':BOOLS,
+	'noname':BOOLS,
 	'skip':BOOLS
 }
 
@@ -184,6 +186,8 @@ func _parse_flags(flag_list:Array) -> Dictionary:
 				if val < _min or val > _max:
 					_parser_error("Flag value out of range for flag '%s', [%f,%f]" % [key,_min,_max])
 					ok = false
+			elif accepted[0] is String:
+				ok = true
 			elif not val in accepted:
 				_parser_error("Invalid flag value for flag '%s' (Accepted values are %s)" % [key,accepted])
 				ok = false
