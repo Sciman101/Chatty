@@ -168,6 +168,11 @@ func _handle_trigger(trigger) -> void:
 		'volume':
 			if trigger.size() >= 2:
 				talk_sfx.volume_db = linear_to_db(clamp(trigger[1].to_float(),0.0,1.0))
+		
+		'animation':
+			if trigger.size() >= 2:
+				var anim_name = trigger[1]
+				set_speaker_animation(anim_name)
 
 func set_dialouge(dialouge:String) -> void:
 	if speaker.text_color:
