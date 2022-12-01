@@ -1,12 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://b418f1wdj3rvp"]
+[gd_scene load_steps=10 format=3 uid="uid://lejjvmvyv0ol"]
 
-[ext_resource type="Script" path="res://scripts/speech_bubble.gd" id="1_jl81n"]
+[ext_resource type="Script" path="res://scripts/player/speech_bubble.gd" id="1_jl81n"]
 [ext_resource type="Texture2D" uid="uid://dl0jjnw46awpb" path="res://graphics/ui/ui_speechbubble_default.tres" id="2_d65k0"]
 [ext_resource type="FontFile" uid="uid://bbnmo4grd6j5x" path="res://graphics/font/monogram.ttf" id="3_8txfa"]
 [ext_resource type="Texture2D" uid="uid://ms1aafo1vad4" path="res://graphics/ui/ui_advance_arrow.tres" id="4_bm768"]
 [ext_resource type="Texture2D" uid="uid://5e2yr1758gbe" path="res://graphics/ui/ui_advance_arrow_2.tres" id="5_pgxmu"]
 [ext_resource type="Texture2D" uid="uid://c7rlroyfg0c8" path="res://graphics/ui/ui_speaker_name.tres" id="6_eifgq"]
-[ext_resource type="Script" path="res://scripts/speaker_name_badge.gd" id="7_ymp1g"]
+[ext_resource type="Script" path="res://scripts/player/speaker_name_badge.gd" id="7_ymp1g"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fp0em"]
 animations = [{
@@ -27,6 +27,7 @@ script = ExtResource("1_jl81n")
 [node name="FadeInSound" type="AudioStreamPlayer" parent="."]
 
 [node name="TalkSoundPlayer" type="AudioStreamPlayer" parent="."]
+volume_db = -10.0
 
 [node name="Graphic" type="Sprite2D" parent="."]
 texture = ExtResource("2_d65k0")
@@ -66,7 +67,6 @@ script = ExtResource("7_ymp1g")
 
 [node name="SpeakerNameLabel" type="Label" parent="Graphic/SpeakerNameBadge"]
 custom_minimum_size = Vector2(16, 0)
-layout_mode = 0
 offset_left = 4.0
 offset_top = 2.0
 offset_right = 20.0

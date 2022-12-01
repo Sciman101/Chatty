@@ -1,4 +1,5 @@
 extends Node
+class_name ChattyParser
 
 const BOOLS = [true,false]
 const VALID_FLAGS = {
@@ -230,7 +231,6 @@ func _strip_triggers_from_bbcode(bbcode:String) -> Dictionary:
 				# Get the trigger
 				var trigger = bbcode.substr(raw_string_index+1,temp_string_index-raw_string_index-1)
 				result.triggers[displayed_string_index] = trigger.split(' ')
-				print(trigger)
 				raw_string_index = temp_string_index
 		else:
 			# Just add the character

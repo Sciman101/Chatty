@@ -75,9 +75,11 @@ func _load_script(script_file:String) -> void:
 	var script_text = _read_textfile(script_path)
 	if script_text:
 		Console.print("\tParsing script " + script_file)
-		var script_object = ChattyParser.compile_script(script_text)
-		if ChattyParser.error:
-			Console.print("\tError loading script! " + ChattyParser.error)
+		
+		var parser = ChattyParser.new()
+		var script_object = parser.compile_script(script_text)
+		if parser.error:
+			Console.print("\tError loading script! " + parser.error)
 		else:
 			scripts[script_file.get_basename()] = script_object
 			Console.print("\tSuccess!")
@@ -216,24 +218,34 @@ func _read_audio(path:String) -> AudioStream:
 	match extension:
 		'wav':
 			stream = AudioStreamWAV.new()
-			stream.format = AudioStreamWAV.FORMAT_16_BITS
-			stream.mix_rate = 44100
 			
 			# Strip out the wav header
-			# TODO make this better
-			var i = 0
-			while str(char(bytes[i])+char(bytes[i+1])+char(bytes[i+2])+char(bytes[i+3])) != "data":
-				i += 1
-			var audio_data_size = bytes[i+4] + (bytes[i+5] << 8) + (bytes[i+6] << 16) + (bytes[i+7] << 32)
-			var data_entry_point = i+8
-			bytes = bytes.slice(data_entry_point, data_entry_point + audio_data_size - 1)
+			var header = bytes.slice(0,44)
+			
+			# Get actual data
+			var audio_data_size = header[40] + (header[41] << 8) + (header[42] << 16) + (header[43] << 32)
+			bytes = bytes.slice(44, 44 + audio_data_size - 1)
+			
+			stream.set_data(bytes)
+			
+			stream.mix_rate = header[24] + (header[25] << 8) + (header[26] << 16) + (header[27] << 32)
+			
+			var bps = header[34] + (header[35] << 8)
+			match bps:
+				8:
+					stream.format = AudioStreamWAV.FORMAT_8_BITS
+				16:
+					stream.format = AudioStreamWAV.FORMAT_16_BITS
+				32:
+					stream.format = AudioStreamWAV.FORMAT_IMA_ADPCM
+			
+			stream.stereo = (header[22] + (header[23] << 8)) == 2
 		'mp3':
 			stream = AudioStreamMP3.new()
+			stream.set_data(bytes)
 		_:
 			_project_load_error("Unsupported file type, " + extension)
 			return null
-	if stream:
-		stream.set_data(bytes)
 	f = null
 	return stream
 

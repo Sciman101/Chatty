@@ -9,12 +9,18 @@
 config_version=5
 
 _global_script_classes=[{
+"base": "Node",
+"class": &"ChattyParser",
+"language": &"GDScript",
+"path": "res://scripts/parsing/chatty_parser.gd"
+}, {
 "base": "SpriteFrames",
 "class": &"Speaker",
 "language": &"GDScript",
-"path": "res://scripts/speaker.gd"
+"path": "res://scripts/parsing/speaker.gd"
 }]
 _global_script_class_icons={
+"ChattyParser": "",
 "Speaker": ""
 }
 
@@ -29,7 +35,6 @@ config/icon="res://graphics/icon.svg"
 
 Console="*res://scene/console.tscn"
 AssetHandler="*res://scripts/singleton/asset_handler.gd"
-ChattyParser="*res://scripts/singleton/chatty_parser.gd"
 
 [display]
 
