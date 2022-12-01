@@ -7,6 +7,8 @@ const VALID_FLAGS = {
 	'duration':[0.01,1000],
 	'frame':[0.0,9999],
 	'speed':[0.001,10],
+	'volume':[0.0,1],
+	'pitch':[0.0,2.0],
 	'noanim':BOOLS,
 	'nosound':BOOLS,
 	'noportrait':BOOLS,

@@ -27,7 +27,6 @@ script = ExtResource("1_jl81n")
 [node name="FadeInSound" type="AudioStreamPlayer" parent="."]
 
 [node name="TalkSoundPlayer" type="AudioStreamPlayer" parent="."]
-volume_db = -10.0
 
 [node name="Graphic" type="Sprite2D" parent="."]
 texture = ExtResource("2_d65k0")
@@ -67,6 +66,7 @@ script = ExtResource("7_ymp1g")
 
 [node name="SpeakerNameLabel" type="Label" parent="Graphic/SpeakerNameBadge"]
 custom_minimum_size = Vector2(16, 0)
+layout_mode = 0
 offset_left = 4.0
 offset_top = 2.0
 offset_right = 20.0

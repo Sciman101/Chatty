@@ -108,6 +108,9 @@ func present(event) -> void:
 		portrait.play()
 	var play_sound = not _ev_flag(event,'nosound')
 	
+	talk_sfx.pitch_scale = _ev_flag(event,'pitch',1)
+	talk_sfx.volume_db = linear_to_db(_ev_flag(event,'volume',1))
+	
 	# Play once
 	if speaker.voice_mode == Speaker.VoiceMode.ONCE and play_sound:
 		play_sound = false
@@ -157,6 +160,14 @@ func _handle_trigger(trigger) -> void:
 		'speed':
 			if trigger.size() >= 2:
 				talk_speed_multiplier = clamp(trigger[1].to_float(),0.01,10)
+		
+		'pitch':
+			if trigger.size() >= 2:
+				talk_sfx.pitch_scale = clamp(trigger[1].to_float(),0.0,2.0)
+			
+		'volume':
+			if trigger.size() >= 2:
+				talk_sfx.volume_db = linear_to_db(clamp(trigger[1].to_float(),0.0,1.0))
 
 func set_dialouge(dialouge:String) -> void:
 	if speaker.text_color:
