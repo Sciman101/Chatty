@@ -1,9 +1,5 @@
 extends CanvasLayer
 
-const MESSAGE_FADE_DURATION := 1.0
-const MESSAGE_FADE_DELAY := 2.0
-const ConsoleMessage = preload("res://scene/console_message.tscn")
-
 @onready var label = $Messages
 
 func _ready():

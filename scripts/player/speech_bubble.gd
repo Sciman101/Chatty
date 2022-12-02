@@ -140,6 +140,9 @@ func present(event) -> void:
 	
 	jump_to_end()
 	
+	if speaker.voice_mode == Speaker.VoiceMode.WAIT and talk_sfx.playing:
+		talk_sfx.stop()
+	
 	# Wait a second
 	if not _ev_flag(event,'skip'):
 		timer.start(DEFAULT_SPEECH_DELAY)
