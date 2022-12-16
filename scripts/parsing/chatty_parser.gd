@@ -1,20 +1,19 @@
 extends Node
 class_name ChattyParser
 
-const BOOLS = [true,false]
 const VALID_FLAGS = {
 	'pos':['bottom','right','left','center','top'],
-	'name':['string'],
+	'name':&'string',
 	'duration':[0.01,1000],
 	'frame':[0.0,9999],
 	'speed':[0.001,10],
 	'volume':[0.0,1],
 	'pitch':[0.0,2.0],
-	'noanim':BOOLS,
-	'nosound':BOOLS,
-	'noportrait':BOOLS,
-	'noname':BOOLS,
-	'skip':BOOLS
+	'noanim':&'bool',
+	'nosound':&'bool',
+	'noportrait':&'bool',
+	'noname':&'bool',
+	'skip':&'bool'
 }
 
 var error = false
@@ -50,7 +49,7 @@ func compile_script(script_text:String) -> ChattyScript:
 		_parse_line(line,script)
 		line_num += 1
 	
-	# Add choice event
+	# Add dangling choice event
 	_resolve_choice_event(script)
 	
 	return script
@@ -58,6 +57,19 @@ func compile_script(script_text:String) -> ChattyScript:
 func _parser_error(message:String) -> void:
 	error = message + " @ line " + str(line_num)
 	Console.error(error)
+
+func _determine_event_type(line:String) -> StringName:
+	if line.begins_with('?'):
+		return &'choice'
+	elif line.begins_with('#'):
+		return &'label'
+	elif line.begins_with('>'):
+		return &'command'
+	else:
+		var index = line.find(':')
+		if index != -1:
+			return &'dialogue'
+		return &'none'
 
 func _resolve_choice_event(script:ChattyScript) -> void:
 	# Add choice event
@@ -70,101 +82,119 @@ func _resolve_choice_event(script:ChattyScript) -> void:
 		script.add_event(event)
 
 func _parse_line(line:String,script:ChattyScript) -> void:
+	line = line.strip_edges()
+	var event_type = _determine_event_type(line)
 	
-	if line.begins_with('?'):
-		# Add choice
-		var choice_line = line.substr(1).strip_edges(true,false)
-		var colon_index = choice_line.find(':')
-		var label = ''
-		var prompt = ''
-		if colon_index == -1:
-			label = choice_line
-			prompt = label
-		else:
-			label = choice_line.substr(0,colon_index)
-			prompt = choice_line.substr(colon_index+1)
-		choice_queue.append({
-			'label': label,
-			'prompt': prompt
-		})
+	if event_type == &'choice':
+		_parse_choice_event(line)
 	else:
-		# Add choice event
+		# Add choice event if we have more than 1 in the queue
 		_resolve_choice_event(script)
 	
 		if line.begins_with('(') and line.ends_with(')'):
 			pass # Do nothing. comment
-		
 		elif line.length() == 0:
 			pass # Empty line. do nothing
 		
-		elif line.begins_with('#'):
-			# Label
-			var label_name = line.substr(1).strip_edges()
-			script.add_label(label_name)
-			var event = {
-				'type':&'label'
-			}
-			script.add_event(event)
+		elif event_type == &'label':
+			_parse_label_event(line,script)
+		elif event_type == &'command':
+			_parse_command_event(line,script)
+		elif event_type == &'dialogue':
+			_parse_dialogue_event(line,script)
+
+func _parse_label_event(line:String,script:ChattyScript):
+	var label_name = line.substr(1).strip_edges()
+	script.add_label(label_name)
+	var event = {
+		'type':&'label'
+	}
+	script.add_event(event)
+
+func _parse_command_event(line:String,script:ChattyScript):
+	var args = line.substr(1).split(' ')
+	var cmd_name = args[0]
+	args = args.slice(1)
+	var event = {
+		'type':&'command',
+		'cmd_name': cmd_name,
+		'args': args
+	}
+	script.add_event(event)
+
+func _parse_choice_event(line:String):
+	var choice_line = line.substr(1).strip_edges(true,false)
+	var colon_index = choice_line.find(':')
+	var label = ''
+	var prompt = ''
+	if colon_index == -1:
+		label = choice_line
+		prompt = label
+	else:
+		label = choice_line.substr(0,colon_index)
+		prompt = choice_line.substr(colon_index+1)
+	choice_queue.append({
+		'label': label,
+		'prompt': prompt
+	})
+
+func _parse_dialogue_event(line:String,script:ChattyScript):
+	var colon_index = line.find(':')
+	if colon_index == -1:
+		_parser_error("Malformed dialouge line")
+	else:
 		
-		elif line.begins_with('>'):
-			# Command
-			var args = line.substr(1).split(' ')
-			var cmd_name = args[0]
-			args = args.slice(1)
-			var event = {
-				'type':&'command',
-				'cmd_name': cmd_name,
-				'args': args
-			}
-			script.add_event(event)
-			pass
+		#name:dialogue
+		#name,anim:dialogue
+		#name,anim[flags]:dialogue
+		var slice_start := 0
+		var slice_end := 0
+		var chr = line[0]
+		# figure out the speaker name
+		while slice_end < line.length()-1 and chr != ',' and chr != ':' and chr != '[':
+			slice_end += 1
+			chr = line[slice_end]
+		if slice_end == line.length()-1:
+			_parser_error("Malformed dialogue line")
+			return
 		
-		else:
-			# Dialouge line
-			# Format: [name]:[dialouge]
-			var colon_index = line.find(':')
-			if colon_index == -1:
-				_parser_error("Malformed dialouge line")
-			else:
-				var params_string = line.substr(0,colon_index).strip_edges()
-				
-				# Extract params
-				var comma_index = params_string.find(',')
-				var bracket_index = params_string.find('[')
-				
-				var speaker_name = ''
-				var animation_name = ''
-				var flags = []
-				if comma_index != -1 and (comma_index < bracket_index or bracket_index == -1):
-					if comma_index != 0:
-						speaker_name = params_string.substr(0,comma_index).strip_edges(false)
-					if bracket_index != -1:
-						animation_name = params_string.substr(comma_index+1,bracket_index-comma_index-1).strip_edges()
-					else:
-						animation_name = params_string.substr(comma_index+1).strip_edges(true,false)
-				elif bracket_index != -1:
-					speaker_name = params_string.substr(0,bracket_index).strip_edges(false)
-				else:
-					speaker_name = params_string
-				
-				if bracket_index != -1:
-					if params_string[len(params_string)-1] != ']':
-						# parse error
-						pass
-					flags = params_string.substr(bracket_index+1,len(params_string)-bracket_index-2).strip_edges().split(',')
-				
-				var dialouge = line.substr(colon_index+1).strip_edges()
-				var result = _strip_triggers_from_bbcode(dialouge)
-				
-				var event = {
-					'type': &'dialouge',
-					'speaker': speaker_name,
-					'animation_name': animation_name,
-					'flags': _parse_flags(flags),
-					'dialouge': result.bbcode,
-					'triggers': result.triggers
-				}
-				script.add_event(event)
+		var speaker_name = line.substr(slice_start,slice_end-slice_start).strip_edges()
+		slice_start = slice_end+1
+		
+		# figure out the animation name, if one exists
+		var animation_name = ''
+		if chr == ',':
+			while slice_end < line.length()-1 and chr != ':' and chr != '[':
+				slice_end += 1
+				chr = line[slice_end]
+			if slice_end == line.length()-1:
+				_parser_error("Malformed dialogue line")
+				return
+			animation_name = line.substr(slice_start,slice_end-slice_start).strip_edges()
+			slice_start = slice_end+1
+		
+		var flags = []
+		# figure out flags, if they exist
+		if chr == '[':
+			var closing_bracket_index = line.find(']',slice_start)
+			if closing_bracket_index == -1:
+				_parser_error("Malformed dialogue line, no closing bracket")
+				return
+			flags = line.substr(slice_start,closing_bracket_index-slice_start).strip_edges().split(',')
+		
+		var raw_dialogue = line.substr(colon_index+1).strip_edges()
+		var result = _strip_triggers_from_bbcode(raw_dialogue)
+		
+		var event = {
+			'type': &'dialouge',
+			'speaker': speaker_name,
+			'flags': _parse_flags(flags),
+			'dialouge': result.bbcode,
+			'triggers': result.triggers
+		}
+		if animation_name != '':
+			event['animation_name'] = animation_name
+		script.add_event(event)
 
 func _parse_flags(flag_list:Array) -> Dictionary:
 	var flags = {}
@@ -182,15 +212,20 @@ func _parse_flags(flag_list:Array) -> Dictionary:
 		else:
 			var accepted = VALID_FLAGS[key]
 			var ok = true
-			if accepted[0] is float:
+			if accepted is StringName:
+				if accepted == &'bool':
+					if val or val == 'true': val = true
+					else: val = false
+					ok = true
+				elif accepted == &'string':
+					ok = true
+			elif accepted[0] is float or accepted[0] is int:
 				var _min = accepted[0]
 				var _max = accepted[1]
 				val = val.to_float()
 				if val < _min or val > _max:
 					_parser_error("Flag value out of range for flag '%s', [%f,%f]" % [key,_min,_max])
 					ok = false
-			elif accepted[0] is String:
-				ok = true
 			elif not val in accepted:
 				_parser_error("Invalid flag value for flag '%s' (Accepted values are %s)" % [key,accepted])
 				ok = false
@@ -208,13 +243,11 @@ func _strip_triggers_from_bbcode(bbcode:String) -> Dictionary:
 	var raw_string_index = 0
 	var displayed_string_index = 0
 	
-	var open_tags = {}
-	
 	while raw_string_index < bbcode.length():
-		var char = bbcode[raw_string_index]
+		var chr = bbcode[raw_string_index]
 		
 		# bbcode tags
-		if char == '[':
+		if chr == '[':
 			var temp_string_index = raw_string_index
 			while bbcode[temp_string_index] != ']' and temp_string_index < bbcode.length():
 				temp_string_index += 1
@@ -223,7 +256,7 @@ func _strip_triggers_from_bbcode(bbcode:String) -> Dictionary:
 				result.bbcode += bbcode.substr(raw_string_index,temp_string_index-raw_string_index+1)
 				raw_string_index = temp_string_index
 		
-		elif char == '<':
+		elif chr == '<':
 			var temp_string_index = raw_string_index
 			while bbcode[temp_string_index] != '>' and temp_string_index < bbcode.length():
 				temp_string_index += 1

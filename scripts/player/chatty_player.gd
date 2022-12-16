@@ -99,7 +99,10 @@ func _ev_flag(event,flag,default=false):
 func _run_dialouge_event(event) -> void:
 	# Show speech bubble, if it's not present already
 	speech_bubble.set_speaker(event.speaker)
-	speech_bubble.set_speaker_animation(event.animation_name)
+	if event.has('animation_name'):
+		speech_bubble.set_speaker_animation(event.animation_name)
+	else:
+		speech_bubble.set_speaker_animation()
 	speech_bubble.set_dialouge(event.dialouge)
 	speech_bubble.set_wide(_ev_flag(event,'noportrait'))
 	speech_bubble.set_frame(_ev_flag(event,'frame',0))

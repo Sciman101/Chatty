@@ -16,7 +16,7 @@ func error(message:String):
 	push_error(message)
 	_push_message(message,Color.RED)
 
-func _input(event):
+func _input(_event):
 	if Input.is_action_just_pressed("toggle_console"):
 		visible = not visible
 

@@ -140,8 +140,8 @@ func _load_speaker_animation(speaker:Speaker,anim_name:String,anim:Dictionary,sp
 		_project_load_error("No atlas for animation " + anim_name)
 		return
 	
-	var w = atlas.get_width() / 48
-	var h = atlas.get_height() / 48
+	var w = int(atlas.get_width()) / 48
+	var h = int(atlas.get_height()) / 48
 	
 	var frames = anim.frames
 	for frame in frames:
@@ -183,10 +183,13 @@ func _read_texture(path:String) -> ImageTexture:
 	if _sprite_load_cache.has(path):
 		return _sprite_load_cache[path]
 	var img = Image.new()
-	img.load(path)
-	var tex = ImageTexture.create_from_image(img)
-	_sprite_load_cache[path] = tex
-	return tex
+	if img.load(path) == OK:
+		var tex = ImageTexture.create_from_image(img)
+		_sprite_load_cache[path] = tex
+		return tex
+	else:
+		_project_load_error("Cannot find file " + path)
+		return null
 
 func _read_textfile(path:String):
 	var f = FileAccess.open(path,FileAccess.READ)
