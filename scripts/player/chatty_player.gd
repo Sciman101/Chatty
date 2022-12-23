@@ -5,7 +5,7 @@ const DEFAULT_SPEECHBUBBLE_MOVE_DURATION = 0.5
 @onready var ffwd_indicator = $FFWD
 
 @onready var speech_bubble = $SpeechBubble
-@onready var bg_handler = $Background
+@onready var bg_handler = $BackgroundHandler
 @onready var choice_box = $ChoiceBox
 var _speech_bubble_positions = {}
 
@@ -147,11 +147,11 @@ func _run_choice_event(event) -> void:
 
 func _run_command_event(event) -> void:
 	var cmd = event.cmd_name
-	print(cmd)
 	if Commands.commands.has(cmd):
-		print('running')
 		var command = Commands.commands[cmd]
 		await command.exec.call(self,event.args,event.optionals)
+	else:
+		_player_error("Unknown command " + cmd)
 
 func _goto_label(label_string:String) -> void:
 	if current_script.label_indices.has(label_string):

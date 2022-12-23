@@ -39,9 +39,9 @@ var commands = {
 	bg = {
 		argc = 1,
 		optionals = {
-			'duration': 0,
-			'animation': 'fade',
-			'transition': 'linear',
+			'duration': 1,
+			'animation': 'none',
+			'transition': 'none',
 			'async': false
 		},
 		exec = _exec_bg
@@ -99,4 +99,9 @@ func _exec_return(player,_args,_optionals):
 		player._player_error("Nothing to return to!")
 
 func _exec_bg(player,args,optionals):
-	pass
+	var bg_handler = player.bg_handler
+	var target_bg_name = args[0]
+	if optionals.async:
+		bg_handler.set_background(target_bg_name,optionals)
+	else:
+		await bg_handler.set_background(target_bg_name,optionals)

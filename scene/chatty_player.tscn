@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bbi3wlbcj3b4"]
+[gd_scene load_steps=8 format=3 uid="uid://bbi3wlbcj3b4"]
 
 [ext_resource type="PackedScene" uid="uid://lejjvmvyv0ol" path="res://scene/speech_bubble.tscn" id="1_gg5w2"]
 [ext_resource type="Script" path="res://scripts/player/background_handler.gd" id="1_h6rm1"]
@@ -8,138 +8,6 @@
 [ext_resource type="PackedScene" path="res://scene/choice_box.tscn" id="6_afs78"]
 [ext_resource type="Texture2D" uid="uid://b6oj7e1hbwkhn" path="res://graphics/ui/debug/ffwd.png" id="7_b2e3i"]
 
-[sub_resource type="Animation" id="Animation_povfc"]
-resource_name = "fade"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("TempBg:modulate:a")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [1.0, 0.0]
-}
-
-[sub_resource type="Animation" id="Animation_mgmlb"]
-resource_name = "slide_down"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CurrentBg:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0, 256), Vector2(0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("TempBg:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(0, -256)]
-}
-
-[sub_resource type="Animation" id="Animation_ho7wf"]
-resource_name = "slide_left"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CurrentBg:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(320, 0), Vector2(0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("TempBg:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(-320, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_3rh1o"]
-resource_name = "slide_right"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CurrentBg:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(-320, 0), Vector2(0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("TempBg:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(320, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_o1eex"]
-resource_name = "slide_up"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CurrentBg:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0, 256), Vector2(0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("TempBg:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(0, -256)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_6r0u6"]
-_data = {
-"fade": SubResource("Animation_povfc"),
-"slide_down": SubResource("Animation_mgmlb"),
-"slide_left": SubResource("Animation_ho7wf"),
-"slide_right": SubResource("Animation_3rh1o"),
-"slide_up": SubResource("Animation_o1eex")
-}
-
 [node name="ChattyPlayer" type="Control"]
 clip_contents = true
 layout_mode = 3
@@ -148,7 +16,7 @@ offset_right = 320.0
 offset_bottom = 256.0
 script = ExtResource("1_vdit5")
 
-[node name="Background" type="Control" parent="."]
+[node name="BackgroundHandler" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -157,24 +25,17 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_h6rm1")
 
-[node name="BackroundAnimations" type="AnimationPlayer" parent="Background"]
-playback_process_mode = 2
-libraries = {
-"": SubResource("AnimationLibrary_6r0u6")
-}
-
-[node name="CurrentBg" type="TextureRect" parent="Background"]
+[node name="CurrentBg" type="TextureRect" parent="BackgroundHandler"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 256.0
-offset_bottom = 256.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_8wa5c")
 
-[node name="TempBg" type="TextureRect" parent="Background"]
+[node name="TempBg" type="TextureRect" parent="BackgroundHandler"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
