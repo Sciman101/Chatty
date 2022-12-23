@@ -1,0 +1,102 @@
+extends Node
+
+# Define commands
+var commands = {
+	
+	goto = {
+		argc = 1,
+		exec = _exec_goto
+	},
+	gotor = {
+		vararg = true,
+		exec = _exec_goto
+	},
+	
+	wait = {
+		argc = 1,
+		exec = _exec_wait
+	},
+	
+	appear = {
+		vararg = true,
+		exec = _exec_appear.bind(true)
+	},
+	disappear = {
+		vararg = true,
+		exec = _exec_appear.bind(false)
+	},
+	
+	sound = {
+		argc = 1,
+		optionals = {
+			'volume': 1,
+			'pitch': 1,
+			'async':false
+		},
+		exec = _exec_sound
+	},
+	
+	bg = {
+		argc = 1,
+		optionals = {
+			'duration': 0,
+			'animation': 'fade',
+			'transition': 'linear',
+			'async': false
+		},
+		exec = _exec_bg
+	},	
+}
+
+func _ready():
+	commands['return'] = {
+		argc = 0,
+		exec = _exec_return
+	}
+
+func _exec_goto(player,args,_optionals):
+	if args.size() == 1:
+		player._goto_label(args[0])
+	else:
+		var label = args[randi() % args.size()]
+		player._goto_label(label)
+
+func _exec_wait(player,args,_optionals):
+	await get_tree().create_timer(args[0].to_float()).timeout
+
+func _exec_appear(player,args,_optionals,visible):
+	if args.size() == 1 and args[0] == 'now':
+		if visible:
+			player.speech_bubble.appearImmediate()
+		else:
+			player.speech_bubble.disappearImmediate()
+	else:
+		if visible:
+			player.speech_bubble.appear()
+		else:
+			player.speech_bubble.disappear()
+
+func _exec_sound(player,args,optionals):
+	if AssetHandler.sounds.has(args[0]):
+		var sound = AssetHandler.sounds[args[0]]
+		var audio_player = AudioStreamPlayer.new()
+		player.add_child(audio_player)
+		audio_player.stream = sound
+		audio_player.volume_db = linear_to_db(optionals.volume)
+		audio_player.pitch_scale = optionals.pitch
+		audio_player.finished.connect(audio_player.queue_free)
+		audio_player.play()
+		if not optionals.async:
+			await audio_player.finished
+	else:
+		player._player_error("Trying to play unknown sound " + args[0])
+
+func _exec_return(player,_args,_optionals):
+	if player._return_stack.size() > 0:
+		# Go back
+		player.script_event_index = player._return_stack.pop_back()
+	else:
+		player._player_error("Nothing to return to!")
+
+func _exec_bg(player,args,optionals):
+	pass

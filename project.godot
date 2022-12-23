@@ -14,6 +14,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://scripts/parsing/chatty_parser.gd"
 }, {
+"base": "Object",
+"class": &"ChattyScript",
+"language": &"GDScript",
+"path": "res://scripts/parsing/chatty_script.gd"
+}, {
 "base": "SpriteFrames",
 "class": &"Speaker",
 "language": &"GDScript",
@@ -21,6 +26,7 @@ _global_script_classes=[{
 }]
 _global_script_class_icons={
 "ChattyParser": "",
+"ChattyScript": "",
 "Speaker": ""
 }
 
@@ -35,6 +41,7 @@ config/icon="res://graphics/icon.svg"
 
 Console="*res://scene/console.tscn"
 AssetHandler="*res://scripts/singleton/asset_handler.gd"
+Commands="*res://scripts/player/commands.gd"
 
 [display]
 

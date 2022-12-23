@@ -1,42 +1,52 @@
 extends Node
 class_name ChattyParser
 
-const VALID_FLAGS = {
-	'pos':['bottom','right','left','center','top'],
-	'name':&'string',
-	'duration':[0.01,1000],
-	'frame':[0.0,9999],
-	'speed':[0.001,10],
-	'volume':[0.0,1],
-	'pitch':[0.0,2.0],
-	'noanim':&'bool',
-	'nosound':&'bool',
-	'noportrait':&'bool',
-	'noname':&'bool',
-	'skip':&'bool'
-}
-
 var error = false
-
-class ChattyScript:
-	var events = []
-	var label_indices = {}
-	var raw_text : String = ""
-	
-	func add_event(event) -> void:
-		events.append(event)
-	func add_label(label_text) -> void:
-		label_indices[label_text] = events.size()
-	
-	func size() -> int: return events.size()
-	
-	func debug_string() -> String:
-		return "====\nChattyScript:\nEvents: %s\nLabels: %s\n====" % [events,label_indices]
 
 var choice_queue = []
 var line_num := 0
 
-func compile_script(script_text:String) -> ChattyScript:
+const FlagSchema = {
+	'pos':{
+		'type':TYPE_ARRAY,
+		'values':['bottom','right','left','center','top']
+	},
+	'name':{
+		'type':TYPE_STRING
+	},
+	'duration':{
+		'type':TYPE_FLOAT,
+		'min': 0.01,
+		'max': 1000
+	},
+	'frame':{
+		'type':TYPE_FLOAT,
+		'min': 0,
+		'max': 9999
+	},
+	'speed':{
+		'type':TYPE_FLOAT,
+		'min': 0.01,
+		'max': 10
+	},
+	'volume':{
+		'type':TYPE_FLOAT,
+		'min': 0,
+		'max': 1
+	},
+	'pitch':{
+		'type':TYPE_FLOAT,
+		'min': 0,
+		'max': 2
+	},
+	'noanim':{'type':TYPE_BOOL},
+	'nosound':{'type':TYPE_BOOL},
+	'noportrait':{'type':TYPE_BOOL},
+	'noname':{'type':TYPE_BOOL},
+	'skip':{'type':TYPE_BOOL},
+}
+
+func parse_script(script_text:String) -> ChattyScript:
 	error = false
 	
 	var lines = Array(script_text.split('\n')).map(func(s): return s.strip_edges())
@@ -112,13 +122,56 @@ func _parse_label_event(line:String,script:ChattyScript):
 	script.add_event(event)
 
 func _parse_command_event(line:String,script:ChattyScript):
-	var args = line.substr(1).split(' ')
-	var cmd_name = args[0]
-	args = args.slice(1)
+	line = line.substr(1).strip_edges()
+	var cmd_name = line.split(' ')[0]
+	
+	if not Commands.commands.has(cmd_name):
+		return _parser_error("Unknown command " + cmd_name)
+	var command = Commands.commands[cmd_name]
+	
+	line = line.substr(cmd_name.length()).strip_edges(true,false)
+	
+	var args = line.split(' ')
+	
+	if not (command.has('vararg') and command.vararg) and args.size() < command.argc:
+		return _parser_error("Not enough arguments for command " + cmd_name)
+	
+	var optionals = {}
+	if command.has('optionals'):
+		optionals = command.optionals.duplicate()
+		if not (command.has('vararg') and command.vararg) and args.size() > command.argc:
+			var extra_args = args.slice(command.argc-1)
+			args = args.slice(0,command.argc)
+			for arg in extra_args:
+				var key = null
+				var value = null
+				var index = arg.find('=')
+				if index != -1:
+					if index == 0 or index == arg.length()-1:
+						_parser_error("Malformed optional argument " + arg)
+					else:
+						key = arg.substr(0,index)
+						value = arg.substr(index+1)
+				else:
+					key = arg
+					value = true
+				
+				if command.optionals.has(key):
+					var type = typeof(command.optionals[key])
+					if type == TYPE_FLOAT or type == TYPE_INT:
+						value = value.to_float()
+					if type == TYPE_BOOL:
+						if (typeof(value) == TYPE_BOOL and value) or value == 'true':
+							value = true
+						else:
+							value = false
+					optionals[key] = value
+	
 	var event = {
 		'type':&'command',
 		'cmd_name': cmd_name,
-		'args': args
+		'args': args,
+		'optionals': optionals
 	}
 	script.add_event(event)
 
@@ -198,41 +251,46 @@ func _parse_dialogue_event(line:String,script:ChattyScript):
 
 func _parse_flags(flag_list:Array) -> Dictionary:
 	var flags = {}
-	for f in flag_list:
-		f = f.strip_edges()
-		var equals_index = f.find('=')
-		var key = f
-		var val = true
-		if equals_index != -1:
-			key = f.substr(0,equals_index).strip_edges()
-			val = f.substr(equals_index+1).strip_edges()
-		
-		if not VALID_FLAGS.has(key):
-			_parser_error("Unknown flag '%s'" % [key])
+	for flag_text in flag_list:
+		flag_text = flag_text.strip_edges()
+		var key = null
+		var value = null
+		var index = flag_text.find('=')
+		if index != -1:
+			if index == 0 or index == flag_text.length()-1:
+				_parser_error("Malformed flag")
+			else:
+				key = flag_text.substr(0,index)
+				value = flag_text.substr(index+1)
 		else:
-			var accepted = VALID_FLAGS[key]
-			var ok = true
-			if accepted is StringName:
-				if accepted == &'bool':
-					if val or val == 'true': val = true
-					else: val = false
-					ok = true
-				elif accepted == &'string':
-					ok = true
-			elif accepted[0] is float or accepted[0] is int:
-				var _min = accepted[0]
-				var _max = accepted[1]
-				val = val.to_float()
-				if val < _min or val > _max:
-					_parser_error("Flag value out of range for flag '%s', [%f,%f]" % [key,_min,_max])
-					ok = false
-			elif not val in accepted:
-				_parser_error("Invalid flag value for flag '%s' (Accepted values are %s)" % [key,accepted])
-				ok = false
+			key = flag_text
+			value = true
 		
-			if ok:
-				flags[key] = val
-		
+		if FlagSchema.has(key):
+			var schema = FlagSchema[key]
+			match schema.type:
+				
+				TYPE_BOOL:
+					if (typeof(value) == TYPE_BOOL and value) or value == 'true':
+						value = true
+					else:
+						value = false
+				TYPE_ARRAY:
+					if not value in schema.values:
+						_parser_error("Invalid flag option '%s' for flag %s" % [value,key])
+				TYPE_STRING:
+					pass # Nothing
+				TYPE_FLOAT:
+					value = value.to_float()
+					if schema.has('min'):
+						value = max(schema.min,value)
+					if schema.has('max'):
+						value = min(schema.max,value)
+				_:
+					pass
+			flags[key] = value
+		else:
+			_parser_error("Unknown dialogue flag " + key)
 	return flags
 
 # Converts a markdown-esque syntax into bbcode

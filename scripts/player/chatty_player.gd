@@ -147,76 +147,11 @@ func _run_choice_event(event) -> void:
 
 func _run_command_event(event) -> void:
 	var cmd = event.cmd_name
-	var args = event.args
-	
-	if cmd.begins_with('>'):
-		# Alias
-		var alias_name = cmd.substr(1)
-		if _aliases.has(alias_name):
-			var alias = _aliases[alias_name]
-			_run_command_event(alias)
-	
-	match cmd:
-		
-		'goto':
-			if args.size() >= 1:
-				_goto_label(args[0])
-		
-		'gotor':
-			if args.size() >= 1:
-				_goto_label(args.pick_random())
-		
-		'wait':
-			if args.size() >= 1:
-				var duration = args[0].to_float()
-				await get_tree().create_timer(duration).timeout
-		
-		'bg':
-			await bg_handler.transition_background(args)
-		
-		'appear':
-			if not speech_bubble.is_bubble_visible():
-				if args.size() > 0 and args[0] == 'now':
-					speech_bubble.appearImmediate()
-				else:
-					await speech_bubble.appear()
-		
-		'disappear':
-			if speech_bubble.is_bubble_visible():
-				if args.size() > 0 and args[0] == 'now':
-					speech_bubble.disappearImmediate()
-				else:
-					await speech_bubble.disappear()
-		
-		'sound':
-			if args.size() > 0:
-				if AssetHandler.sounds.has(args[0]):
-					var sound = AssetHandler.sounds[args[0]]
-					var player = AudioStreamPlayer.new()
-					add_child(player)
-					player.stream = sound
-					player.finished.connect(player.queue_free)
-					player.play()
-					if not (args.size() >= 2 and args[1] == 'async'):
-						await player.finished
-				else:
-					_player_error("Trying to play unknown sound " + args[0])
-		
-		'alias':
-			if args.size() >= 2:
-				var alias_name = args[0]
-				var alias_cmd = args.slice(1)
-				_aliases[alias_name] = {
-					cmd_name = alias_cmd[0],
-					args = alias_cmd.slice(1)
-				}
-		
-		'return':
-			if _return_stack.size() > 0:
-				# Go back
-				script_event_index = _return_stack.pop_back()
-			else:
-				_player_error("Nothing to return to!")
+	print(cmd)
+	if Commands.commands.has(cmd):
+		print('running')
+		var command = Commands.commands[cmd]
+		await command.exec.call(self,event.args,event.optionals)
 
 func _goto_label(label_string:String) -> void:
 	if current_script.label_indices.has(label_string):

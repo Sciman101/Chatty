@@ -77,13 +77,12 @@ func _load_script(script_file:String) -> void:
 		Console.print("\tParsing script " + script_file)
 		
 		var parser = ChattyParser.new()
-		var script_object = parser.compile_script(script_text)
+		var script_object = parser.parse_script(script_text)
 		if parser.error:
 			Console.print("\tError loading script! " + parser.error)
 		else:
 			scripts[script_file.get_basename()] = script_object
 			Console.print("\tSuccess!")
-	
 
 func _load_background(bg_file:String) -> void:
 	var bg_path = _project_dir + "/backgrounds/" + bg_file
