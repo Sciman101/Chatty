@@ -301,6 +301,8 @@ func _strip_triggers_from_bbcode(bbcode:String) -> Dictionary:
 	var raw_string_index = 0
 	var displayed_string_index = 0
 	
+	bbcode = bbcode.replace('\\n','\n')
+	
 	while raw_string_index < bbcode.length():
 		var chr = bbcode[raw_string_index]
 		

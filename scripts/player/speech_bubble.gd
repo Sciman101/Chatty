@@ -31,6 +31,7 @@ var speaker = null
 
 var skip_event := false
 var talk_speed_multiplier := 1.0
+var instant_text = false
 
 var is_presenting = false
 
@@ -102,6 +103,7 @@ func present(event) -> void:
 	var character_delay = max(0.01,time/num_characters)
 	
 	talk_speed_multiplier = _ev_flag(event,'speed',1)
+	instant_text = false
 	
 	# Other flags
 	if not _ev_flag(event,'noanim'):
@@ -131,9 +133,10 @@ func present(event) -> void:
 			if not (speaker.voice_mode == Speaker.VoiceMode.WAIT and talk_sfx.playing):
 				talk_sfx.play()
 		
-		if talk_speed_multiplier == 0: talk_speed_multiplier = 0.01
-		timer.start(character_delay / talk_speed_multiplier)
-		await timer.timeout
+		if not instant_text:
+			if talk_speed_multiplier == 0: talk_speed_multiplier = 0.01
+			timer.start(character_delay / talk_speed_multiplier)
+			await timer.timeout
 		
 		if triggers.has(i):
 			await _handle_trigger(triggers[i])
@@ -161,6 +164,7 @@ func _handle_trigger(trigger) -> void:
 				portrait.play()
 		
 		'speed':
+			instant_text = false
 			if trigger.size() >= 2:
 				talk_speed_multiplier = clamp(trigger[1].to_float(),0.01,10)
 		
@@ -171,6 +175,9 @@ func _handle_trigger(trigger) -> void:
 		'volume':
 			if trigger.size() >= 2:
 				talk_sfx.volume_db = linear_to_db(clamp(trigger[1].to_float(),0.0,1.0))
+		
+		'instant':
+			instant_text = true
 		
 		'animation':
 			if trigger.size() >= 2:
@@ -207,8 +214,6 @@ func set_speaker(new_speaker) -> bool:
 		ui_atlas_redirect_texture.atlas = speaker.ui_atlas_override
 	else:
 		ui_atlas_redirect_texture.atlas = AssetHandler.defaults.ui_atlas
-	
-	
 	
 	return true
 

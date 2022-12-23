@@ -22,10 +22,17 @@ const EASES = {
 
 var ANIMATIONS = {
 	'fade': _anim_fade,
+	
 	'slideright': _anim_slide.bind(Vector2.RIGHT),
 	'slideleft': _anim_slide.bind(Vector2.LEFT),
 	'slideup': _anim_slide.bind(Vector2.UP),
 	'slidedown': _anim_slide.bind(Vector2.DOWN),
+	
+	'uncoverright': _anim_uncover.bind(Vector2.RIGHT),
+	'uncoverleft': _anim_uncover.bind(Vector2.LEFT),
+	'uncoverup': _anim_uncover.bind(Vector2.UP),
+	'uncoverdown': _anim_uncover.bind(Vector2.DOWN),
+	
 	'coverright': _anim_cover.bind(Vector2.RIGHT),
 	'coverleft': _anim_cover.bind(Vector2.LEFT),
 	'coverup': _anim_cover.bind(Vector2.UP),
@@ -76,10 +83,21 @@ func _anim_slide(duration,trans,ease,direction):
 	tween.tween_property(current_bg,'position',Vector2.ZERO,duration)
 	await tween.finished
 
-func _anim_cover(duration,trans,ease,direction):
+func _anim_uncover(duration,trans,ease,direction):
 	var tween = get_tree().create_tween().set_trans(trans).set_ease(ease)
 	tween.tween_property(temp_bg,'position',direction * Vector2(320,256),duration)
 	await tween.finished
+
+func _anim_cover(duration,trans,ease,direction):
+	var temp = temp_bg.texture
+	temp_bg.texture = current_bg.texture
+	current_bg.texture = temp
+	temp_bg.position = -direction * Vector2(320,256)
+	var tween = get_tree().create_tween().set_trans(trans).set_ease(ease)
+	tween.tween_property(temp_bg,'position',Vector2.ZERO,duration)
+	await tween.finished
+	current_bg.texture = temp_bg.texture
+	_prep_bgs()
 
 
 # == HELPERS ==
