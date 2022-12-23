@@ -80,11 +80,6 @@ func _input(event):
 	if Input.is_action_just_pressed("advance_dialouge"):
 		skip_event = true
 
-func _ev_flag(event,flag,default=false):
-	if event.flags.has(flag):
-		return event.flags[flag]
-	return default
-
 # Actually do the thing
 func present(event) -> void:
 	# Reset
@@ -99,19 +94,19 @@ func present(event) -> void:
 	_set_visible_characters(0)
 	
 	# Set time from args
-	var time = _ev_flag(event,'duration',DEFAULT_CHARACTER_DELAY*num_characters)
+	var time = event.get('duration',DEFAULT_CHARACTER_DELAY*num_characters)
 	var character_delay = max(0.01,time/num_characters)
 	
-	talk_speed_multiplier = _ev_flag(event,'speed',1)
+	talk_speed_multiplier = event.get('speed',1)
 	instant_text = false
 	
 	# Other flags
-	if not _ev_flag(event,'noanim'):
+	if not event.get('noanim',false):
 		portrait.play()
-	var play_sound = not _ev_flag(event,'nosound')
+	var play_sound = not event.get('nosound',false)
 	
-	talk_sfx.pitch_scale = _ev_flag(event,'pitch',1)
-	talk_sfx.volume_db = linear_to_db(_ev_flag(event,'volume',1))
+	talk_sfx.pitch_scale = event.flag('pitch',1)
+	talk_sfx.volume_db = linear_to_db(event.flag('volume',1))
 	
 	# Play once
 	if speaker.voice_mode == Speaker.VoiceMode.ONCE and play_sound:
@@ -147,7 +142,7 @@ func present(event) -> void:
 		talk_sfx.stop()
 	
 	# Wait a second
-	if not _ev_flag(event,'skip'):
+	if not event.get('skip'):
 		timer.start(DEFAULT_SPEECH_DELAY)
 		await timer.timeout
 		advance_arrow.visible = true
@@ -194,10 +189,7 @@ func set_dialouge(dialouge:String) -> void:
 
 func set_speaker(new_speaker) -> bool:
 	if new_speaker is String:
-		if AssetHandler.speakers.has(new_speaker):
-			new_speaker = AssetHandler.speakers[new_speaker]
-		else:
-			return false
+		return AssetHandler.speakers.get(new_speaker,false)
 	
 	speaker = new_speaker
 	portrait.frames = speaker

@@ -91,29 +91,21 @@ func _run_current_script_event() -> void:
 		&'label':
 			pass # Labels do nothing. this is just here for completeness
 
-func _ev_flag(event,flag,default=false):
-	if event.flags.has(flag):
-		return event.flags[flag]
-	return default
-
 func _run_dialouge_event(event) -> void:
 	# Show speech bubble, if it's not present already
 	speech_bubble.set_speaker(event.speaker)
-	if event.has('animation_name'):
-		speech_bubble.set_speaker_animation(event.animation_name)
-	else:
-		speech_bubble.set_speaker_animation()
+	speech_bubble.set_speaker_animation(event.get('animation_name',&'default'))
 	speech_bubble.set_dialouge(event.dialouge)
-	speech_bubble.set_wide(_ev_flag(event,'noportrait'))
-	speech_bubble.set_frame(_ev_flag(event,'frame',0))
+	speech_bubble.set_wide(event.get('noportrait'))
+	speech_bubble.set_frame(event.get('frame',0))
 	
-	if _ev_flag(event,'noname'):
+	if event.get('noname'):
 		speech_bubble.set_speaker_name("")
-	elif _ev_flag(event,'name'):
-		speech_bubble.set_speaker_name(_ev_flag(event,'name'))
+	elif event.get('name'):
+		speech_bubble.set_speaker_name(event.get('name'))
 	
 	var target_pos = null
-	var pos_name = _ev_flag(event,'pos','bottom')
+	var pos_name = event.get('pos','bottom')
 	if _speech_bubble_positions.has(pos_name):
 		target_pos = _speech_bubble_positions[pos_name]
 	
@@ -135,7 +127,7 @@ func _run_dialouge_event(event) -> void:
 
 func _should_wait_for_input(event) -> bool:
 	if ffwd: return false
-	if _ev_flag(event,'skip'): return false
+	if event.get('skip'): return false
 	var next_event = _next_event()
 	if next_event and next_event.type == &'choice': return false
 	return true

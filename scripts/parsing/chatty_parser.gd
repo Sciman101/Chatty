@@ -133,13 +133,13 @@ func _parse_command_event(line:String,script:ChattyScript):
 	
 	var args = line.split(' ')
 	
-	if not (command.has('vararg') and command.vararg) and args.size() < command.argc:
+	if not command.get('vararg',false) and args.size() < command.argc:
 		return _parser_error("Not enough arguments for command " + cmd_name)
 	
 	var optionals = {}
 	if command.has('optionals'):
 		optionals = command.optionals.duplicate()
-		if not (command.has('vararg') and command.vararg) and args.size() > command.argc:
+		if not command.get('vararg',false) and args.size() > command.argc:
 			var extra_args = args.slice(command.argc-1)
 			args = args.slice(0,command.argc)
 			for arg in extra_args:
