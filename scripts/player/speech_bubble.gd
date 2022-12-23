@@ -122,6 +122,9 @@ func present(event) -> void:
 	
 	for i in range(num_characters):
 		
+		if triggers.has(i):
+			await _handle_trigger(triggers[i])
+		
 		# If we're told to skip, end the event
 		if skip_event and i > 1:
 			skip_event = false
@@ -137,9 +140,6 @@ func present(event) -> void:
 			if talk_speed_multiplier == 0: talk_speed_multiplier = 0.01
 			timer.start(character_delay / talk_speed_multiplier)
 			await timer.timeout
-		
-		if triggers.has(i):
-			await _handle_trigger(triggers[i])
 	
 	jump_to_end()
 	
