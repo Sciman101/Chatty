@@ -22,27 +22,32 @@ const EASES = {
 
 var ANIMATIONS = {
 	'fade': _anim_fade,
+	'fade-zoomin': _anim_zoom_fade.bind(2),
+	'fade-zoomout': _anim_zoom_fade.bind(0.5),
 	
-	'slideright': _anim_slide.bind(Vector2.RIGHT),
-	'slideleft': _anim_slide.bind(Vector2.LEFT),
-	'slideup': _anim_slide.bind(Vector2.UP),
-	'slidedown': _anim_slide.bind(Vector2.DOWN),
+	'slide-right': _anim_slide.bind(Vector2.RIGHT),
+	'slide-left': _anim_slide.bind(Vector2.LEFT),
+	'slide-up': _anim_slide.bind(Vector2.UP),
+	'slide-down': _anim_slide.bind(Vector2.DOWN),
 	
-	'uncoverright': _anim_uncover.bind(Vector2.RIGHT),
-	'uncoverleft': _anim_uncover.bind(Vector2.LEFT),
-	'uncoverup': _anim_uncover.bind(Vector2.UP),
-	'uncoverdown': _anim_uncover.bind(Vector2.DOWN),
+	'uncover-right': _anim_uncover.bind(Vector2.RIGHT),
+	'uncover-left': _anim_uncover.bind(Vector2.LEFT),
+	'uncover-up': _anim_uncover.bind(Vector2.UP),
+	'uncover-down': _anim_uncover.bind(Vector2.DOWN),
 	
-	'coverright': _anim_cover.bind(Vector2.RIGHT),
-	'coverleft': _anim_cover.bind(Vector2.LEFT),
-	'coverup': _anim_cover.bind(Vector2.UP),
-	'coverdown': _anim_cover.bind(Vector2.DOWN),
+	'cover-right': _anim_cover.bind(Vector2.RIGHT),
+	'cover-left': _anim_cover.bind(Vector2.LEFT),
+	'cover-up': _anim_cover.bind(Vector2.UP),
+	'cover-down': _anim_cover.bind(Vector2.DOWN),
+	
+	'custom': _anim_shader
 }
 
 @onready var current_bg : TextureRect = $CurrentBg
 @onready var temp_bg : TextureRect = $TempBg
 @onready var player = get_parent()
 
+var tween = null
 var _cached_color_bgs = {}
 
 func _ready():
@@ -61,6 +66,19 @@ func set_background(bg_name:String,options:Dictionary) -> void:
 				_prep_bgs()
 				var trans = _get_transition_values(options.transition)
 				current_bg.texture = bg
+				if tween != null and tween.is_running():
+					tween.kill()
+				if options.animation == 'custom':
+					if options.transition_mask == 'none':
+						player._player_error("No transition texture specified!")
+					else:
+						# load texture
+						var tex = AssetHandler.backgrounds.get(options.transition_mask,null)
+						if tex:
+							temp_bg.material.set_shader_parameter('transition_texture',tex)
+						else:
+							player._player_error("Unknown transition texture '%s'" % options.transition_mask)
+					
 				await ANIMATIONS[options.animation].call(options.duration,trans[0],trans[1])
 			else:
 				player._player_error("Unknown background animation '%s'" % bg_name)
@@ -72,43 +90,62 @@ func set_background(bg_name:String,options:Dictionary) -> void:
 
 # == ANIMATIONS ==
 func _anim_fade(duration,trans,ease):
-	var tween = get_tree().create_tween().set_trans(trans).set_ease(ease)
+	tween = get_tree().create_tween().set_trans(trans).set_ease(ease)
 	tween.tween_property(temp_bg,'modulate',Color(1,1,1,0),duration)
+	await tween.finished
+
+func _anim_zoom_fade(duration,trans,ease,zoom):
+	tween = get_tree().create_tween().set_trans(trans).set_ease(ease).set_parallel(true)
+	tween.tween_property(temp_bg,'modulate',Color(1,1,1,0),duration)
+	tween.tween_property(temp_bg,'scale',Vector2.ONE * zoom,duration)
 	await tween.finished
 
 func _anim_slide(duration,trans,ease,direction):
 	current_bg.position = -direction * Vector2(320,256)
-	var tween = get_tree().create_tween().set_trans(trans).set_ease(ease).set_parallel(true)
+	tween = get_tree().create_tween().set_trans(trans).set_ease(ease).set_parallel(true)
 	tween.tween_property(temp_bg,'position',direction * Vector2(320,256),duration)
 	tween.tween_property(current_bg,'position',Vector2.ZERO,duration)
 	await tween.finished
 
 func _anim_uncover(duration,trans,ease,direction):
-	var tween = get_tree().create_tween().set_trans(trans).set_ease(ease)
+	tween = get_tree().create_tween().set_trans(trans).set_ease(ease)
 	tween.tween_property(temp_bg,'position',direction * Vector2(320,256),duration)
 	await tween.finished
 
 func _anim_cover(duration,trans,ease,direction):
-	var temp = temp_bg.texture
-	temp_bg.texture = current_bg.texture
-	current_bg.texture = temp
+	_swap_bgs()
 	temp_bg.position = -direction * Vector2(320,256)
-	var tween = get_tree().create_tween().set_trans(trans).set_ease(ease)
+	tween = get_tree().create_tween().set_trans(trans).set_ease(ease)
 	tween.tween_property(temp_bg,'position',Vector2.ZERO,duration)
 	await tween.finished
-	current_bg.texture = temp_bg.texture
+	_swap_bgs()
 	_prep_bgs()
 
+func _anim_shader(duration,trans,ease):
+	tween = get_tree().create_tween().set_trans(trans).set_ease(ease)
+	tween.tween_method(_set_shader_progress,0.0,1.0,duration)
+	await tween.finished
 
 # == HELPERS ==
+func _set_shader_progress(amt:float) -> void:
+	temp_bg.material.set_shader_parameter('transition_amount',amt)
+
 func _prep_bgs():
 	temp_bg.visible = true
 	current_bg.visible = true
+	temp_bg.scale = Vector2.ONE
+	current_bg.scale = Vector2.ONE
 	current_bg.modulate = Color.WHITE
 	temp_bg.modulate = Color.WHITE
 	current_bg.position = Vector2.ZERO
 	temp_bg.position = Vector2.ZERO
 	temp_bg.texture = current_bg.texture
+	temp_bg.material.set_shader_parameter('transition_amount',0)
+
+func _swap_bgs() -> void:
+	var temp = temp_bg.texture
+	temp_bg.texture = current_bg.texture
+	current_bg.texture = temp
 
 func _get_background(bgname:String):
 	if AssetHandler.backgrounds.has(bgname):

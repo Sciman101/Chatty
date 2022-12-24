@@ -105,8 +105,8 @@ func present(event) -> void:
 		portrait.play()
 	var play_sound = not event.get('nosound',false)
 	
-	talk_sfx.pitch_scale = event.flag('pitch',1)
-	talk_sfx.volume_db = linear_to_db(event.flag('volume',1))
+	talk_sfx.pitch_scale = event.get('pitch',1)
+	talk_sfx.volume_db = linear_to_db(event.get('volume',1))
 	
 	# Play once
 	if speaker.voice_mode == Speaker.VoiceMode.ONCE and play_sound:
@@ -188,8 +188,10 @@ func set_dialouge(dialouge:String) -> void:
 	_set_visible_characters(0)
 
 func set_speaker(new_speaker) -> bool:
-	if new_speaker is String:
-		return AssetHandler.speakers.get(new_speaker,false)
+	if AssetHandler.speakers.has(new_speaker):
+		new_speaker = AssetHandler.speakers[new_speaker]
+	else:
+		return false
 	
 	speaker = new_speaker
 	portrait.frames = speaker

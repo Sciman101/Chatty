@@ -96,7 +96,7 @@ func _run_dialouge_event(event) -> void:
 	speech_bubble.set_speaker(event.speaker)
 	speech_bubble.set_speaker_animation(event.get('animation_name',&'default'))
 	speech_bubble.set_dialouge(event.dialouge)
-	speech_bubble.set_wide(event.get('noportrait'))
+	speech_bubble.set_wide(event.get('noportrait',false))
 	speech_bubble.set_frame(event.get('frame',0))
 	
 	if event.get('noname'):

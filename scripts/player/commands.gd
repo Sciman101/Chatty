@@ -31,7 +31,7 @@ var commands = {
 		optionals = {
 			'volume': 1,
 			'pitch': 1,
-			'async':false
+			'async':false,
 		},
 		exec = _exec_sound
 	},
@@ -42,7 +42,8 @@ var commands = {
 			'duration': 1,
 			'animation': 'none',
 			'transition': 'none',
-			'async': false
+			'async': false,
+			'transition_mask': 'none'
 		},
 		exec = _exec_bg
 	},	

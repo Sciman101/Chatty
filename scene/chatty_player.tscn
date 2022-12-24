@@ -1,12 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://bbi3wlbcj3b4"]
+[gd_scene load_steps=10 format=3 uid="uid://bbi3wlbcj3b4"]
 
 [ext_resource type="PackedScene" uid="uid://lejjvmvyv0ol" path="res://scene/speech_bubble.tscn" id="1_gg5w2"]
 [ext_resource type="Script" path="res://scripts/player/background_handler.gd" id="1_h6rm1"]
 [ext_resource type="Script" path="res://scripts/player/chatty_player.gd" id="1_vdit5"]
 [ext_resource type="Texture2D" uid="uid://0oq1ppm4tae4" path="res://graphics/white.png" id="3_8wa5c"]
 [ext_resource type="Texture2D" uid="uid://lpdqh7lyftu3" path="res://graphics/black.png" id="4_8cnja"]
+[ext_resource type="Shader" path="res://shaders/greyscale_reveal.gdshader" id="4_qume7"]
 [ext_resource type="PackedScene" path="res://scene/choice_box.tscn" id="6_afs78"]
 [ext_resource type="Texture2D" uid="uid://b6oj7e1hbwkhn" path="res://graphics/ui/debug/ffwd.png" id="7_b2e3i"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1fkek"]
+shader = ExtResource("4_qume7")
+shader_parameter/transition_amount = 0.0
 
 [node name="ChattyPlayer" type="Control"]
 clip_contents = true
@@ -32,16 +37,19 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(160, 128)
 texture = ExtResource("3_8wa5c")
 
 [node name="TempBg" type="TextureRect" parent="BackgroundHandler"]
 visible = false
+material = SubResource("ShaderMaterial_1fkek")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(160, 128)
 texture = ExtResource("4_8cnja")
 
 [node name="SpeechBubble" parent="." instance=ExtResource("1_gg5w2")]
