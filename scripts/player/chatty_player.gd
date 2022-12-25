@@ -96,16 +96,16 @@ func _run_dialouge_event(event) -> void:
 	speech_bubble.set_speaker(event.speaker)
 	speech_bubble.set_speaker_animation(event.get('animation_name',&'default'))
 	speech_bubble.set_dialouge(event.dialouge)
-	speech_bubble.set_wide(event.get('noportrait',false))
-	speech_bubble.set_frame(event.get('frame',0))
+	speech_bubble.set_wide(event.flags.get('noportrait',false))
+	speech_bubble.set_frame(event.flags.get('frame',0))
 	
-	if event.get('noname'):
+	if event.flags.get('noname'):
 		speech_bubble.set_speaker_name("")
-	elif event.get('name'):
-		speech_bubble.set_speaker_name(event.get('name'))
+	elif event.flags.get('name'):
+		speech_bubble.set_speaker_name(event.flags.get('name'))
 	
 	var target_pos = null
-	var pos_name = event.get('pos','bottom')
+	var pos_name = event.flags.get('pos','bottom')
 	if _speech_bubble_positions.has(pos_name):
 		target_pos = _speech_bubble_positions[pos_name]
 	
@@ -127,7 +127,7 @@ func _run_dialouge_event(event) -> void:
 
 func _should_wait_for_input(event) -> bool:
 	if ffwd: return false
-	if event.get('skip'): return false
+	if event.flags.get('skip'): return false
 	var next_event = _next_event()
 	if next_event and next_event.type == &'choice': return false
 	return true

@@ -94,19 +94,19 @@ func present(event) -> void:
 	_set_visible_characters(0)
 	
 	# Set time from args
-	var time = event.get('duration',DEFAULT_CHARACTER_DELAY*num_characters)
+	var time = event.flags.get('duration',DEFAULT_CHARACTER_DELAY*num_characters)
 	var character_delay = max(0.01,time/num_characters)
 	
-	talk_speed_multiplier = event.get('speed',1)
+	talk_speed_multiplier = event.flags.get('speed',1)
 	instant_text = false
 	
 	# Other flags
-	if not event.get('noanim',false):
+	if not event.flags.get('noanim',false):
 		portrait.play()
-	var play_sound = not event.get('nosound',false)
+	var play_sound = not event.flags.get('nosound',false)
 	
-	talk_sfx.pitch_scale = event.get('pitch',1)
-	talk_sfx.volume_db = linear_to_db(event.get('volume',1))
+	talk_sfx.pitch_scale = event.flags.get('pitch',1)
+	talk_sfx.volume_db = linear_to_db(event.flags.get('volume',1))
 	
 	# Play once
 	if speaker.voice_mode == Speaker.VoiceMode.ONCE and play_sound:
@@ -142,7 +142,8 @@ func present(event) -> void:
 		talk_sfx.stop()
 	
 	# Wait a second
-	if not event.get('skip'):
+	if not event.flags.get('skip',false):
+		print('hh')
 		timer.start(DEFAULT_SPEECH_DELAY)
 		await timer.timeout
 		advance_arrow.visible = true
