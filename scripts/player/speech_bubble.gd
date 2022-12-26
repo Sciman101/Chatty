@@ -143,7 +143,6 @@ func present(event) -> void:
 	
 	# Wait a second
 	if not event.flags.get('skip',false):
-		print('hh')
 		timer.start(DEFAULT_SPEECH_DELAY)
 		await timer.timeout
 		advance_arrow.visible = true

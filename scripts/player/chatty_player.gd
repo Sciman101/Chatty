@@ -6,6 +6,7 @@ const DEFAULT_SPEECHBUBBLE_MOVE_DURATION = 0.5
 
 @onready var speech_bubble = $SpeechBubble
 @onready var bg_handler = $BackgroundHandler
+@onready var music_handler = $MusicHandler
 @onready var choice_box = $ChoiceBox
 var _speech_bubble_positions = {}
 

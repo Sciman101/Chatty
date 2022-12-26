@@ -1,7 +1,9 @@
 >bg windowsxp
-jnfr: that's it
-jnfr: ive fucking had it
-jnfr: I'm bringing about an age of untold darkness
->bg black animation=custom duration=1 transition_mask=dencup
-jnfr: Good.
->disappear
+>music ome playback_start=10
+ru_b: ...Yeah, haha
+jnfr: Yeah, I just hope they don't find the bodies.
+>music pause
+ru_b [nosound,noanim]: ...
+jnfr [nosound,noanim]: ...
+>music ome
+jnfr: Anyways!!

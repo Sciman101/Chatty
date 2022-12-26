@@ -46,7 +46,20 @@ var commands = {
 			'transition_mask': 'none'
 		},
 		exec = _exec_bg
-	},	
+	},
+	
+	music = {
+		argc = 1,
+		optionals = {
+			'volume': 1,
+			'pitch': 1,
+			'fade_time': 0,
+			'playback_start': 0,
+			'align_playback': false,
+			'async': false
+		},
+		exec = _exec_music
+	}
 }
 
 func _ready():
@@ -106,3 +119,11 @@ func _exec_bg(player,args,optionals):
 		bg_handler.set_background(target_bg_name,optionals)
 	else:
 		await bg_handler.set_background(target_bg_name,optionals)
+
+func _exec_music(player,args,optionals):
+	var music_handler = player.music_handler
+	var target_music_name = args[0]
+	if optionals.async:
+		music_handler.set_music(target_music_name,optionals)
+	else:
+		await music_handler.set_music(target_music_name,optionals)
