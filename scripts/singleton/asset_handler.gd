@@ -10,6 +10,7 @@ var speakers = {}
 var backgrounds = {}
 var scripts = {}
 var sounds = {}
+var music = {}
 
 var defaults = {}
 
@@ -34,7 +35,8 @@ func load_project(project_dir:String) -> void:
 	_load_from_folder('scripts',_load_script)
 	_load_from_folder('speakers',_load_speaker,true)
 	_load_from_folder('backgrounds',_load_background)
-	_load_from_folder('sounds',_load_sounds)
+	_load_from_folder('sounds',_load_sound)
+	_load_from_folder('music',_load_music)
 	
 	Console.print("Looking for starting script '%s'" % _project.start_script)
 	if not scripts.has(_project.start_script):
@@ -91,12 +93,19 @@ func _load_background(bg_file:String) -> void:
 		backgrounds[bg_file.get_basename()] = bg
 		Console.print("\tLoaded background " + bg_file)
 
-func _load_sounds(sound_file:String) -> void:
+func _load_sound(sound_file:String) -> void:
 	var sound_path = _project_dir + "/sounds/" + sound_file
 	var sound = _read_audio(sound_path)
 	if sound:
 		sounds[sound_file.get_basename()] = sound
 		Console.print("\tLoaded sound " + sound_file)
+
+func _load_music(sound_file:String) -> void:
+	var sound_path = _project_dir + "/music/" + sound_file
+	var sound = _read_audio(sound_path)
+	if sound:
+		music[sound_file.get_basename()] = sound
+		Console.print("\tLoaded music " + sound_file)
 
 func _load_speaker(speaker_name:String) -> void:
 	var speaker_path = _project_dir + "/speakers/" + speaker_name
