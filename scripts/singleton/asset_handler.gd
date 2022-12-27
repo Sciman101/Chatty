@@ -11,6 +11,7 @@ var backgrounds = {}
 var scripts = {}
 var sounds = {}
 var music = {}
+var sprites = {}
 
 var defaults = {}
 
@@ -37,6 +38,7 @@ func load_project(project_dir:String) -> void:
 	_load_from_folder('backgrounds',_load_background)
 	_load_from_folder('sounds',_load_sound)
 	_load_from_folder('music',_load_music)
+	_load_from_folder('sprites',_load_sprite)
 	
 	Console.print("Looking for starting script '%s'" % _project.start_script)
 	if not scripts.has(_project.start_script):
@@ -106,6 +108,13 @@ func _load_music(sound_file:String) -> void:
 	if sound:
 		music[sound_file.get_basename()] = sound
 		Console.print("\tLoaded music " + sound_file)
+
+func _load_sprite(sprite_name:String) -> void:
+	var sprite_path = _project_dir + "/sprites/" + sprite_name
+	var tex = _read_texture(sprite_path)
+	if tex:
+		sprites[sprite_name] = tex
+		Console.print("\tLoaded sprite " + sprite_name)
 
 func _load_speaker(speaker_name:String) -> void:
 	var speaker_path = _project_dir + "/speakers/" + speaker_name

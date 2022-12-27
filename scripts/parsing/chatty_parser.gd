@@ -160,11 +160,14 @@ func _parse_command_event(line:String,script:ChattyScript):
 					var type = typeof(command.optionals[key])
 					if type == TYPE_FLOAT or type == TYPE_INT:
 						value = value.to_float()
-					if type == TYPE_BOOL:
+					elif type == TYPE_BOOL:
 						if (typeof(value) == TYPE_BOOL and value) or value == 'true':
 							value = true
 						else:
 							value = false
+					elif type == TYPE_VECTOR2:
+						pass
+						# TODO write vector2 parser
 					optionals[key] = value
 	
 	var event = {

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bbi3wlbcj3b4"]
+[gd_scene load_steps=12 format=3 uid="uid://bbi3wlbcj3b4"]
 
 [ext_resource type="PackedScene" uid="uid://lejjvmvyv0ol" path="res://scene/speech_bubble.tscn" id="1_gg5w2"]
 [ext_resource type="Script" path="res://scripts/player/background_handler.gd" id="1_h6rm1"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scene/choice_box.tscn" id="6_afs78"]
 [ext_resource type="Script" path="res://scripts/player/music_handler.gd" id="6_lcfu5"]
 [ext_resource type="Texture2D" uid="uid://b6oj7e1hbwkhn" path="res://graphics/ui/debug/ffwd.png" id="7_b2e3i"]
+[ext_resource type="Script" path="res://scripts/player/sprite_handler.gd" id="7_lkpgk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1fkek"]
 shader = ExtResource("4_qume7")
@@ -59,6 +60,9 @@ script = ExtResource("6_lcfu5")
 [node name="AudioStreamPlayer1" type="AudioStreamPlayer" parent="MusicHandler"]
 
 [node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="MusicHandler"]
+
+[node name="SpriteHandler" type="Node2D" parent="."]
+script = ExtResource("7_lkpgk")
 
 [node name="SpeechBubble" parent="." instance=ExtResource("1_gg5w2")]
 position = Vector2(160, 210)

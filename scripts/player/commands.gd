@@ -59,6 +59,21 @@ var commands = {
 			'async': false
 		},
 		exec = _exec_music
+	},
+	
+	sprite = {
+		argc = 2,
+		optionals = {
+			'id': '',
+			'position': Vector2(160,128),
+			'angle': 0,
+			'depth': 0,
+			'opacity': 1,
+			'duration': 0,
+			'transition': 'none',
+			'async': false
+		},
+		exec = _exec_sprite
 	}
 }
 
@@ -127,3 +142,18 @@ func _exec_music(player,args,optionals):
 		music_handler.set_music(target_music_name,optionals)
 	else:
 		await music_handler.set_music(target_music_name,optionals)
+
+func _exec_sprite(player,args,optionals):
+	var action = args[0]
+	var sprite_identifier = args[1]
+	var sprite_handler = player.sprite_handler
+	
+	if action == 'add':
+		sprite_handler.add_sprite(sprite_identifier,optionals)
+	elif action == 'remove':
+		sprite_handler.remove_sprite(sprite_identifier,optionals)
+	elif action == 'modify':
+		if optionals.async:
+			await sprite_handler.modify_sprite(sprite_identifier,optionals)
+		else:
+			sprite_handler.modify_sprite(sprite_identifier,optionals)

@@ -4,9 +4,11 @@ const DEFAULT_SPEECHBUBBLE_MOVE_DURATION = 0.5
 
 @onready var ffwd_indicator = $FFWD
 
-@onready var speech_bubble = $SpeechBubble
 @onready var bg_handler = $BackgroundHandler
 @onready var music_handler = $MusicHandler
+@onready var sprite_handler = $SpriteHandler
+
+@onready var speech_bubble = $SpeechBubble
 @onready var choice_box = $ChoiceBox
 var _speech_bubble_positions = {}
 
