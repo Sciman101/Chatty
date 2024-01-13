@@ -1,0 +1,78 @@
+[gd_scene load_steps=10 format=3 uid="uid://lejjvmvyv0ol"]
+
+[ext_resource type="Script" path="res://scripts/player/speech_bubble.gd" id="1_jl81n"]
+[ext_resource type="Texture2D" uid="uid://dl0jjnw46awpb" path="res://graphics/ui/ui_speechbubble_default.tres" id="2_d65k0"]
+[ext_resource type="FontFile" uid="uid://bbnmo4grd6j5x" path="res://graphics/font/monogram.ttf" id="3_8txfa"]
+[ext_resource type="Texture2D" uid="uid://ms1aafo1vad4" path="res://graphics/ui/ui_advance_arrow.tres" id="4_bm768"]
+[ext_resource type="Texture2D" uid="uid://5e2yr1758gbe" path="res://graphics/ui/ui_advance_arrow_2.tres" id="5_pgxmu"]
+[ext_resource type="Texture2D" uid="uid://c7rlroyfg0c8" path="res://graphics/ui/ui_speaker_name.tres" id="6_eifgq"]
+[ext_resource type="Script" path="res://scripts/player/speaker_name_badge.gd" id="7_ymp1g"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fp0em"]
+animations = [{
+"frames": [ExtResource("4_bm768"), ExtResource("5_pgxmu")],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="FontVariation" id="FontVariation_eku4v"]
+base_font = ExtResource("3_8txfa")
+variation_embolden = 0.6
+
+[node name="SpeechBubble" type="Node2D"]
+texture_filter = 1
+script = ExtResource("1_jl81n")
+
+[node name="FadeInSound" type="AudioStreamPlayer" parent="."]
+
+[node name="TalkSoundPlayer" type="AudioStreamPlayer" parent="."]
+volume_db = -10.0
+
+[node name="Graphic" type="Sprite2D" parent="."]
+texture = ExtResource("2_d65k0")
+
+[node name="Portrait" type="AnimatedSprite2D" parent="Graphic"]
+position = Vector2(-99, -2)
+playing = true
+
+[node name="AdvanceArrow" type="AnimatedSprite2D" parent="Graphic"]
+position = Vector2(118, 22)
+frames = SubResource("SpriteFrames_fp0em")
+playing = true
+
+[node name="Dialouge" type="RichTextLabel" parent="Graphic"]
+offset_left = -72.707
+offset_top = -30.0
+offset_right = 119.293
+offset_bottom = 22.0
+mouse_force_pass_scroll_events = false
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_constants/line_separation = -2
+theme_override_fonts/normal_font = ExtResource("3_8txfa")
+theme_override_fonts/bold_font = SubResource("FontVariation_eku4v")
+bbcode_enabled = true
+scroll_active = false
+visible_characters_behavior = 1
+
+[node name="SpeakerNameBadge" type="NinePatchRect" parent="Graphic"]
+offset_left = -128.0
+offset_top = -50.0
+offset_bottom = -14.0
+texture = ExtResource("6_eifgq")
+region_rect = Rect2(0, 0, 48, 32)
+patch_margin_left = 16
+patch_margin_right = 16
+script = ExtResource("7_ymp1g")
+
+[node name="SpeakerNameLabel" type="Label" parent="Graphic/SpeakerNameBadge"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 20.0
+offset_bottom = 18.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_8txfa")
+
+[node name="Timer" type="Timer" parent="."]

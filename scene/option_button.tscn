@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Texture2D" uid="uid://br1uhlq4cuppe" path="res://graphics/ui/ui_choicebutton_default.tres" id="1_223mm"]
+[ext_resource type="FontFile" uid="uid://bbnmo4grd6j5x" path="res://graphics/font/monogram.ttf" id="2_fpf4x"]
+[ext_resource type="Texture2D" uid="uid://celul16rt8l6j" path="res://graphics/ui/ui_choicebutton_pressed.tres" id="2_qw7ak"]
+[ext_resource type="Script" path="res://scripts/player/option_button.gd" id="2_vrgj4"]
+[ext_resource type="Texture2D" uid="uid://b3gvnceklf6o4" path="res://graphics/ui/ui_choicebutton_hover.tres" id="3_snwm2"]
+
+[node name="OptionButton" type="TextureButton"]
+offset_left = 48.0
+offset_top = 55.0
+offset_right = 208.0
+offset_bottom = 73.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+shortcut_in_tooltip = false
+texture_normal = ExtResource("1_223mm")
+texture_pressed = ExtResource("2_qw7ak")
+texture_hover = ExtResource("3_snwm2")
+script = ExtResource("2_vrgj4")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_fpf4x")
+horizontal_alignment = 1
+clip_text = true
+text_overrun_behavior = 3

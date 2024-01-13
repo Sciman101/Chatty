@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/choice_box.gd" id="1_23xgq"]
+
+[node name="ChoiceBox" type="Node2D"]
+texture_filter = 1
+script = ExtResource("1_23xgq")
+
+[node name="OptionList" type="VBoxContainer" parent="."]
+offset_left = -128.0
+offset_top = -64.0
+offset_right = 128.0
+offset_bottom = 64.0
+alignment = 1

@@ -1,0 +1,96 @@
+[gd_scene load_steps=12 format=3 uid="uid://bbi3wlbcj3b4"]
+
+[ext_resource type="PackedScene" uid="uid://lejjvmvyv0ol" path="res://scene/speech_bubble.tscn" id="1_gg5w2"]
+[ext_resource type="Script" path="res://scripts/player/background_handler.gd" id="1_h6rm1"]
+[ext_resource type="Script" path="res://scripts/player/chatty_player.gd" id="1_vdit5"]
+[ext_resource type="Texture2D" uid="uid://0oq1ppm4tae4" path="res://graphics/white.png" id="3_8wa5c"]
+[ext_resource type="Texture2D" uid="uid://lpdqh7lyftu3" path="res://graphics/black.png" id="4_8cnja"]
+[ext_resource type="Shader" path="res://shaders/greyscale_reveal.gdshader" id="4_qume7"]
+[ext_resource type="PackedScene" path="res://scene/choice_box.tscn" id="6_afs78"]
+[ext_resource type="Script" path="res://scripts/player/music_handler.gd" id="6_lcfu5"]
+[ext_resource type="Texture2D" uid="uid://b6oj7e1hbwkhn" path="res://graphics/ui/debug/ffwd.png" id="7_b2e3i"]
+[ext_resource type="Script" path="res://scripts/player/sprite_handler.gd" id="7_lkpgk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1fkek"]
+shader = ExtResource("4_qume7")
+shader_parameter/transition_amount = 0.0
+
+[node name="ChattyPlayer" type="Control"]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 320.0
+offset_bottom = 256.0
+script = ExtResource("1_vdit5")
+
+[node name="BackgroundHandler" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_h6rm1")
+
+[node name="CurrentBg" type="TextureRect" parent="BackgroundHandler"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(160, 128)
+texture = ExtResource("3_8wa5c")
+
+[node name="TempBg" type="TextureRect" parent="BackgroundHandler"]
+visible = false
+material = SubResource("ShaderMaterial_1fkek")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(160, 128)
+texture = ExtResource("4_8cnja")
+
+[node name="MusicHandler" type="Node" parent="."]
+script = ExtResource("6_lcfu5")
+
+[node name="AudioStreamPlayer1" type="AudioStreamPlayer" parent="MusicHandler"]
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="MusicHandler"]
+
+[node name="SpriteHandler" type="Node2D" parent="."]
+script = ExtResource("7_lkpgk")
+
+[node name="SpeechBubble" parent="." instance=ExtResource("1_gg5w2")]
+position = Vector2(160, 210)
+
+[node name="ChoiceBox" parent="." instance=ExtResource("6_afs78")]
+position = Vector2(160, 128)
+
+[node name="SpeechBubblePositions" type="Node2D" parent="."]
+visible = false
+
+[node name="bottom" type="Marker2D" parent="SpeechBubblePositions"]
+position = Vector2(160, 210)
+
+[node name="center" type="Marker2D" parent="SpeechBubblePositions"]
+position = Vector2(160, 128)
+
+[node name="left" type="Marker2D" parent="SpeechBubblePositions"]
+position = Vector2(130, 128)
+
+[node name="right" type="Marker2D" parent="SpeechBubblePositions"]
+position = Vector2(190, 128)
+
+[node name="top" type="Marker2D" parent="SpeechBubblePositions"]
+position = Vector2(160, 40)
+
+[node name="FFWD" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(32, 32)
+texture = ExtResource("7_b2e3i")
+
+[connection signal="finished" from="MusicHandler/AudioStreamPlayer1" to="MusicHandler" method="_on_audio_stream_player_1_finished"]

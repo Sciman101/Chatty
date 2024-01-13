@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://buldjgtgtgnj"]
+
+[ext_resource type="Script" path="res://scripts/console.gd" id="1_wg4o4"]
+[ext_resource type="FontFile" uid="uid://bbnmo4grd6j5x" path="res://graphics/font/monogram.ttf" id="2_fnrc5"]
+
+[node name="Console" type="CanvasLayer"]
+script = ExtResource("1_wg4o4")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 320.0
+offset_bottom = 256.0
+color = Color(0, 0, 0, 0.588235)
+
+[node name="Messages" type="RichTextLabel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_fonts/normal_font = ExtResource("2_fnrc5")
+bbcode_enabled = true
+scroll_following = true
+selection_enabled = true
+
+[node name="Button" type="Button" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -49.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Clear"
+
+[connection signal="pressed" from="Button" to="." method="_on_clear_button_pressed"]
